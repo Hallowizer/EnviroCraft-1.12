@@ -1,6 +1,8 @@
 EnviroMine
 ==========
-For information, please check [the wiki](https://github.com/Funwayguy/EnviroMine/wiki)
+For information, please check [the wiki](https://github.com/EnviroMine/EnviroMine-1.7/wiki)
+An attempt at a 1.12 port is in progress, feel free to contribute to help with the porting/bugfixing!
+The code is not in a useable state yet, a testing build will be available shortly after it is in a bootable state.
 
 Licence
 =======
