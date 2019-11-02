@@ -3,7 +3,7 @@ package enviromine.client.gui.hud.items;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
@@ -102,9 +102,9 @@ public class HudItemTemperature extends HudItem
 		
 		GL11.glScalef((float)UI_Settings.guiScale, (float)UI_Settings.guiScale, (float)UI_Settings.guiScale);
 		
-		int heatBar = MathHelper.ceiling_float_int(((Gui_EventManager.tracker.bodyTemp + 50) / 150) * this.getWidth());
-		int preheatBar = MathHelper.ceiling_float_int(((Gui_EventManager.tracker.airTemp + 50) / 150) * this.getWidth());
-		int preheatIco = 16 - MathHelper.ceiling_float_int(((Gui_EventManager.tracker.airTemp + 50) / 150) * 16);
+		int heatBar = MathHelper.ceil(((Gui_EventManager.tracker.bodyTemp + 50) / 150) * this.getWidth());
+		int preheatBar = MathHelper.ceil(((Gui_EventManager.tracker.airTemp + 50) / 150) * this.getWidth());
+		int preheatIco = 16 - MathHelper.ceil(((Gui_EventManager.tracker.airTemp + 50) / 150) * 16);
 		
 		float dispHeat = new BigDecimal(String.valueOf(Gui_EventManager.tracker.bodyTemp)).setScale(2, RoundingMode.DOWN).floatValue();
 		float FdispHeat = new BigDecimal(String.valueOf((Gui_EventManager.tracker.bodyTemp * 1.8) + 32)).setScale(2, RoundingMode.DOWN).floatValue();
@@ -216,7 +216,7 @@ public class HudItemTemperature extends HudItem
 				grad = 255;
 			} else
 			{
-				grad = MathHelper.floor_float((Gui_EventManager.tracker.bodyTemp - 39F) / 6F * 255F);
+				grad = MathHelper.floor((Gui_EventManager.tracker.bodyTemp - 39F) / 6F * 255F);
 			}
 			RenderAssist.drawScreenOverlay(scaledwidth, scaledheight, RenderAssist.getColorFromRGBA(255, 255, 255, grad));
 			
@@ -228,7 +228,7 @@ public class HudItemTemperature extends HudItem
 				grad = 255;
 			} else
 			{
-				grad = MathHelper.floor_float(Math.abs(5F - (Gui_EventManager.tracker.bodyTemp - 30F)) / 5F * 255F);
+				grad = MathHelper.floor(Math.abs(5F - (Gui_EventManager.tracker.bodyTemp - 30F)) / 5F * 255F);
 			}
 			RenderAssist.drawScreenOverlay(scaledwidth, scaledheight, RenderAssist.getColorFromRGBA(125, 255, 255, grad));
 		}

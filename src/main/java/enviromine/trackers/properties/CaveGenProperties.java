@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
 import enviromine.core.EM_ConfigHandler;
@@ -41,9 +41,9 @@ public class CaveGenProperties implements PropertyBase
 	
 	public CaveGenProperties(String id, int oreMeta, String source, int srcMeta, int veins, int size, int minY, int maxY)
 	{
-		this.ore = (Block)Block.blockRegistry.getObject(id);
+		this.ore = (Block)Block.REGISTRY.getObject(id);
 		this.oreMeta = oreMeta;
-		this.source = (Block)Block.blockRegistry.getObject(source);
+		this.source = (Block)Block.REGISTRY.getObject(source);
 		this.srcMeta = srcMeta;
 		this.veins = veins;
 		this.size = size;
@@ -68,7 +68,7 @@ public class CaveGenProperties implements PropertyBase
 	{
 		config.setCategoryComment(this.categoryName(), this.categoryDescription());
 		String nID = config.get(category, CGPNames[0], "minecraft:stone").getString();
-		int nOreM = MathHelper.clamp_int(config.get(category, CGPNames[1], 0).getInt(), 0, 15);
+		int nOreM = MathHelper.clamp(config.get(category, CGPNames[1], 0).getInt(), 0, 15);
 		String nSource = config.get(category, CGPNames[2], "minecraft:stone").getString();
 		int nSrcM = config.get(category, CGPNames[3], 0).getInt();
 		int nVeins = config.get(category, CGPNames[4], 4).getInt();
@@ -83,9 +83,9 @@ public class CaveGenProperties implements PropertyBase
 	@Override
 	public void SaveProperty(Configuration config, String category)
 	{
-		config.get(category, CGPNames[0], Block.blockRegistry.getIDForObject(ore));
+		config.get(category, CGPNames[0], Block.REGISTRY.getIDForObject(ore));
 		config.get(category, CGPNames[1], oreMeta);
-		config.get(category, CGPNames[2], Block.blockRegistry.getNameForObject(source));
+		config.get(category, CGPNames[2], Block.REGISTRY.getNameForObject(source));
 		config.get(category, CGPNames[3], srcMeta);
 		config.get(category, CGPNames[4], veins);
 		config.get(category, CGPNames[5], size);
@@ -124,9 +124,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Coal";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(ObjectHandler.flammableCoal));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(ObjectHandler.flammableCoal));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 32);
 			config.get(catName, CGPNames[5], 16);
@@ -138,9 +138,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Iron";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.iron_ore));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.IRON_ORE));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 24);
 			config.get(catName, CGPNames[5], 16);
@@ -152,9 +152,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Lapis";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.redstone_ore));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.REDSTONE_ORE));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 12);
 			config.get(catName, CGPNames[5], 8);
@@ -166,9 +166,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Redstone";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.redstone_ore));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.REDSTONE_ORE));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 12);
 			config.get(catName, CGPNames[5], 12);
@@ -180,9 +180,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Gold";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.gold_ore));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.GOLD_ORE));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 8);
 			config.get(catName, CGPNames[5], 8);
@@ -194,9 +194,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Diamonds";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.diamond_ore));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.DIAMOND_ORE));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 4);
 			config.get(catName, CGPNames[5], 8);
@@ -208,9 +208,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Emeralds";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.emerald_ore));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.EMERALD_ORE));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 2);
 			config.get(catName, CGPNames[5], 4);
@@ -222,9 +222,9 @@ public class CaveGenProperties implements PropertyBase
 		{
 			String catName = this.categoryName() + ".Silverfish";
 			
-			config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.monster_egg));
+			config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.MONSTER_EGG));
 			config.get(catName, CGPNames[1], 0);
-			config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+			config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 			config.get(catName, CGPNames[3], 0);
 			config.get(catName, CGPNames[4], 48);
 			config.get(catName, CGPNames[5], 24);
@@ -254,9 +254,9 @@ public class CaveGenProperties implements PropertyBase
 		
 		String catName = this.categoryName() + "." + EnviroUtils.replaceULN(block.getUnlocalizedName());
 		
-		config.get(catName, CGPNames[0], Block.blockRegistry.getNameForObject(Blocks.iron_ore));
+		config.get(catName, CGPNames[0], Block.REGISTRY.getNameForObject(Blocks.IRON_ORE));
 		config.get(catName, CGPNames[1], 0);
-		config.get(catName, CGPNames[2], Block.blockRegistry.getNameForObject(Blocks.stone));
+		config.get(catName, CGPNames[2], Block.REGISTRY.getNameForObject(Blocks.STONE));
 		config.get(catName, CGPNames[3], 0);
 		config.get(catName, CGPNames[4], 24);
 		config.get(catName, CGPNames[5], 16);

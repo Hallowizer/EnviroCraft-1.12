@@ -14,11 +14,11 @@ public class ReloadCustomObjects
 	public static void doReloadConfig()
 	{
 		Minecraft mc = Minecraft.getMinecraft();
-		if((!(Minecraft.getMinecraft().isSingleplayer()) || !EnviroMine.proxy.isClient()) && Minecraft.getMinecraft().thePlayer != null)
+		if((!(Minecraft.getMinecraft().isSingleplayer()) || !EnviroMine.proxy.isClient()) && Minecraft.getMinecraft().player != null)
 		{
 			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			{
-				mc.thePlayer.addChatMessage(new ChatComponentText("Single player only function."));
+				mc.player.addChatMessage(new ChatComponentText("Single player only function."));
 			}
 			return;
 		}
@@ -30,20 +30,20 @@ public class ReloadCustomObjects
 			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			{
 				
-				mc.thePlayer.addChatMessage(new ChatComponentText("Reloading Configs..."));
+				mc.player.addChatMessage(new ChatComponentText("Reloading Configs..."));
 			
 				if(EM_ConfigHandler.ReloadConfig())
 				{
-					mc.thePlayer.addChatMessage(new ChatComponentText("Loaded objects and " + EM_Settings.stabilityTypes.size() + " stability types"));
+					mc.player.addChatMessage(new ChatComponentText("Loaded objects and " + EM_Settings.stabilityTypes.size() + " stability types"));
 				}else
 				{
-					mc.thePlayer.addChatMessage(new ChatComponentText("Failed to Load Custom Objects Files."));
+					mc.player.addChatMessage(new ChatComponentText("Failed to Load Custom Objects Files."));
 				}
 			}
 			else
 			{
 				
-				mc.thePlayer.addChatMessage(new ChatComponentText("Must hold left shift to reload Custom Objects"));
+				mc.player.addChatMessage(new ChatComponentText("Must hold left shift to reload Custom Objects"));
 			}
 		}
 	}

@@ -2,10 +2,10 @@ package enviromine.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S29PacketSoundEffect;
+import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
 import enviromine.EnviroDamageSource;
@@ -24,7 +24,7 @@ public class HandlingTheThing
 	
 	public static void stalkPlayer(EntityPlayer player)
 	{
-		boolean flag = player.getEntityData().getBoolean("EM_THING_TARGET") || (player.worldObj.getWorldTime()%6000 == 0 && EM_Settings.thingChance > player.getRNG().nextFloat());
+		boolean flag = player.getEntityData().getBoolean("EM_THING_TARGET") || (player.world.getWorldTime()%6000 == 0 && EM_Settings.thingChance > player.getRNG().nextFloat());
 		
 		// Check if Halloween or Friday 13th. Guarantees attack if true!
 		if((date.get(Calendar.MONTH) == Calendar.OCTOBER && date.get(Calendar.DAY_OF_MONTH) == 31) || (date.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY && date.get(Calendar.DAY_OF_MONTH) == 13))
@@ -32,7 +32,7 @@ public class HandlingTheThing
 			flag = true;
 		}
 		
-		if(player == null || !player.isEntityAlive() || !flag || player.dimension != EM_Settings.caveDimID || player.worldObj.difficultySetting == EnumDifficulty.PEACEFUL)
+		if(player == null || !player.isEntityAlive() || !flag || player.dimension != EM_Settings.caveDimID || player.world.getDifficulty() == EnumDifficulty.PEACEFUL)
 		{
 			if(player != null && player.getEntityData() != null)
 			{
@@ -46,9 +46,9 @@ public class HandlingTheThing
 		player.addStat(EnviroAchievements.itsPitchBlack, 1);
 		
 		EnviroDataTracker tracker = EM_StatusManager.lookupTrackerFromUsername(player.getCommandSenderName());
-		int i = MathHelper.floor_double(player.posX);
-		int j = MathHelper.floor_double(player.posY);
-		int k = MathHelper.floor_double(player.posZ);
+		int i = MathHelper.floor(player.posX);
+		int j = MathHelper.floor(player.posY);
+		int k = MathHelper.floor(player.posZ);
 		
 		int darkness = player.getEntityData().getInteger("EM_THING");
 		int deathSpeed = 1;
@@ -63,7 +63,7 @@ public class HandlingTheThing
 			}
 		}
 		
-		if(player.worldObj.getBlockLightValue(i, j, k) < 10 && player.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) < 10 && !player.capabilities.isCreativeMode && !player.isPotionActive(Potion.nightVision))
+		if(player.world.getBlockLightValue(i, j, k) < 10 && player.world.getSavedLightValue(EnumSkyBlock.SKY, i, j, k) < 10 && !player.capabilities.isCreativeMode && !player.isPotionActive(Potion.nightVision))
 		{
 			if(!hasWitnesses(player))
 			{
@@ -97,7 +97,7 @@ public class HandlingTheThing
 			}
 		}
 		
-		if(darkness >= 1000 && darkness%20 == 0 && player.worldObj.rand.nextInt(5) == 0)
+		if(darkness >= 1000 && darkness%20 == 0 && player.world.rand.nextInt(5) == 0)
 		{
 			float rndX = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
 			float rndY = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
@@ -108,9 +108,9 @@ public class HandlingTheThing
 			if(!EnviroMine.proxy.isClient() && player instanceof EntityPlayerMP)
 			{
 				((EntityPlayerMP)player).playerNetServerHandler.sendPacket(packet);
-			} else if(EnviroMine.proxy.isClient() && !player.worldObj.isRemote)
+			} else if(EnviroMine.proxy.isClient() && !player.world.isRemote)
 			{
-				player.worldObj.playSoundEffect(player.posX + rndX, player.posY + rndY, player.posZ + rndZ, "enviromine:whispers", 0.5F, (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
+				player.world.playSoundEffect(player.posX + rndX, player.posY + rndY, player.posZ + rndZ, "enviromine:whispers", 0.5F, (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
 			}
 		}
 		
@@ -128,7 +128,7 @@ public class HandlingTheThing
 	public static boolean hasWitnesses(EntityPlayer victim)
 	{
 		@SuppressWarnings("unchecked")
-		List<EntityPlayer> players = victim.worldObj.getEntitiesWithinAABB(EntityPlayer.class, victim.boundingBox.expand(128, 128, 128));
+		List<EntityPlayer> players = victim.world.getEntitiesWithinAABB(EntityPlayer.class, victim.boundingBox.expand(128, 128, 128));
 		
 		Iterator<EntityPlayer> iterator = players.iterator();
 		

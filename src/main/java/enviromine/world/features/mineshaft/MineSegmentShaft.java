@@ -17,82 +17,82 @@ public class MineSegmentShaft extends MineSegment
 	@Override
 	public boolean build()
 	{
-		this.fillArea(1, 0, 1, 3, 2, 3, Blocks.air, 0);
+		this.fillArea(1, 0, 1, 3, 2, 3, Blocks.AIR, 0);
 		
-		if(hasFloor && ((getBlock(2, 1, 0) == Blocks.fence && getBlock(2, 1, -1) == Blocks.air) || getBlock(2, 1, -1) == Blocks.air))
+		if(hasFloor && ((getBlock(2, 1, 0) == Blocks.OAK_FENCE && getBlock(2, 1, -1) == Blocks.AIR) || getBlock(2, 1, -1) == Blocks.AIR))
 		{
-			this.fillArea(1, 0, 0, 3, 2, 0, Blocks.air, 0);
+			this.fillArea(1, 0, 0, 3, 2, 0, Blocks.AIR, 0);
 			
 			for(int i = 1; i <= 3; i++)
 			{
 				if(!getBlock(i, -1, -1).isNormalCube() && !getBlock(i, 0, -1).isNormalCube())
 				{
-					setBlock(i, 0, 0, Blocks.fence, 0);
+					setBlock(i, 0, 0, Blocks.OAK_FENCE, 0);
 				}
 			}
-		} else if(getBlock(2, 1, -1) != Blocks.ladder)
+		} else if(getBlock(2, 1, -1) != Blocks.LADDER)
 		{
-			this.fillArea(1, 0, 0, 3, 2, 0, Blocks.fence, 0);
+			this.fillArea(1, 0, 0, 3, 2, 0, Blocks.OAK_FENCE, 0);
 		}
 		
-		if(hasFloor && ((getBlock(0, 1, 2) == Blocks.fence && getBlock(-1, 1, 2) == Blocks.air) || getBlock(-1, 1, 2) == Blocks.air))
+		if(hasFloor && ((getBlock(0, 1, 2) == Blocks.OAK_FENCE && getBlock(-1, 1, 2) == Blocks.AIR) || getBlock(-1, 1, 2) == Blocks.AIR))
 		{
-			this.fillArea(0, 0, 1, 0, 2, 3, Blocks.air, 0);
+			this.fillArea(0, 0, 1, 0, 2, 3, Blocks.AIR, 0);
 			
 			for(int i = 1; i <= 3; i++)
 			{
 				if(!getBlock(-1, -1, i).isNormalCube() && !getBlock(-1, 0, i).isNormalCube())
 				{
-					setBlock(0, 0, i, Blocks.fence, 0);
+					setBlock(0, 0, i, Blocks.OAK_FENCE, 0);
 				}
 			}
-		} else if(getBlock(-1, 1, 2) != Blocks.ladder)
+		} else if(getBlock(-1, 1, 2) != Blocks.LADDER)
 		{
-			this.fillArea(0, 0, 1, 0, 2, 3, Blocks.fence, 0);
+			this.fillArea(0, 0, 1, 0, 2, 3, Blocks.OAK_FENCE, 0);
 		}
 		
-		if(hasFloor && ((getBlock(2, 1, 4) == Blocks.fence && getBlock(2, 1, 5) == Blocks.air) || getBlock(2, 1, 5) == Blocks.air))
+		if(hasFloor && ((getBlock(2, 1, 4) == Blocks.OAK_FENCE && getBlock(2, 1, 5) == Blocks.AIR) || getBlock(2, 1, 5) == Blocks.AIR))
 		{
-			this.fillArea(1, 0, 4, 3, 2, 4, Blocks.air, 0);
+			this.fillArea(1, 0, 4, 3, 2, 4, Blocks.AIR, 0);
 			
 			for(int i = 1; i <= 3; i++)
 			{
 				if(!getBlock(i, -1, 5).isNormalCube() && !getBlock(i, 0, 5).isNormalCube())
 				{
-					setBlock(i, 0, 4, Blocks.fence, 0);
+					setBlock(i, 0, 4, Blocks.OAK_FENCE, 0);
 				}
 			}
-		} else if(getBlock(2, 1, 5) != Blocks.ladder)
+		} else if(getBlock(2, 1, 5) != Blocks.LADDER)
 		{
-			this.fillArea(1, 0, 4, 3, 2, 4, Blocks.fence, 0);
+			this.fillArea(1, 0, 4, 3, 2, 4, Blocks.OAK_FENCE, 0);
 		}
 		
-		if(hasFloor && ((getBlock(4, 1, 2) == Blocks.fence && getBlock(5, 1, 2) == Blocks.air) || getBlock(5, 1, 2) == Blocks.air))
+		if(hasFloor && ((getBlock(4, 1, 2) == Blocks.OAK_FENCE && getBlock(5, 1, 2) == Blocks.AIR) || getBlock(5, 1, 2) == Blocks.AIR))
 		{
-			this.fillArea(4, 0, 1, 4, 2, 3, Blocks.air, 0);
+			this.fillArea(4, 0, 1, 4, 2, 3, Blocks.AIR, 0);
 			
 			for(int i = 1; i <= 3; i++)
 			{
 				if(!getBlock(5, -1, i).isNormalCube() && !getBlock(5, 0, i).isNormalCube())
 				{
-					setBlock(4, 0, i, Blocks.fence, 0);
+					setBlock(4, 0, i, Blocks.OAK_FENCE, 0);
 				}
 			}
-		} else if(getBlock(5, 1, 2) != Blocks.ladder)
+		} else if(getBlock(5, 1, 2) != Blocks.LADDER)
 		{
-			this.fillArea(4, 0, 1, 4, 2, 3, Blocks.fence, 0);
+			this.fillArea(4, 0, 1, 4, 2, 3, Blocks.OAK_FENCE, 0);
 		}
 		
-		this.fillArea(0, 3, 0, 4, 3, 4, Blocks.planks, 0);
-		this.fillArea(1, 3, 1, 3, 3, 3, Blocks.air, 0);
+		this.fillArea(0, 3, 0, 4, 3, 4, Blocks.PLANKS, 0);
+		this.fillArea(1, 3, 1, 3, 3, 3, Blocks.AIR, 0);
 		
-		this.fillArea(0, 0, 0, 0, 3, 0, Blocks.log, 0);
-		this.fillArea(4, 0, 0, 4, 3, 0, Blocks.log, 0);
-		this.fillArea(0, 0, 4, 0, 3, 4, Blocks.log, 0);
-		this.fillArea(4, 0, 4, 4, 3, 4, Blocks.log, 0);
+		this.fillArea(0, 0, 0, 0, 3, 0, Blocks.LOG, 0);
+		this.fillArea(4, 0, 0, 4, 3, 0, Blocks.LOG, 0);
+		this.fillArea(0, 0, 4, 0, 3, 4, Blocks.LOG, 0);
+		this.fillArea(4, 0, 4, 4, 3, 4, Blocks.LOG, 0);
 		
-		this.fillArea(0, 0, 2, 0, 3, 2, Blocks.planks, 0);
-		this.fillAndRotate(1, 0, 2, 1, 3, 2, Blocks.ladder, 5);
+		this.fillArea(0, 0, 2, 0, 3, 2, Blocks.PLANKS, 0);
+		this.fillAndRotate(1, 0, 2, 1, 3, 2, Blocks.LADDER, 5);
 		
 		if(this.hasFloor)
 		{
@@ -102,7 +102,7 @@ public class MineSegmentShaft extends MineSegment
 				{
 					if(!this.getBlock(i, -1, k).isNormalCube())
 					{
-						this.setBlock(i, -1, k, Blocks.planks, 0);
+						this.setBlock(i, -1, k, Blocks.PLANKS, 0);
 					}
 				}
 			}
@@ -114,7 +114,7 @@ public class MineSegmentShaft extends MineSegment
 	@Override
 	public boolean canBuild()
 	{
-		if(this.getBlock(2, 0, 1) == Blocks.ladder || this.getBlock(1, 0, 2) == Blocks.ladder || this.getBlock(2, 0, 3) == Blocks.ladder || this.getBlock(3, 0, 2) == Blocks.ladder)
+		if(this.getBlock(2, 0, 1) == Blocks.LADDER || this.getBlock(1, 0, 2) == Blocks.LADDER || this.getBlock(2, 0, 3) == Blocks.LADDER || this.getBlock(3, 0, 2) == Blocks.LADDER)
 		{
 			return false;
 		} else

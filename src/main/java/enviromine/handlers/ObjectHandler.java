@@ -18,8 +18,8 @@ import net.minecraftforge.oredict.OreDictionary;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import enviromine.EntityPhysicsBlock;
 import enviromine.blocks.BlockBurningCoal;
 import enviromine.blocks.BlockDavyLamp;
@@ -123,7 +123,7 @@ public class ObjectHandler
 		tag.setInteger("camelPackFill", 0);
 		tag.setInteger("camelPackMax", 100);
 		tag.setBoolean("isCamelPack", true);
-		tag.setString("camelPath", Item.itemRegistry.getNameForObject(camelPack));
+		tag.setString("camelPath", Item.REGISTRY.getNameForObject(camelPack));
 		camelStack1.setTagCompound(tag);
 		EnviroMine.enviroTab.addRawStack(camelStack1);
 		
@@ -133,7 +133,7 @@ public class ObjectHandler
 		tag.setInteger("camelPackFill", 100);
 		tag.setInteger("camelPackMax", 100);
 		tag.setBoolean("isCamelPack", true);
-		tag.setString("camelPath", Item.itemRegistry.getNameForObject(camelPack));
+		tag.setString("camelPath", Item.REGISTRY.getNameForObject(camelPack));
 		camelStack2.setTagCompound(tag);
 		EnviroMine.enviroTab.addRawStack(camelStack2);
 		
@@ -163,19 +163,19 @@ public class ObjectHandler
 		elevatorMat = new MaterialElevator(MapColor.ironColor);
 		elevator = new BlockElevator(elevatorMat).setBlockName("enviromine.elevator").setCreativeTab(EnviroMine.enviroTab).setBlockTextureName("iron_block");
 		
-		davyLampBlock = new BlockDavyLamp(Material.redstoneLight).setLightLevel(1.0F).setBlockName("enviromine.davy_lamp").setCreativeTab(EnviroMine.enviroTab);
+		davyLampBlock = new BlockDavyLamp(Material.REDSTONE_LIGHT).setLightLevel(1.0F).setBlockName("enviromine.davy_lamp").setCreativeTab(EnviroMine.enviroTab);
 		davyLamp = new ItemDavyLamp(davyLampBlock).setUnlocalizedName("enviromine.davylamp").setCreativeTab(EnviroMine.enviroTab);
 		
 		flammableCoal = new BlockFlammableCoal();
-		burningCoal = new BlockBurningCoal(Material.rock).setBlockName("enviromine.burningcoal").setCreativeTab(EnviroMine.enviroTab);
+		burningCoal = new BlockBurningCoal(Material.ROCK).setBlockName("enviromine.burningcoal").setCreativeTab(EnviroMine.enviroTab);
 		fireTorch = new BlockFireTorch(true).setTickRandomly(true).setBlockName("torch").setBlockTextureName("torch_on").setLightLevel(0.9375F).setCreativeTab(EnviroMine.enviroTab);
 		offTorch = new BlockFireTorch(false).setTickRandomly(false).setBlockName("torch").setBlockTextureName("torch_on").setLightLevel(0F).setCreativeTab(EnviroMine.enviroTab);
-		esky = new BlockEsky(Material.iron).setBlockName("enviromine.esky").setCreativeTab(EnviroMine.enviroTab);
-		freezer = new BlockFreezer(Material.iron).setBlockName("enviromine.freezer").setCreativeTab(EnviroMine.enviroTab);
+		esky = new BlockEsky(Material.IRON).setBlockName("enviromine.esky").setCreativeTab(EnviroMine.enviroTab);
+		freezer = new BlockFreezer(Material.IRON).setBlockName("enviromine.freezer").setCreativeTab(EnviroMine.enviroTab);
 		
 		noPhysBlock = new BlockNoPhysics();
 		
-		Blocks.redstone_torch.setLightLevel(0.9375F);
+		Blocks.REDSTONE_TORCH.setLightLevel(0.9375F);
 	}
 	
 	public static void registerBlocks()
@@ -193,7 +193,7 @@ public class ObjectHandler
 		GameRegistry.registerBlock(noPhysBlock, "no_phys_block");
 		
 		// Must be done after registration
-		Blocks.fire.setFireInfo(flammableCoal, 60, 100);
+		Blocks.FIRE.setFireInfo(flammableCoal, 60, 100);
 		
 		// Ore Dictionary Stuffs
 		OreDictionary.registerOre("oreCoal", flammableCoal);
@@ -221,65 +221,65 @@ public class ObjectHandler
 	
 	public static void registerRecipes()
 	{
-		GameRegistry.addSmelting(badWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);
-		GameRegistry.addSmelting(saltWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);
-		GameRegistry.addSmelting(coldWaterBottle, new ItemStack(Items.potionitem, 1, 0), 0.0F);
-		GameRegistry.addShapelessRecipe(new ItemStack(coldWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Items.snowball, 1));
-		GameRegistry.addShapelessRecipe(new ItemStack(badWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Blocks.dirt, 1));
-		GameRegistry.addShapelessRecipe(new ItemStack(saltWaterBottle, 1, 0), new ItemStack(Items.potionitem, 1, 0), new ItemStack(Blocks.sand, 1));
+		GameRegistry.addSmelting(badWaterBottle, new ItemStack(Items.POTIONITEM, 1, 0), 0.0F);
+		GameRegistry.addSmelting(saltWaterBottle, new ItemStack(Items.POTIONITEM, 1, 0), 0.0F);
+		GameRegistry.addSmelting(coldWaterBottle, new ItemStack(Items.POTIONITEM, 1, 0), 0.0F);
+		GameRegistry.addShapelessRecipe(new ItemStack(coldWaterBottle, 1, 0), new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Items.SNOWBALL, 1));
+		GameRegistry.addShapelessRecipe(new ItemStack(badWaterBottle, 1, 0), new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Blocks.DIRT, 1));
+		GameRegistry.addShapelessRecipe(new ItemStack(saltWaterBottle, 1, 0), new ItemStack(Items.POTIONITEM, 1, 0), new ItemStack(Blocks.SAND, 1));
 		
-		GameRegistry.addRecipe(new ItemStack(Items.slime_ball, 4, 0), " r ", "rwr", " r ", 'w', new ItemStack(spoiledMilk, 1, 0), 'r', new ItemStack(rottenFood, 1));
-		GameRegistry.addRecipe(new ItemStack(Blocks.mycelium), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.grass), 'x', new ItemStack(Blocks.brown_mushroom), 'y', new ItemStack(rottenFood, 1));
-		GameRegistry.addRecipe(new ItemStack(Blocks.mycelium), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.grass), 'y', new ItemStack(Blocks.brown_mushroom), 'x', new ItemStack(rottenFood, 1));
-		GameRegistry.addRecipe(new ItemStack(Blocks.mycelium), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.grass), 'x', new ItemStack(Blocks.red_mushroom), 'y', new ItemStack(rottenFood, 1));
-		GameRegistry.addRecipe(new ItemStack(Blocks.mycelium), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.grass), 'y', new ItemStack(Blocks.red_mushroom), 'x', new ItemStack(rottenFood, 1));
-		GameRegistry.addRecipe(new ItemStack(Blocks.dirt, 1), "xxx", "xxx", "xxx", 'x', new ItemStack(rottenFood));
+		GameRegistry.addRecipe(new ItemStack(Items.SLIME_BALL, 4, 0), " r ", "rwr", " r ", 'w', new ItemStack(spoiledMilk, 1, 0), 'r', new ItemStack(rottenFood, 1));
+		GameRegistry.addRecipe(new ItemStack(Blocks.MYCELIUM), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.GRASS), 'x', new ItemStack(Blocks.BROWN_MUSHROOM), 'y', new ItemStack(rottenFood, 1));
+		GameRegistry.addRecipe(new ItemStack(Blocks.MYCELIUM), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.GRASS), 'y', new ItemStack(Blocks.BROWN_MUSHROOM), 'x', new ItemStack(rottenFood, 1));
+		GameRegistry.addRecipe(new ItemStack(Blocks.MYCELIUM), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.GRASS), 'x', new ItemStack(Blocks.RED_MUSHROOM), 'y', new ItemStack(rottenFood, 1));
+		GameRegistry.addRecipe(new ItemStack(Blocks.MYCELIUM), "xyx", "yzy", "xyx", 'z', new ItemStack(Blocks.GRASS), 'y', new ItemStack(Blocks.RED_MUSHROOM), 'x', new ItemStack(rottenFood, 1));
+		GameRegistry.addRecipe(new ItemStack(Blocks.DIRT, 1), "xxx", "xxx", "xxx", 'x', new ItemStack(rottenFood));
 		
 		
-		GameRegistry.addRecipe(new ItemStack(gasMask, 1), "xxx", "xzx", "yxy", 'x', new ItemStack(Items.iron_ingot), 'y', new ItemStack(airFilter), 'z', new ItemStack(Blocks.glass_pane));
-		GameRegistry.addRecipe(new ItemStack(hardHat, 1), "xyx", "xzx", 'x', new ItemStack(Items.dye, 1, 11), 'y', new ItemStack(Blocks.redstone_lamp), 'z', new ItemStack(Items.iron_helmet, 1, 0));
+		GameRegistry.addRecipe(new ItemStack(gasMask, 1), "xxx", "xzx", "yxy", 'x', new ItemStack(Items.IRON_INGOT), 'y', new ItemStack(airFilter), 'z', new ItemStack(Blocks.GLASS_PANE));
+		GameRegistry.addRecipe(new ItemStack(hardHat, 1), "xyx", "xzx", 'x', new ItemStack(Items.DYE, 1, 11), 'y', new ItemStack(Blocks.REDSTONE_LAMP), 'z', new ItemStack(Items.IRON_HELMET, 1, 0));
 
-		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xyx", "xzx", "xyx", 'x', new ItemStack(Items.iron_ingot), 'y', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE), 'z', new ItemStack(Items.coal, 1, 1));
-		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xyx", "xzx", "xyx", 'x', new ItemStack(Items.iron_ingot), 'y', new ItemStack(Items.paper), 'z', new ItemStack(Items.coal, 1, 1));
-		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xyx", "xzx", "xpx", 'x', new ItemStack(Items.iron_ingot), 'y', new ItemStack(Items.paper), 'p', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE),'z', new ItemStack(Items.coal, 1, 1));
-		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xpx", "xzx", "xyx", 'x', new ItemStack(Items.iron_ingot), 'y', new ItemStack(Items.paper), 'p', new ItemStack(Blocks.wool, 1, OreDictionary.WILDCARD_VALUE),'z', new ItemStack(Items.coal, 1, 1));
+		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xyx", "xzx", "xyx", 'x', new ItemStack(Items.IRON_INGOT), 'y', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE), 'z', new ItemStack(Items.COAL, 1, 1));
+		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xyx", "xzx", "xyx", 'x', new ItemStack(Items.IRON_INGOT), 'y', new ItemStack(Items.PAPER), 'z', new ItemStack(Items.COAL, 1, 1));
+		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xyx", "xzx", "xpx", 'x', new ItemStack(Items.IRON_INGOT), 'y', new ItemStack(Items.PAPER), 'p', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE),'z', new ItemStack(Items.COAL, 1, 1));
+		GameRegistry.addRecipe(new ItemStack(airFilter, 4), "xpx", "xzx", "xyx", 'x', new ItemStack(Items.IRON_INGOT), 'y', new ItemStack(Items.PAPER), 'p', new ItemStack(Blocks.WOOL, 1, OreDictionary.WILDCARD_VALUE),'z', new ItemStack(Items.COAL, 1, 1));
 		
-		GameRegistry.addRecipe(new ItemStack(elevator, 1, 0), "xyx", "z z", "z z", 'x', new ItemStack(Blocks.iron_block), 'y', new ItemStack(Blocks.redstone_lamp), 'z', new ItemStack(Blocks.iron_bars));
-		GameRegistry.addRecipe(new ItemStack(elevator, 1, 1), "z z", "xyx", "www", 'x', new ItemStack(Blocks.iron_block), 'y', new ItemStack(Blocks.furnace), 'z', new ItemStack(Blocks.iron_bars), 'w', new ItemStack(Items.diamond_pickaxe));
+		GameRegistry.addRecipe(new ItemStack(elevator, 1, 0), "xyx", "z z", "z z", 'x', new ItemStack(Blocks.IRON_BLOCK), 'y', new ItemStack(Blocks.REDSTONE_LAMP), 'z', new ItemStack(Blocks.IRON_BARS));
+		GameRegistry.addRecipe(new ItemStack(elevator, 1, 1), "z z", "xyx", "www", 'x', new ItemStack(Blocks.IRON_BLOCK), 'y', new ItemStack(Blocks.FURNACE), 'z', new ItemStack(Blocks.IRON_BARS), 'w', new ItemStack(Items.DIAMOND_PICKAXE));
 		
-		GameRegistry.addRecipe(new ItemStack(davyLampBlock), " x ", "zyz", "xxx", 'x', new ItemStack(Items.gold_ingot), 'y', new ItemStack(Blocks.torch), 'z', new ItemStack(Blocks.glass_pane));
-		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(Items.flint_and_steel, 1, OreDictionary.WILDCARD_VALUE));
-		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(Blocks.torch));
+		GameRegistry.addRecipe(new ItemStack(davyLampBlock), " x ", "zyz", "xxx", 'x', new ItemStack(Items.GOLD_INGOT), 'y', new ItemStack(Blocks.TORCH), 'z', new ItemStack(Blocks.GLASS_PANE));
+		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(Items.FLINT_AND_STEEL, 1, OreDictionary.WILDCARD_VALUE));
+		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(Blocks.TORCH));
 		GameRegistry.addShapelessRecipe(new ItemStack(davyLampBlock, 1, 1), new ItemStack(davyLampBlock, 1, 0), new ItemStack(fireTorch));
 		
-		GameRegistry.addRecipe(new ItemStack(esky), "xxx", "yzy", "yyy", 'x', new ItemStack(Blocks.snow), 'y', new ItemStack(Items.dye, 1, 4), 'z', new ItemStack(Blocks.chest));
-		GameRegistry.addRecipe(new ItemStack(freezer), "xyx", "yzy", "xyx", 'x', new ItemStack(Blocks.iron_block), 'y', new ItemStack(Blocks.ice), 'z', new ItemStack(esky));
-		GameRegistry.addRecipe(new ItemStack(freezer), "xyx", "yzy", "xyx", 'x', new ItemStack(Blocks.iron_block), 'y', new ItemStack(Blocks.packed_ice), 'z', new ItemStack(esky));
+		GameRegistry.addRecipe(new ItemStack(esky), "xxx", "yzy", "yyy", 'x', new ItemStack(Blocks.SNOW), 'y', new ItemStack(Items.DYE, 1, 4), 'z', new ItemStack(Blocks.CHEST));
+		GameRegistry.addRecipe(new ItemStack(freezer), "xyx", "yzy", "xyx", 'x', new ItemStack(Blocks.IRON_BLOCK), 'y', new ItemStack(Blocks.ICE), 'z', new ItemStack(esky));
+		GameRegistry.addRecipe(new ItemStack(freezer), "xyx", "yzy", "xyx", 'x', new ItemStack(Blocks.IRON_BLOCK), 'y', new ItemStack(Blocks.PACKED_ICE), 'z', new ItemStack(esky));
 		
 		ItemStack camelStack = new ItemStack(camelPack);
 		NBTTagCompound tag = new NBTTagCompound();
 		tag.setInteger("camelPackFill", 0);
 		tag.setInteger("camelPackMax", 100);
 		tag.setBoolean("isCamelPack", true);
-		tag.setString("camelPath", Item.itemRegistry.getNameForObject(camelPack));
+		tag.setString("camelPath", Item.REGISTRY.getNameForObject(camelPack));
 		camelStack.setTagCompound(tag);
-		GameRegistry.addRecipe(camelStack, "xxx", "xyx", "xxx", 'x', new ItemStack(Items.leather), 'y', new ItemStack(Items.glass_bottle));
+		GameRegistry.addRecipe(camelStack, "xxx", "xyx", "xxx", 'x', new ItemStack(Items.LEATHER), 'y', new ItemStack(Items.GLASS_BOTTLE));
 		
 		ItemStack camelStack2 = camelStack.copy();
 		camelStack2.getTagCompound().setInteger("camelPackFill", 25);
-		GameRegistry.addRecipe(camelStack2, "xxx", "xyx", "xxx", 'x', new ItemStack(Items.leather), 'y', new ItemStack(Items.potionitem, 1, 0));
+		GameRegistry.addRecipe(camelStack2, "xxx", "xyx", "xxx", 'x', new ItemStack(Items.LEATHER), 'y', new ItemStack(Items.POTIONITEM, 1, 0));
 	}
 
 	public static String[] DefaultIgnitionSources()
 	{
-		String[] list = new String[]{Block.blockRegistry.getNameForObject(Blocks.flowing_lava), 
-			Block.blockRegistry.getNameForObject(Blocks.lava),
-			Block.blockRegistry.getNameForObject(Blocks.torch),
-			Block.blockRegistry.getNameForObject(Blocks.lit_furnace),
-			Block.blockRegistry.getNameForObject(Blocks.fire),
-			Block.blockRegistry.getNameForObject(ObjectHandler.fireGasBlock),
-			Block.blockRegistry.getNameForObject(ObjectHandler.fireTorch),
-			Block.blockRegistry.getNameForObject(ObjectHandler.burningCoal)};
+		String[] list = new String[]{Block.REGISTRY.getNameForObject(Blocks.FLOWING_LAVA), 
+			Block.REGISTRY.getNameForObject(Blocks.LAVA),
+			Block.REGISTRY.getNameForObject(Blocks.TORCH),
+			Block.REGISTRY.getNameForObject(Blocks.LIT_FURNACE),
+			Block.REGISTRY.getNameForObject(Blocks.FIRE),
+			Block.REGISTRY.getNameForObject(ObjectHandler.fireGasBlock),
+			Block.REGISTRY.getNameForObject(ObjectHandler.fireTorch),
+			Block.REGISTRY.getNameForObject(ObjectHandler.burningCoal)};
 		
 		return list;
 	}	

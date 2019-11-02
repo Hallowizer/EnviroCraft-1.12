@@ -41,7 +41,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 		
         if (++this.field_145974_k % 20 * 4 == 0)
         {
-            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, Blocks.ender_chest, 1, this.numPlayersUsing);
+            this.world.addBlockEvent(this.getPos(), Blocks.ENDER_CHEST, 1, this.numPlayersUsing);
         }
 
         this.field_145975_i = this.field_145972_a;
@@ -50,9 +50,9 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 
         if (this.numPlayersUsing > 0 && this.field_145972_a == 0.0F)
         {
-            double d0 = (double)this.xCoord + 0.5D;
-            d1 = (double)this.zCoord + 0.5D;
-            this.worldObj.playSoundEffect(d0, (double)this.yCoord + 0.5D, d1, "enviromine:freezeropen", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+            double d0 = (double)this.getPos().getX() + 0.5D;
+            d1 = (double)this.getPos().getZ() + 0.5D;
+            this.world.playSoundEffect(d0, (double)this.getPos().getY() + 0.5D, d1, "enviromine:freezeropen", 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
         }
 
         if (this.numPlayersUsing == 0 && this.field_145972_a > 0.0F || this.numPlayersUsing > 0 && this.field_145972_a < 1.0F)
@@ -77,10 +77,10 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 
             if (this.field_145972_a < f1 && f2 >= f1)
             {
-                d1 = (double)this.xCoord + 0.5D;
-                double d2 = (double)this.zCoord + 0.5D;
+                d1 = (double)this.getPos().getX() + 0.5D;
+                double d2 = (double)this.getPos().getZ() + 0.5D;
                 
-                this.worldObj.playSoundEffect(d1, (double)this.yCoord + 0.5D, d2, "enviromine:freezerclose", 0.5F, this.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+                this.world.playSoundEffect(d1, (double)this.getPos().getY() + 0.5D, d2, "enviromine:freezerclose", 0.5F, this.world.rand.nextFloat() * 0.1F + 0.9F);
             }
 
             if (this.field_145972_a < 0.0F)
@@ -91,22 +91,22 @@ public class TileEntityFreezer extends TileEntity implements IInventory
         
         // Esky Code
 		
-		if(this.getWorldObj() == null)
+		if(this.getWorld() == null)
 		{
 			return;
 		}
 		
 		if(lastCheck <= -1)
 		{
-			lastCheck = worldObj.getTotalWorldTime();
+			lastCheck = getWorld().getTotalWorldTime();
 		}
 		
-		if(tick >= interval && !this.worldObj.isRemote)
+		if(tick >= interval && !this.getWorld().isRemote)
 		{
 			tick = 0;
 			
-			long time = worldObj.getTotalWorldTime() - lastCheck;
-			lastCheck = worldObj.getTotalWorldTime();
+			long time = getWorld().getTotalWorldTime() - lastCheck;
+			lastCheck = getWorld().getTotalWorldTime();
 			
 			for(int i = 0; i < this.getSizeInventory(); i++)
 			{
@@ -120,13 +120,13 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 				RotProperties rotProps = null;
 				long rotTime = (long)(EM_Settings.foodRotTime * 24000L);
 				
-				if(EM_Settings.rotProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem())))
+				if(EM_Settings.rotProperties.containsKey("" + Item.REGISTRY.getNameForObject(stack.getItem())))
 				{
-					rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(stack.getItem()));
+					rotProps = EM_Settings.rotProperties.get("" + Item.REGISTRY.getNameForObject(stack.getItem()));
 					rotTime = (long)(rotProps.days * 24000L);
-				} else if(EM_Settings.rotProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()))
+				} else if(EM_Settings.rotProperties.containsKey("" + Item.REGISTRY.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()))
 				{
-					rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage());
+					rotProps = EM_Settings.rotProperties.get("" + Item.REGISTRY.getNameForObject(stack.getItem()) + "," + stack.getItemDamage());
 					rotTime = (long)(rotProps.days * 24000L);
 				}
 				
@@ -185,7 +185,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory
         {
             ItemStack itemstack;
 
-            if (this.items[p_70298_1_].stackSize <= p_70298_2_)
+            if (this.items[p_70298_1_].getCount() <= p_70298_2_)
             {
                 itemstack = this.items[p_70298_1_];
                 this.items[p_70298_1_] = null;
@@ -196,7 +196,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory
             {
                 itemstack = this.items[p_70298_1_].splitStack(p_70298_2_);
 
-                if (this.items[p_70298_1_].stackSize == 0)
+                if (this.items[p_70298_1_].getCount() == 0)
                 {
                     this.items[p_70298_1_] = null;
                 }
@@ -231,9 +231,9 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 	{
         this.items[slot] = stack;
 
-        if (stack != null && stack.stackSize > this.getInventoryStackLimit())
+        if (stack != null && stack.getCount() > this.getInventoryStackLimit())
         {
-            stack.stackSize = this.getInventoryStackLimit();
+            stack.setCount(this.getInventoryStackLimit());
         }
 
         this.markDirty();
@@ -265,7 +265,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 	@Override
 	public boolean isUseableByPlayer(EntityPlayer player)
 	{
-        return this.worldObj.getTileEntity(this.xCoord, this.yCoord, this.zCoord) != this ? false : player.getDistanceSq((double)this.xCoord + 0.5D, (double)this.yCoord + 0.5D, (double)this.zCoord + 0.5D) <= 64.0D;
+        return this.world.getTileEntity(this.getPos()) != this ? false : player.getDistanceSq((double)this.getPos().getX() + 0.5D, (double)this.getPos().getY() + 0.5D, (double)this.getPos().getZ() + 0.5D) <= 64.0D;
 	}
 
     /**
@@ -294,9 +294,9 @@ public class TileEntityFreezer extends TileEntity implements IInventory
         }
 
         ++this.numPlayersUsing;
-        this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numPlayersUsing);
-        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
-        this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
+        this.world.addBlockEvent(this.getPos(), this.getBlockType(), 1, this.numPlayersUsing);
+        this.world.notifyBlocksOfNeighborChange(this.getPos(), this.getBlockType());
+        this.world.notifyBlocksOfNeighborChange(this.getPos().down(), this.getBlockType());
 	}
 
 	@Override
@@ -305,9 +305,9 @@ public class TileEntityFreezer extends TileEntity implements IInventory
         if (this.getBlockType() instanceof BlockFreezer)
         {
             --this.numPlayersUsing;
-            this.worldObj.addBlockEvent(this.xCoord, this.yCoord, this.zCoord, this.getBlockType(), 1, this.numPlayersUsing);
-            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord, this.zCoord, this.getBlockType());
-            this.worldObj.notifyBlocksOfNeighborChange(this.xCoord, this.yCoord - 1, this.zCoord, this.getBlockType());
+            this.world.addBlockEvent(this.getPos(), this.getBlockType(), 1, this.numPlayersUsing);
+            this.world.notifyBlocksOfNeighborChange(this.getPos(), this.getBlockType());
+            this.world.notifyBlocksOfNeighborChange(this.getPos().down(), this.getBlockType());
         }
 	}
 
@@ -346,7 +346,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 	}
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tags)
+	public NBTTagCompound writeToNBT(NBTTagCompound tags)
 	{
 		super.writeToNBT(tags);
         NBTTagList nbttaglist = new NBTTagList();
@@ -364,6 +364,7 @@ public class TileEntityFreezer extends TileEntity implements IInventory
 
         tags.setTag("Items", nbttaglist);
         tags.setLong("RotCheck", this.lastCheck);
+        return tags;
 	}
 	
 }

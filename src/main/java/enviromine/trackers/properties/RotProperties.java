@@ -132,7 +132,7 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 	public void GenDefaults()
 	{
 		@SuppressWarnings("unchecked")
-		Iterator<Item> iterator = Item.itemRegistry.iterator();
+		Iterator<Item> iterator = Item.REGISTRY.iterator();
 		
 		while(iterator.hasNext())
 		{
@@ -143,7 +143,7 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 				continue;
 			}
 			
-			String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
+			String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
 			
 			if(regName.length <= 0)
 			{
@@ -171,39 +171,39 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 			
 			config.load();
 			
-			if(item == Items.rotten_flesh || item == ObjectHandler.rottenFood)
+			if(item == Items.ROTTEN_FLESH || item == ObjectHandler.rottenFood)
 			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, RPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, RPName[1], -1).getInt(-1);
 				config.get(category, RPName[2], "", "Set blank to rot into nothing").getString();
 				config.get(category, RPName[3], 0).getInt(0);
 				config.get(category, RPName[4], -1, "Set this to -1 to disable rotting on this item").getInt(-1);
-			} else if(item == Items.milk_bucket)
+			} else if(item == Items.MILK_BUCKET)
 			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, RPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.spoiledMilk), "Set blank to rot into nothing").getString();
+				config.get(category, RPName[2], Item.REGISTRY.getNameForObject(ObjectHandler.spoiledMilk), "Set blank to rot into nothing").getString();
 				config.get(category, RPName[3], 0).getInt(0);
 				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			} else if(item == Items.spider_eye)
+			} else if(item == Items.SPIDER_EYE)
 			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, RPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(Items.fermented_spider_eye), "Set blank to rot into nothing").getString();
+				config.get(category, RPName[2], Item.REGISTRY.getNameForObject(Items.FERMENTED_SPIDER_EYE), "Set blank to rot into nothing").getString();
 				config.get(category, RPName[3], 0).getInt(0);
 				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
-			} else if(item == Items.fermented_spider_eye || item == Items.beef || item == Items.chicken || item == Items.porkchop || item == Items.fish || item == Items.cooked_beef || item == Items.cooked_chicken || item == Items.cooked_porkchop || item == Items.cooked_fished)
+			} else if(item == Items.FERMENTED_SPIDER_EYE || item == Items.BEEF || item == Items.CHICKEN || item == Items.PORKCHOP || item == Items.FISH || item == Items.COOKED_BEEF || item == Items.COOKED_CHICKEN || item == Items.COOKED_PORKCHOP || item == Items.COOKED_FISH)
 			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, RPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(Items.rotten_flesh), "Set blank to rot into nothing").getString();
+				config.get(category, RPName[2], Item.REGISTRY.getNameForObject(Items.ROTTEN_FLESH), "Set blank to rot into nothing").getString();
 				config.get(category, RPName[3], 0).getInt(0);
 				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
 			} else if(item instanceof ItemFood && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, RPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, RPName[1], -1).getInt(-1);
-				config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
+				config.get(category, RPName[2], Item.REGISTRY.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
 				config.get(category, RPName[3], 0).getInt(0);
 				config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
 			}
@@ -229,7 +229,7 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 		
 		Item item = (Item)obj;
 		
-		String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
+		String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
 		
 		if(regName.length <= 0)
 		{
@@ -239,9 +239,9 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 		
 		String category = this.categoryName() + "." + EnviroUtils.replaceULN(item.getUnlocalizedName() +"_"+ regName[1]);
 		
-		config.get(category, RPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+		config.get(category, RPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 		config.get(category, RPName[1], -1).getInt(-1);
-		config.get(category, RPName[2], Item.itemRegistry.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
+		config.get(category, RPName[2], Item.REGISTRY.getNameForObject(ObjectHandler.rottenFood), "Set blank to rot into nothing").getString();
 		config.get(category, RPName[3], 0).getInt(0);
 		config.get(category, RPName[4], 7, "Set this to -1 to disable rotting on this item").getInt(7);
 	}

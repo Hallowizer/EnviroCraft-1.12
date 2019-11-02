@@ -1,7 +1,7 @@
 package enviromine.client.gui.hud.items;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.StatCollector;
 
@@ -99,7 +99,7 @@ public class HudItemHydration extends HudItem	{
 		
 		GL11.glScalef((float)UI_Settings.guiScale, (float)UI_Settings.guiScale, (float)UI_Settings.guiScale);
 		
-		int waterBar = MathHelper.ceiling_float_int((Gui_EventManager.tracker.hydration / 100) * this.getWidth());
+		int waterBar = MathHelper.ceil((Gui_EventManager.tracker.hydration / 100) * this.getWidth());
 
 		int frameBorder = 4;
 		if(this.isBlinking())

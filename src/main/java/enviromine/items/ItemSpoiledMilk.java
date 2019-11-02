@@ -18,14 +18,14 @@ public class ItemSpoiledMilk extends Item
     {
         this.setMaxStackSize(1);
         this.setCreativeTab(EnviroMine.enviroTab);
-        this.setContainerItem(Items.bucket);
+        this.setContainerItem(Items.BUCKET);
     }
 
     public ItemStack onEaten(ItemStack stack, World world, EntityPlayer player)
     {
         if (!player.capabilities.isCreativeMode)
         {
-            --stack.stackSize;
+            stack.shrink(1);
         }
 
         if (!world.isRemote)
@@ -35,7 +35,7 @@ public class ItemSpoiledMilk extends Item
         
         player.addStat(EnviroAchievements.tenSecondRule, 1);
 
-        return stack.stackSize <= 0 ? new ItemStack(Items.bucket) : stack;
+        return stack.getCount() <= 0 ? new ItemStack(Items.BUCKET) : stack;
     }
 
     /**
@@ -51,7 +51,7 @@ public class ItemSpoiledMilk extends Item
      */
     public EnumAction getItemUseAction(ItemStack p_77661_1_)
     {
-        return EnumAction.drink;
+        return EnumAction.DRINK;
     }
 
     /**

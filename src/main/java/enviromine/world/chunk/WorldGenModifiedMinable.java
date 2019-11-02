@@ -3,7 +3,8 @@ package enviromine.world.chunk;
 import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.gen.feature.WorldGenerator;
 
@@ -18,7 +19,7 @@ public class WorldGenModifiedMinable extends WorldGenerator
 
     public WorldGenModifiedMinable(Block block, int number)
     {
-        this(block, number, Blocks.stone);
+        this(block, number, Blocks.STONE);
     }
 
     public WorldGenModifiedMinable(Block block, int number, Block target)
@@ -58,12 +59,12 @@ public class WorldGenModifiedMinable extends WorldGenerator
             double d9 = rand.nextDouble() * (double)this.numberOfBlocks / 16.0D;
             double d10 = (double)(MathHelper.sin((float)l * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * d9 + 1.0D;
             double d11 = (double)(MathHelper.sin((float)l * (float)Math.PI / (float)this.numberOfBlocks) + 1.0F) * d9 + 1.0D;
-            int i1 = MathHelper.floor_double(d6 - d10 / 2.0D);
-            int j1 = MathHelper.floor_double(d7 - d11 / 2.0D);
-            int k1 = MathHelper.floor_double(d8 - d10 / 2.0D);
-            int l1 = MathHelper.floor_double(d6 + d10 / 2.0D);
-            int i2 = MathHelper.floor_double(d7 + d11 / 2.0D);
-            int j2 = MathHelper.floor_double(d8 + d10 / 2.0D);
+            int i1 = MathHelper.floor(d6 - d10 / 2.0D);
+            int j1 = MathHelper.floor(d7 - d11 / 2.0D);
+            int k1 = MathHelper.floor(d8 - d10 / 2.0D);
+            int l1 = MathHelper.floor(d6 + d10 / 2.0D);
+            int i2 = MathHelper.floor(d7 + d11 / 2.0D);
+            int j2 = MathHelper.floor(d8 + d10 / 2.0D);
 
             for (int k2 = i1; k2 <= l1; ++k2)
             {
@@ -81,9 +82,9 @@ public class WorldGenModifiedMinable extends WorldGenerator
                             {
                                 double d14 = ((double)i3 + 0.5D - d8) / (d10 / 2.0D);
 
-                                if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlock(k2, l2, i3) == targetBlock && (targetMeta <= -1 || world.getBlockMetadata(k2, l2, i3) == targetMeta))
+                                if (d12 * d12 + d13 * d13 + d14 * d14 < 1.0D && world.getBlockState(new BlockPos(k2, l2, i3)).getBlock() == targetBlock && (targetMeta <= -1 || world.getBlockMetadata(k2, l2, i3) == targetMeta))
                                 {
-                                    world.setBlock(k2, l2, i3, this.minableBlock, mineableBlockMeta, 2);
+                                    world.setBlock(new BlockPos(k2, l2, i3), this.minableBlock, mineableBlockMeta, 2);
                                 }
                             }
                         }

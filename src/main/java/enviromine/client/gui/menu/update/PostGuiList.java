@@ -9,15 +9,15 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.StatCollector;
 
 import org.lwjgl.input.Mouse;
 
 import com.google.common.collect.Lists;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.UpdateNotification;
 import enviromine.core.EM_Settings;
 import enviromine.utils.EnviroUtils;
@@ -309,7 +309,7 @@ public class PostGuiList extends GuiListExtended
 	
 	public void scrollByMultiplied(float p_148145_1_)
 	{
-		super.scrollBy(MathHelper.ceiling_float_int(p_148145_1_ * scrollSpeed));
+		super.scrollBy(MathHelper.ceil(p_148145_1_ * scrollSpeed));
 	}
 	
 	@Override

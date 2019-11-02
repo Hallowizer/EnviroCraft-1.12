@@ -1,7 +1,7 @@
 package enviromine.client.renderer.tileentity;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import net.minecraft.client.model.ModelChest;
 import net.minecraft.client.renderer.tileentity.TileEntitySpecialRenderer;
@@ -23,7 +23,7 @@ public class TileEntityEskyRenderer extends TileEntitySpecialRenderer
     {
         int i = 0;
 
-        if (p_147500_1_.hasWorldObj())
+        if (p_147500_1_.hasWorld())
         {
             i = p_147500_1_.getBlockMetadata();
         }

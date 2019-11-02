@@ -2,8 +2,8 @@ package enviromine.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
@@ -14,7 +14,8 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import enviromine.blocks.tiles.TileEntityElevator;
@@ -105,7 +106,7 @@ public class BlockElevator extends Block implements ITileEntityProvider
 			return true;
 		}*/
 		
-		if(!(meta == 0 && world.getBlock(i, j - 1, k) == ObjectHandler.elevator && world.getBlockMetadata(i, j - 1, k)%2 == 1) && !(meta == 1 && world.getBlock(i, j + 1, k) == ObjectHandler.elevator && world.getBlockMetadata(i, j + 1, k)%2 == 0))
+		if(!(meta == 0 && world.getBlockState(new BlockPos(i, j - 1, k)).getBlock() == ObjectHandler.elevator && world.getBlockMetadata(i, j - 1, k)%2 == 1) && !(meta == 1 && world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == ObjectHandler.elevator && world.getBlockMetadata(i, j + 1, k)%2 == 0))
 		{
 			player.addChatMessage(new ChatComponentText("Elevator is incomplete!"));
 			return true;

@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -78,29 +79,29 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 		// --- Generate Shaft --- //
 		
 		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 0, 4, shaftTop, 4, Blocks.fence, Blocks.fence, false);
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, shaftTop + 1, 0, 4, shaftTop + 2, 4, Blocks.air, Blocks.air, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, shaftTop + 1, 0, 4, shaftTop + 2, 4, Blocks.AIR, Blocks.AIR, false);
 		
 		for(int depth = 3; depth < shaftTop; depth += 4)
 		{
-			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, depth, 0, 4, depth, 4, Blocks.planks, Blocks.planks, false);
+			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, depth, 0, 4, depth, 4, Blocks.PLANKS, Blocks.PLANKS, false);
 		}
 		
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 0, 0, shaftTop - 2, 0, Blocks.log, Blocks.log, false);
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4, 0, 0, 4, shaftTop - 2, 0, Blocks.log, Blocks.log, false);
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 4, 0, shaftTop - 2, 4, Blocks.log, Blocks.log, false);
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4, 0, 4, 4, shaftTop - 2, 4, Blocks.log, Blocks.log, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 0, 0, shaftTop - 2, 0, Blocks.LOG, Blocks.LOG, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4, 0, 0, 4, shaftTop - 2, 0, Blocks.LOG, Blocks.LOG, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 4, 0, shaftTop - 2, 4, Blocks.LOG, Blocks.LOG, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4, 0, 4, 4, shaftTop - 2, 4, Blocks.LOG, Blocks.LOG, false);
 		
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 2, 0, 0, 2, shaftTop - 2, 0, Blocks.planks, Blocks.planks, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 2, 0, 0, 2, shaftTop - 2, 0, Blocks.PLANKS, Blocks.PLANKS, false);
 		
-		this.customPlaceBlockAtCurrentPosition(par1World, Blocks.air, 0, 2, shaftTop, 0, par3StructureBoundingBox);
+		this.customPlaceBlockAtCurrentPosition(par1World, Blocks.AIR, 0, 2, shaftTop, 0, par3StructureBoundingBox);
 		
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1, 0, 1, 3, shaftTop, 3, Blocks.air, Blocks.air, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1, 0, 1, 3, shaftTop, 3, Blocks.AIR, Blocks.AIR, false);
 		
-		int var4 = this.getMetadataWithOffset(Blocks.ladder, 2);
+		int var4 = this.getMetadataWithOffset(Blocks.LADDER, 2);
 		
 		for(int ladderDepth = 0; ladderDepth < shaftTop; ladderDepth += 1)
 		{
-			this.customPlaceBlockAtCurrentPosition(par1World, Blocks.ladder, var4, 2, ladderDepth, 1, par3StructureBoundingBox);
+			this.customPlaceBlockAtCurrentPosition(par1World, Blocks.LADDER, var4, 2, ladderDepth, 1, par3StructureBoundingBox);
 		}
 		
 		MineshaftBuilder mineBuilder = new MineshaftBuilder(par1World, this.getXWithOffset(0, 0), this.getYWithOffset(shaftTop), this.getZWithOffset(0, 0), this.coordBaseMode);
@@ -122,8 +123,8 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 				{
 					if(sectionHeight != 0)
 					{
-						this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1, sectionHeight - 1, 1, 3, sectionHeight - 1, 3, Blocks.planks, Blocks.planks, false);
-						this.customPlaceBlockAtCurrentPosition(par1World, Blocks.ladder, var4, 2, sectionHeight - 1, 1, par3StructureBoundingBox);
+						this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1, sectionHeight - 1, 1, 3, sectionHeight - 1, 3, Blocks.PLANKS, Blocks.PLANKS, false);
+						this.customPlaceBlockAtCurrentPosition(par1World, Blocks.LADDER, var4, 2, sectionHeight - 1, 1, par3StructureBoundingBox);
 					}
 					
 					genSegmentsAtCurrentHeight(par1World, par2Random, par3StructureBoundingBox, 0, sectionHeight, 0);
@@ -261,72 +262,72 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 			
 			// --- Pre Checks --- //
 			
-			if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 0 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.chest)
+			if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 0 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.CHEST)
 			{
 				containsLoot = true;
 			}
 			
-			if((customGetBlockAtCurrentPosition(par1World, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.air || customGetBlockAtCurrentPosition(par1World, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.trapdoor) && customGetBlockSkyLightAtCurrentPosition(par1World, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox) >= 15)
+			if((customGetBlockAtCurrentPosition(par1World, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.AIR || customGetBlockAtCurrentPosition(par1World, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.TRAPDOOR) && customGetBlockSkyLightAtCurrentPosition(par1World, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox) >= 15)
 			{
 				ventDivider = true;
 			}
 			
 			if(!containsLoot)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 1 + curZ, 3 + curX, 2 + curY, 3 + curZ, Blocks.air, Blocks.air, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 1 + curZ, 3 + curX, 2 + curY, 3 + curZ, Blocks.AIR, Blocks.AIR, false);
 			} else
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 1 + curY, 1 + curZ, 3 + curX, 2 + curY, 3 + curZ, Blocks.air, Blocks.air, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 1 + curY, 1 + curZ, 3 + curX, 2 + curY, 3 + curZ, Blocks.AIR, Blocks.AIR, false);
 				
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 1 + curZ, 3 + curX, 0 + curY, 1 + curZ, Blocks.air, Blocks.air, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 1 + curZ, 1 + curX, 0 + curY, 3 + curZ, Blocks.air, Blocks.air, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 0 + curY, 3 + curZ, 3 + curX, 0 + curY, 1 + curZ, Blocks.air, Blocks.air, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 0 + curY, 3 + curZ, 1 + curX, 0 + curY, 3 + curZ, Blocks.air, Blocks.air, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 1 + curZ, 3 + curX, 0 + curY, 1 + curZ, Blocks.AIR, Blocks.AIR, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 1 + curZ, 1 + curX, 0 + curY, 3 + curZ, Blocks.AIR, Blocks.AIR, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 0 + curY, 3 + curZ, 3 + curX, 0 + curY, 1 + curZ, Blocks.AIR, Blocks.AIR, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 0 + curY, 3 + curZ, 1 + curX, 0 + curY, 3 + curZ, Blocks.AIR, Blocks.AIR, false);
 			}
 			
 			// --- Base Segment --- //
-			if((customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 0 + curZ, par3StructureBoundingBox) == Blocks.fence && customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, -1 + curZ, par3StructureBoundingBox) == Blocks.air) || customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 0 + curZ, par3StructureBoundingBox) == Blocks.air)
+			if((customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 0 + curZ, par3StructureBoundingBox) == Blocks.OAK_FENCE && customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, -1 + curZ, par3StructureBoundingBox) == Blocks.AIR) || customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 0 + curZ, par3StructureBoundingBox) == Blocks.AIR)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 0 + curZ, 3 + curX, 2 + curY, 0 + curZ, Blocks.air, Blocks.air, false);
-			} else if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, -1 + curZ, par3StructureBoundingBox) != Blocks.ladder)
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 0 + curZ, 3 + curX, 2 + curY, 0 + curZ, Blocks.AIR, Blocks.AIR, false);
+			} else if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, -1 + curZ, par3StructureBoundingBox) != Blocks.LADDER)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 0 + curZ, 3 + curX, 2 + curY, 0 + curZ, Blocks.fence, Blocks.fence, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 0 + curZ, 3 + curX, 2 + curY, 0 + curZ, Blocks.OAK_FENCE, Blocks.OAK_FENCE, false);
 			}
 			
-			if((customGetBlockAtCurrentPosition(par1World, 0 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.fence && customGetBlockAtCurrentPosition(par1World, -1 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.air) || customGetBlockAtCurrentPosition(par1World, 0 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.air)
+			if((customGetBlockAtCurrentPosition(par1World, 0 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.OAK_FENCE && customGetBlockAtCurrentPosition(par1World, -1 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.AIR) || customGetBlockAtCurrentPosition(par1World, 0 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.AIR)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 1 + curZ, 0 + curX, 2 + curY, 3 + curZ, Blocks.air, Blocks.air, false);
-			} else if(customGetBlockAtCurrentPosition(par1World, -1 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) != Blocks.ladder)
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 1 + curZ, 0 + curX, 2 + curY, 3 + curZ, Blocks.AIR, Blocks.AIR, false);
+			} else if(customGetBlockAtCurrentPosition(par1World, -1 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) != Blocks.LADDER)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 1 + curZ, 0 + curX, 2 + curY, 3 + curZ, Blocks.fence, Blocks.fence, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 1 + curZ, 0 + curX, 2 + curY, 3 + curZ, Blocks.OAK_FENCE, Blocks.OAK_FENCE, false);
 			}
 			
-			if((customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 4 + curZ, par3StructureBoundingBox) == Blocks.fence && customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 5 + curZ, par3StructureBoundingBox) == Blocks.air) || customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 4 + curZ, par3StructureBoundingBox) == Blocks.air)
+			if((customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 4 + curZ, par3StructureBoundingBox) == Blocks.OAK_FENCE && customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 5 + curZ, par3StructureBoundingBox) == Blocks.AIR) || customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 4 + curZ, par3StructureBoundingBox) == Blocks.AIR)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 4 + curZ, 3 + curX, 2 + curY, 4 + curZ, Blocks.air, Blocks.air, false);
-			} else if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 5 + curZ, par3StructureBoundingBox) != Blocks.ladder)
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 4 + curZ, 3 + curX, 2 + curY, 4 + curZ, Blocks.AIR, Blocks.AIR, false);
+			} else if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 1 + curY, 5 + curZ, par3StructureBoundingBox) != Blocks.LADDER)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 4 + curZ, 3 + curX, 2 + curY, 4 + curZ, Blocks.fence, Blocks.fence, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 0 + curY, 4 + curZ, 3 + curX, 2 + curY, 4 + curZ, Blocks.OAK_FENCE, Blocks.OAK_FENCE, false);
 			}
 			
-			if((customGetBlockAtCurrentPosition(par1World, 4 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.fence && customGetBlockAtCurrentPosition(par1World, 5 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.air) || customGetBlockAtCurrentPosition(par1World, 4 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.air)
+			if((customGetBlockAtCurrentPosition(par1World, 4 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.OAK_FENCE && customGetBlockAtCurrentPosition(par1World, 5 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.AIR) || customGetBlockAtCurrentPosition(par1World, 4 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) == Blocks.AIR)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 1 + curZ, 4 + curX, 2 + curY, 3 + curZ, Blocks.air, Blocks.air, false);
-			} else if(customGetBlockAtCurrentPosition(par1World, 5 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) != Blocks.ladder)
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 1 + curZ, 4 + curX, 2 + curY, 3 + curZ, Blocks.AIR, Blocks.AIR, false);
+			} else if(customGetBlockAtCurrentPosition(par1World, 5 + curX, 1 + curY, 2 + curZ, par3StructureBoundingBox) != Blocks.LADDER)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 1 + curZ, 4 + curX, 2 + curY, 3 + curZ, Blocks.fence, Blocks.fence, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 1 + curZ, 4 + curX, 2 + curY, 3 + curZ, Blocks.OAK_FENCE, Blocks.OAK_FENCE, false);
 			}
 			
-			if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox) != Blocks.trapdoor)
+			if(customGetBlockAtCurrentPosition(par1World, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox) != Blocks.TRAPDOOR)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 3 + curY, 0 + curZ, 4 + curX, 3 + curY, 4 + curZ, Blocks.planks, Blocks.planks, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, 3 + curY, 3 + curZ, Blocks.air, Blocks.air, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 3 + curY, 0 + curZ, 4 + curX, 3 + curY, 4 + curZ, Blocks.PLANKS, Blocks.PLANKS, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, 3 + curY, 3 + curZ, Blocks.AIR, Blocks.AIR, false);
 			}
 			
-			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 0 + curZ, 0 + curX, 3 + curY, 0 + curZ, Blocks.log, Blocks.log, false);
-			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 0 + curZ, 4 + curX, 3 + curY, 0 + curZ, Blocks.log, Blocks.log, false);
-			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 4 + curZ, 0 + curX, 3 + curY, 4 + curZ, Blocks.log, Blocks.log, false);
-			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 4 + curZ, 4 + curX, 3 + curY, 4 + curZ, Blocks.log, Blocks.log, false);
+			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 0 + curZ, 0 + curX, 3 + curY, 0 + curZ, Blocks.LOG, Blocks.LOG, false);
+			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 0 + curZ, 4 + curX, 3 + curY, 0 + curZ, Blocks.LOG, Blocks.LOG, false);
+			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0 + curX, 0 + curY, 4 + curZ, 0 + curX, 3 + curY, 4 + curZ, Blocks.LOG, Blocks.LOG, false);
+			this.customFillWithBlocks(par1World, par3StructureBoundingBox, 4 + curX, 0 + curY, 4 + curZ, 4 + curX, 3 + curY, 4 + curZ, Blocks.LOG, Blocks.LOG, false);
 			
 			Block tempBlock;
 			
@@ -335,11 +336,11 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 				for(int k = 0; k <= 4; k++)
 				{
 					tempBlock = customGetBlockAtCurrentPosition(par1World, i + curX, -1 + curY, k + curZ, par3StructureBoundingBox);
-					if(tempBlock == Blocks.air || tempBlock == Blocks.flowing_lava || tempBlock == Blocks.lava || tempBlock == Blocks.flowing_water || tempBlock == Blocks.water)
+					if(tempBlock == Blocks.AIR || tempBlock == Blocks.FLOWING_LAVA || tempBlock == Blocks.LAVA || tempBlock == Blocks.FLOWING_WATER || tempBlock == Blocks.WATER)
 					{
 						//if(!(i == 2 && k == 2 && ventDivider))
 						{
-							customPlaceBlockAtCurrentPosition(par1World, Blocks.planks, 0, i + curX, -1 + curY, k + curZ, par3StructureBoundingBox);
+							customPlaceBlockAtCurrentPosition(par1World, Blocks.PLANKS, 0, i + curX, -1 + curY, k + curZ, par3StructureBoundingBox);
 						}
 					}
 				}
@@ -356,34 +357,34 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 					ventGroundLevel += 4;
 				}
 				
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, ventGroundLevel, 3 + curZ, Blocks.fence, Blocks.fence, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, ventGroundLevel, 3 + curZ, Blocks.OAK_FENCE, Blocks.OAK_FENCE, false);
 				
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 1 + curX, ventGroundLevel, 1 + curZ, Blocks.log, Blocks.log, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 3 + curY, 1 + curZ, 3 + curX, ventGroundLevel, 1 + curZ, Blocks.log, Blocks.log, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 3 + curZ, 1 + curX, ventGroundLevel, 3 + curZ, Blocks.log, Blocks.log, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 3 + curY, 3 + curZ, 3 + curX, ventGroundLevel, 3 + curZ, Blocks.log, Blocks.log, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 1 + curX, ventGroundLevel, 1 + curZ, Blocks.LOG, Blocks.LOG, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 3 + curY, 1 + curZ, 3 + curX, ventGroundLevel, 1 + curZ, Blocks.LOG, Blocks.LOG, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 3 + curZ, 1 + curX, ventGroundLevel, 3 + curZ, Blocks.LOG, Blocks.LOG, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 3 + curX, 3 + curY, 3 + curZ, 3 + curX, ventGroundLevel, 3 + curZ, Blocks.LOG, Blocks.LOG, false);
 				
 				for(int ventHeight = 3 + curY; ventHeight <= ventGroundLevel; ventHeight += 4)
 				{
-					this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, ventHeight, 1 + curZ, 3 + curX, ventHeight, 3 + curZ, Blocks.planks, Blocks.planks, false);
+					this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, ventHeight, 1 + curZ, 3 + curX, ventHeight, 3 + curZ, Blocks.PLANKS, Blocks.PLANKS, false);
 				}
 				
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 2 + curX, 3 + curY, 2 + curZ, 2 + curX, ventGroundLevel, 2 + curZ, Blocks.air, Blocks.air, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 2 + curX, 3 + curY, 2 + curZ, 2 + curX, ventGroundLevel, 2 + curZ, Blocks.AIR, Blocks.AIR, false);
 				
-				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.trapdoor, 0 | 8, 2 + curX, ventGroundLevel, 2 + curZ, par3StructureBoundingBox);
-				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.trapdoor, 0, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox);
+				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.TRAPDOOR, 0 | 8, 2 + curX, ventGroundLevel, 2 + curZ, par3StructureBoundingBox);
+				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.TRAPDOOR, 0, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox);
 			} else if(par2Random.nextInt(20) == 0 && !ventDivider)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, 3 + curY, 3 + curZ, Blocks.leaves, Blocks.leaves, false);
-				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.log, 0, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, 3 + curY, 3 + curZ, Blocks.LEAVES, Blocks.LEAVES, false);
+				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.LOG, 0, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox);
 			}
 			
 			if(ventDivider)
 			{
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, -1 + curY, 1 + curZ, 3 + curX, -1 + curY, 3 + curZ, Blocks.planks, Blocks.planks, false);
-				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, 3 + curY, 3 + curZ, Blocks.planks, Blocks.planks, false);
-				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.trapdoor, 0, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox);
-				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.trapdoor, 0 | 8, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, -1 + curY, 1 + curZ, 3 + curX, -1 + curY, 3 + curZ, Blocks.PLANKS, Blocks.PLANKS, false);
+				this.customFillWithBlocks(par1World, par3StructureBoundingBox, 1 + curX, 3 + curY, 1 + curZ, 3 + curX, 3 + curY, 3 + curZ, Blocks.PLANKS, Blocks.PLANKS, false);
+				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.TRAPDOOR, 0, 2 + curX, 3 + curY, 2 + curZ, par3StructureBoundingBox);
+				this.customPlaceBlockAtCurrentPosition(par1World, Blocks.TRAPDOOR, 0 | 8, 2 + curX, -1 + curY, 2 + curZ, par3StructureBoundingBox);
 			}
 			
 			// --- Place Loot --- //
@@ -433,7 +434,7 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 			{
 				for(int var14 = par5; var14 <= par8; ++var14)
 				{
-					if(!par11 || this.getBlockAtCurrentPosition(par1World, var13, var12, var14, par2StructureBoundingBox) != Blocks.air)
+					if(!par11 || this.getBlockAtCurrentPosition(par1World, var13, var12, var14, par2StructureBoundingBox) != Blocks.AIR)
 					{
 						if(var12 != par4 && var12 != par7 && var13 != par3 && var13 != par6 && var14 != par5 && var14 != par8)
 						{
@@ -471,10 +472,10 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 		
 		if(par1World.getChunkFromBlockCoords(var6, var8) == null)
 		{
-			return Blocks.air;
+			return Blocks.AIR;
 		} else
 		{
-			return par1World.getBlock(var6, var7, var8);
+			return par1World.getBlockState(new BlockPos(var6, var7, var8)).getBlock();
 		}
 	}
 	
@@ -484,7 +485,7 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 		int var7 = this.getYWithOffset(par3);
 		int var8 = this.getZWithOffset(par2, par4);
 		Chunk chunk = par1World.getChunkFromBlockCoords(var6, var8);
-		return chunk.getSavedLightValue(EnumSkyBlock.Sky, var6 & 0xf, var7, var8 & 0xf);
+		return chunk.getSavedLightValue(EnumSkyBlock.SKY, var6 & 0xf, var7, var8 & 0xf);
 	}
 	
 	protected boolean customGenerateStructureChestContents(World par1World, StructureBoundingBox par2StructureBoundingBox, Random par3Random, int par4, int par5, int par6, WeightedRandomChestContent[] par7ArrayOfWeightedRandomChestContent, int par8)
@@ -498,8 +499,8 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 			return false;
 		}
 		
-		par1World.setBlock(var9, var10, var11, Blocks.chest);
-		TileEntityChest var12 = (TileEntityChest)par1World.getTileEntity(var9, var10, var11);
+		par1World.setBlock(var9, var10, var11, Blocks.CHEST);
+		TileEntityChest var12 = (TileEntityChest)par1World.getTileEntity(new BlockPos(var9, var10, var11));
 		
 		if(var12 != null)
 		{

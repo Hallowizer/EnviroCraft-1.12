@@ -27,7 +27,7 @@ public class TileEntityDavyLampRenderer extends TileEntitySpecialRenderer
 	@Override
 	public void renderTileEntityAt(TileEntity tileEntity, double x, double y, double z, float f)
 	{
-		int pass = (int)(tileEntity.getWorldObj().getTotalWorldTime()/2%2);
+		int pass = (int)(tileEntity.getWorld().getTotalWorldTime()/2%2);
 		GL11.glPushMatrix();
         GL11.glTranslated(x, y, z);
         if(tileEntity.getBlockMetadata() == 1)

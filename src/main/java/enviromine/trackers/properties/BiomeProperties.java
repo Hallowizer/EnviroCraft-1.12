@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.BiomeDictionary;
 import net.minecraftforge.common.BiomeDictionary.Type;
 import net.minecraftforge.common.config.Configuration;
@@ -70,7 +70,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	 * @param biome
 	 * @return true if has custom properties
 	 */
-	public boolean hasProperty(BiomeGenBase biome)
+	public boolean hasProperty(Biome biome)
 	{
 		return EM_Settings.biomeProperties.containsKey(biome.biomeID);
 	}
@@ -80,7 +80,7 @@ public class BiomeProperties implements SerialisableProperty, PropertyBase
 	 * @param biome
 	 * @return BiomeProperties
 	 */
-	public BiomeProperties getProperty(BiomeGenBase biome)
+	public BiomeProperties getProperty(Biome biome)
 	{
 		return EM_Settings.biomeProperties.get(biome.biomeID);
 	}

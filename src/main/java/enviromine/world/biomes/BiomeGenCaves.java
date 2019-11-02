@@ -44,10 +44,10 @@ public class BiomeGenCaves extends BiomeGenBase
 				continue;
 			}
 			
-			if(EnumCreatureType.monster.getCreatureClass().isAssignableFrom(clazz))
+			if(EnumCreatureType.MONSTER.getCreatureClass().isAssignableFrom(clazz))
 			{
 				this.spawnableMonsterList.add(new SpawnListEntry(clazz, props.weight, props.minGroup, props.maxGroup));
-			} else if(EnumCreatureType.waterCreature.getCreatureClass().isAssignableFrom(clazz))
+			} else if(EnumCreatureType.WATER_CREATURE.getCreatureClass().isAssignableFrom(clazz))
 			{
 				this.spawnableWaterCreatureList.add(new SpawnListEntry(clazz, props.weight, props.minGroup, props.maxGroup));
 			} else

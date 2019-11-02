@@ -2,8 +2,8 @@ package enviromine.blocks;
 
 import java.util.ArrayList;
 import java.util.List;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.blocks.tiles.TileEntityDavyLamp;
 import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
@@ -18,6 +18,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
 
@@ -75,7 +76,7 @@ public class BlockDavyLamp extends Block implements ITileEntityProvider
 	{
 		ItemStack stack = player.getEquipmentInSlot(0);
 		
-		if (stack != null && stack.getItem() == Items.flint_and_steel && world.getBlockMetadata(i, j, k) == 0)
+		if (stack != null && stack.getItem() == Items.FLINT_AND_STEEL && world.getBlockMetadata(i, j, k) == 0)
 		{
 			stack.damageItem(1, player);
 			world.setBlockMetadataWithNotify(i, j, k, 1, 2);
@@ -103,7 +104,7 @@ public class BlockDavyLamp extends Block implements ITileEntityProvider
 				int y = j + ForgeDirection.VALID_DIRECTIONS[ii].offsetY;
 				int z = k + ForgeDirection.VALID_DIRECTIONS[ii].offsetZ;
 				
-				Block bDir = world.getBlock(x, y, z);
+				Block bDir = world.getBlockState(new BlockPos(x, y, z)).getBlock();
 				
 				if (bDir instanceof BlockGas)
 				{

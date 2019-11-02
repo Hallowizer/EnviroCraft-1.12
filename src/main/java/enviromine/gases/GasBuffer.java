@@ -7,6 +7,7 @@ import java.util.concurrent.TimeUnit;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 import org.apache.logging.log4j.Level;
@@ -68,7 +69,7 @@ public class GasBuffer
 		}
 	}
 	
-	public static void scheduleUpdate(World world, int x, int y, int z, BlockGas block)
+	public static void scheduleUpdate(World world, BlockPos pos, BlockGas block)
 	{
 		if(world.isRemote)
 		{
@@ -76,7 +77,7 @@ public class GasBuffer
 			return;
 		}
 		
-		int[] entry = new int[]{world.provider.dimensionId, x, y, z};
+		int[] entry = new int[]{world.provider.getDimension(), pos.getX(), pos.getY(), pos.getZ()};
 		
 		if(block == ObjectHandler.fireGasBlock)
 		{
@@ -177,9 +178,9 @@ public class GasBuffer
 				if(world == null || world.getTotalWorldTime() < EM_PhysManager.worldStartTime + EM_Settings.worldDelay)
 				{
 					continue;
-				} else if(EM_PhysManager.chunkDelay.containsKey(world.provider.dimensionId + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)))
+				} else if(EM_PhysManager.chunkDelay.containsKey(world.provider.getDimension() + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)))
 				{
-					if(EM_PhysManager.chunkDelay.get(world.provider.dimensionId + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)) > world.getTotalWorldTime())
+					if(EM_PhysManager.chunkDelay.get(world.provider.getDimension() + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)) > world.getTotalWorldTime())
 					{
 						continue;
 					}
@@ -219,9 +220,9 @@ public class GasBuffer
 				if(world == null || world.getTotalWorldTime() < EM_PhysManager.worldStartTime + EM_Settings.worldDelay)
 				{
 					continue;
-				} else if(EM_PhysManager.chunkDelay.containsKey(world.provider.dimensionId + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)))
+				} else if(EM_PhysManager.chunkDelay.containsKey(world.provider.getDimension() + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)))
 				{
-					if(EM_PhysManager.chunkDelay.get(world.provider.dimensionId + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)) > world.getTotalWorldTime())
+					if(EM_PhysManager.chunkDelay.get(world.provider.getDimension() + "" + (entry[1] >> 4) + "," + (entry[3] >> 4)) > world.getTotalWorldTime())
 					{
 						continue;
 					}

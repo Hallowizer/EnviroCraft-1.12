@@ -152,7 +152,7 @@ public class CaveSpawnProperties implements PropertyBase
 		}
 		
 		int eID = (Integer)obj;
-		
+
 		String catName = this.categoryName() + "." + EnviroUtils.replaceULN(EntityList.getStringFromID(eID));
 		
 		config.get(catName, CGPNames[0], eID);

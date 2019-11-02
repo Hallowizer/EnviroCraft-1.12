@@ -6,6 +6,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.WeightedRandomChestContent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ChestGenHooks;
 import enviromine.core.EnviroMine;
@@ -223,12 +224,12 @@ public abstract class MineSegment
 			this.world.setBlock(this.xOffset(x, z), this.yOffset(y), this.zOffset(x, z), block, meta, 2);
 		} else
 		{
-			if(block != Blocks.air && block.getMaterial() == Material.wood && builder.rand.nextBoolean())
+			if(block != Blocks.AIR && block.getMaterial() == Material.WOOD && builder.rand.nextBoolean())
 			{
-				this.world.setBlock(this.xOffset(x, z), this.yOffset(y), this.zOffset(x, z), Blocks.vine, 0, 2);
+				this.world.setBlock(this.xOffset(x, z), this.yOffset(y), this.zOffset(x, z), Blocks.VINE, 0, 2);
 			} else
 			{
-				this.world.setBlockToAir(this.xOffset(x, z), this.yOffset(y), this.zOffset(x, z));
+				this.world.setBlockToAir(new BlockPos(this.xOffset(x, z), this.yOffset(y), this.zOffset(x, z)));
 			}
 		}
 	}
@@ -240,7 +241,7 @@ public abstract class MineSegment
 	
 	public Block getBlock(int x, int y, int z)
 	{
-		return this.world.getBlock(this.xOffset(x, z), this.yOffset(y), this.zOffset(x, z));
+		return this.world.getBlockState(new BlockPos(this.xOffset(x, z), this.yOffset(y), this.zOffset(x, z))).getBlock();
 	}
 	
 	public int getBlockMeta(int x, int y, int z)
@@ -259,8 +260,8 @@ public abstract class MineSegment
 			return;
 		}
 		
-		world.setBlock(i, j, k, Blocks.chest);
-		TileEntityChest chestTile = (TileEntityChest)world.getTileEntity(i, j, k);
+		world.setBlock(i, j, k, Blocks.CHEST);
+		TileEntityChest chestTile = (TileEntityChest)world.getTileEntity(new BlockPos(i, j, k));
 		
 		if(chestTile != null)
 		{

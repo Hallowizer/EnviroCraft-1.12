@@ -41,7 +41,7 @@ public class CamelPackIntegrationHandler implements IRecipe
 			if (item == null)
 			{
 				continue;
-			} else if (item.hasTagCompound() && item.stackTagCompound.hasKey("isCamelPack"))
+			} else if (item.hasTagCompound() && item.getTagCompound().hasKey("isCamelPack"))
 			{
 				if (hasPack || isRemove)
 				{
@@ -53,7 +53,7 @@ public class CamelPackIntegrationHandler implements IRecipe
 				}
 			} else if (item.getItem() instanceof ItemArmor && ((ItemArmor)item.getItem()).armorType == 1)
 			{
-				String name = Item.itemRegistry.getNameForObject(item.getItem());
+				String name = Item.REGISTRY.getNameForObject(item.getItem());
 				if (EM_Settings.armorProperties.containsKey(name) && EM_Settings.armorProperties.get(name).allowCamelPack)
 				{
 					if (hasArmor)
@@ -61,7 +61,7 @@ public class CamelPackIntegrationHandler implements IRecipe
 						return false;
 					} else
 					{
-						if (item.hasTagCompound() && item.stackTagCompound.hasKey("camelPackFill"))
+						if (item.hasTagCompound() && item.getTagCompound().hasKey("camelPackFill"))
 						{
 							if (hasPack)
 							{
@@ -96,7 +96,7 @@ public class CamelPackIntegrationHandler implements IRecipe
 		{
 			if (isRemove)
 			{
-				Object obj = Item.itemRegistry.getObject(armor.getTagCompound().getString("packName"));
+				Object obj = Item.REGISTRY.getObject(armor.getTagCompound().getString("packName"));
 				if (obj instanceof Item) {
 					ItemStack out = new ItemStack((Item)obj);
 					
@@ -116,7 +116,7 @@ public class CamelPackIntegrationHandler implements IRecipe
 				
 				armor.getTagCompound().setInteger("camelPackFill", pack.getTagCompound().getInteger("camelPackFill"));
 				armor.getTagCompound().setInteger("camelPackMax", pack.getTagCompound().getInteger("camelPackMax"));
-				armor.getTagCompound().setString("packName", Item.itemRegistry.getNameForObject(pack.getItem()));
+				armor.getTagCompound().setString("packName", Item.REGISTRY.getNameForObject(pack.getItem()));
 				
 				return armor;
 			}
@@ -156,7 +156,7 @@ public class CamelPackIntegrationHandler implements IRecipe
 						continue;
 					} else if (slot.hasTagCompound() && slot.getTagCompound().hasKey("camelPackFill"))
 					{
-						slot.stackSize++;
+						slot.grow(1);
 						slot.getTagCompound().removeTag("camelPackFill");
 						slot.getTagCompound().removeTag("camelPackMax");
 						slot.getTagCompound().removeTag("packName");

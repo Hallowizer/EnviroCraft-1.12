@@ -4,11 +4,11 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.Gui_EventManager;
 import enviromine.client.gui.UI_Settings;
 import enviromine.core.EM_Settings;
@@ -42,7 +42,7 @@ public class Debug_Info
 	@SideOnly(Side.CLIENT)
 	public static void ShowDebugText(RenderGameOverlayEvent event , Minecraft mc)
 	{
-		if(event.type != ElementType.HELMET || event.isCancelable())
+		if(event.getType() != ElementType.HELMET || event.isCancelable())
 		{
 			return;
 		}
@@ -55,8 +55,8 @@ public class Debug_Info
 		try
 		{
 			DB_abientTemp = Gui_EventManager.tracker.airTemp;
-			DB_biomeName = Gui_EventManager.tracker.trackedEntity.worldObj.getBiomeGenForCoords(MathHelper.floor_double(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor_double(Gui_EventManager.tracker.trackedEntity.posZ)).biomeName;
-			DB_biomeID = Gui_EventManager.tracker.trackedEntity.worldObj.getBiomeGenForCoords(MathHelper.floor_double(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor_double(Gui_EventManager.tracker.trackedEntity.posZ)).biomeID;
+			DB_biomeName = Gui_EventManager.tracker.trackedEntity.world.getBiomeGenForCoords(MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posZ)).biomeName;
+			DB_biomeID = Gui_EventManager.tracker.trackedEntity.world.getBiomeGenForCoords(MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posZ)).biomeID;
 			DB_tempchange = new BigDecimal(String.valueOf(Gui_EventManager.tracker.bodyTemp - Gui_EventManager.tracker.prevBodyTemp)).setScale(3, RoundingMode.HALF_UP).floatValue();
 			DB_sanityrate = new BigDecimal(String.valueOf(Gui_EventManager.tracker.sanity - Gui_EventManager.tracker.prevSanity)).setScale(3, RoundingMode.HALF_UP).floatValue();
 			DB_airquality = new BigDecimal(String.valueOf(Gui_EventManager.tracker.airQuality - Gui_EventManager.tracker.prevAirQuality)).setScale(3, RoundingMode.HALF_UP).floatValue();

@@ -17,11 +17,11 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.MathHelper;
-import cpw.mods.fml.common.FMLCommonHandler;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.util.math.MathHelper;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
 import enviromine.client.gui.UI_Settings;
@@ -110,10 +110,10 @@ public class EnviroDataTracker
 			return;
 		}
 		
-		int i = MathHelper.floor_double(trackedEntity.posX);
-		int k = MathHelper.floor_double(trackedEntity.posZ);
+		int i = MathHelper.floor(trackedEntity.posX);
+		int k = MathHelper.floor(trackedEntity.posZ);
 		
-		if(!trackedEntity.worldObj.getChunkFromBlockCoords(i, k).isChunkLoaded)
+		if(!trackedEntity.world.getChunkFromBlockCoords(i, k).isChunkLoaded)
 		{
 			return;
 		}
@@ -132,7 +132,7 @@ public class EnviroDataTracker
 		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F) && enviroData[7] > (float)(-1F * EM_Settings.sanityMult))
 		{
 			enviroData[7] = (float)(-1F * EM_Settings.sanityMult);
-		} else if(trackedEntity.getHealth() >= trackedEntity.getMaxHealth() && enviroData[7] < (0.1F * EM_Settings.sanityMult) && trackedEntity.worldObj.isDaytime() && !trackedEntity.worldObj.provider.hasNoSky && trackedEntity.worldObj.canBlockSeeTheSky(MathHelper.floor_double(trackedEntity.posX), MathHelper.floor_double(trackedEntity.posY), MathHelper.floor_double(trackedEntity.posZ)))
+		} else if(trackedEntity.getHealth() >= trackedEntity.getMaxHealth() && enviroData[7] < (0.1F * EM_Settings.sanityMult) && trackedEntity.world.isDaytime() && !trackedEntity.world.provider.hasNoSky && trackedEntity.world.canBlockSeeTheSky(MathHelper.floor(trackedEntity.posX), MathHelper.floor(trackedEntity.posY), MathHelper.floor(trackedEntity.posZ)))
 		{
 			enviroData[7] = (float)(0.1F * EM_Settings.sanityMult);
 		}
@@ -152,7 +152,7 @@ public class EnviroDataTracker
 				
 				if(gasMaskFill > 0 && airQuality <= 99F)
 				{
-					int airDrop = 100 - MathHelper.ceiling_float_int(airQuality);
+					int airDrop = 100 - MathHelper.ceil(airQuality);
 					airDrop = gasMaskFill >= airDrop? airDrop : gasMaskFill;
 					
 					if(airDrop > 0)
@@ -366,7 +366,7 @@ public class EnviroDataTracker
 			{
 				trackedEntity.attackEntityFrom(EnviroDamageSource.suffocate, 4.0F);
 				
-				trackedEntity.worldObj.playSoundAtEntity(trackedEntity, "enviromine:gag", 1f, 1f);
+				trackedEntity.world.playSoundAtEntity(trackedEntity, "enviromine:gag", 1f, 1f);
      		}
 			
 			if(airQuality <= 10F)
@@ -503,10 +503,10 @@ public class EnviroDataTracker
 		
 		DimensionProperties dimensionProp = null;
 		
-		if(EM_Settings.dimensionProperties.containsKey(trackedEntity.worldObj.provider.dimensionId))
+		if(EM_Settings.dimensionProperties.containsKey(trackedEntity.world.provider.getDimension()))
 		{ 
 				
-			dimensionProp = EM_Settings.dimensionProperties.get(trackedEntity.worldObj.provider.dimensionId);
+			dimensionProp = EM_Settings.dimensionProperties.get(trackedEntity.world.provider.getDimension());
 			if(dimensionProp != null && dimensionProp.override)
 			{   
 				if(!dimensionProp.trackTemp && EM_Settings.enableBodyTemp) bodyTemp = prevBodyTemp;
@@ -529,7 +529,7 @@ public class EnviroDataTracker
 	{
 		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000)
 		{
-			Minecraft.getMinecraft().thePlayer.playSound("enviromine:chill",  UI_Settings.breathVolume, 1.0F);
+			Minecraft.getMinecraft().player.playSound("enviromine:chill",  UI_Settings.breathVolume, 1.0F);
 			chillPrevTime = Minecraft.getSystemTime();
 		}
 	}
@@ -677,9 +677,9 @@ public class EnviroDataTracker
 	
 	public void ClampSafeRange()
 	{
-		airQuality = MathHelper.clamp_float(airQuality, 25F, 100F);
-		bodyTemp = MathHelper.clamp_float(bodyTemp, 35F, 39F);
-		hydration = MathHelper.clamp_float(hydration, 25F, 100F);
-		sanity = MathHelper.clamp_float(sanity, 50F, 100F);
+		airQuality = MathHelper.clamp(airQuality, 25F, 100F);
+		bodyTemp = MathHelper.clamp(bodyTemp, 35F, 39F);
+		hydration = MathHelper.clamp(hydration, 25F, 100F);
+		sanity = MathHelper.clamp(sanity, 50F, 100F);
 	}
 }

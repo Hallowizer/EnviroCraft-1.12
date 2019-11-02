@@ -15,8 +15,8 @@ import net.minecraft.util.StatCollector;
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.UpdateNotification;
 import enviromine.client.gui.menu.config.EM_ConfigMenu;
 import enviromine.client.gui.menu.config.ProfileMenu;
@@ -180,12 +180,12 @@ public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
 	{
 		this.drawDefaultBackground();
 		
-		if(!EnviroMine.proxy.isClient() && MinecraftServer.getServer().getConfigurationManager().func_152607_e(mc.thePlayer.getGameProfile()) || EnviroMine.proxy.isClient() )
+		if(!EnviroMine.proxy.isClient() && MinecraftServer.getServer().getConfigurationManager().func_152607_e(mc.player.getGameProfile()) || EnviroMine.proxy.isClient() )
 		{
-			this.drawString(this.fontRendererObj, StatCollector.translateToLocal("options.enviromine.adminOptions.title") +" ", this.width / 2 -30, this.height / 6 + 74, 16777215);
+			this.drawString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.adminOptions.title") +" ", this.width / 2 -30, this.height / 6 + 74, 16777215);
 		}
-		this.drawCenteredString(this.fontRendererObj, StatCollector.translateToLocal("options.enviromine.guiMainmenu.title"), this.width / 2, 15, 16777215);
-        this.drawCenteredString(this.fontRendererObj, I18n.format("editor.enviromine.currentProfile") +": "+ EM_ConfigHandler.getProfileName(), this.width / 2, 30, 16777215);
+		this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.guiMainmenu.title"), this.width / 2, 15, 16777215);
+        this.drawCenteredString(this.fontRenderer, I18n.format("editor.enviromine.currentProfile") +": "+ EM_ConfigHandler.getProfileName(), this.width / 2, 30, 16777215);
 		super.drawScreen(par1, par2, par3);
 	}
 }

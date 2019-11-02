@@ -9,7 +9,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -29,14 +29,14 @@ public class BlockFlammableCoal extends BlockOre
 	@Override
 	public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
     {
-        return Items.coal;
+        return Items.COAL;
     }
 	
 	@Override
 	public ItemStack createStackedBlock(int meta)
 	{
         int j = 0;
-        Item item = Item.getItemFromBlock(Blocks.coal_ore);
+        Item item = Item.getItemFromBlock(Blocks.COAL_ORE);
 
         if (item != null && item.getHasSubtypes())
         {
@@ -61,7 +61,7 @@ public class BlockFlammableCoal extends BlockOre
     {
         if (this.getItemDropped(p_149690_5_, rand, p_149690_7_) != Item.getItemFromBlock(this))
         {
-        	return MathHelper.getRandomIntegerInRange(rand, 0, 2);
+        	return MathHelper.getInt(rand, 0, 2);
         } else
         {
         	return 0;
@@ -80,7 +80,7 @@ public class BlockFlammableCoal extends BlockOre
     	if(world.rand.nextBoolean())
     	{
     		world.setBlock(i, j, k, ObjectHandler.gasBlock);
-    		TileEntity tile = world.getTileEntity(i, j, k);
+    		TileEntity tile = world.getTileEntity(new BlockPos(i, j, k));
     		
     		if(tile != null && tile instanceof TileEntityGas)
     		{
@@ -102,9 +102,9 @@ public class BlockFlammableCoal extends BlockOre
 			if(world.getTotalWorldTime() < EM_PhysManager.worldStartTime + EM_Settings.worldDelay)
 			{
 				return;
-			} else if(EM_PhysManager.chunkDelay.containsKey(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)))
+			} else if(EM_PhysManager.chunkDelay.containsKey(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)))
 			{
-				if(EM_PhysManager.chunkDelay.get(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
+				if(EM_PhysManager.chunkDelay.get(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
 				{
 					return;
 				}

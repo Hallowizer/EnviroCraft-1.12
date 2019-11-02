@@ -96,7 +96,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 	 */
 	public boolean hasProperty(ItemStack stack)
 	{
-		return EM_Settings.itemProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()) || EM_Settings.itemProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem()));
+		return EM_Settings.itemProperties.containsKey("" + Item.REGISTRY.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()) || EM_Settings.itemProperties.containsKey("" + Item.REGISTRY.getNameForObject(stack.getItem()));
 	}
 	/** 
 	 * 	<b>getProperty(ItemStack stack)</b><bR><br>
@@ -108,12 +108,12 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 	{
 		ItemProperties itemProps;
 		
-		if(EM_Settings.itemProperties.containsKey("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()))
+		if(EM_Settings.itemProperties.containsKey("" + Item.REGISTRY.getNameForObject(stack.getItem()) + "," + stack.getItemDamage()))
 		{
-			itemProps = EM_Settings.itemProperties.get("" + Item.itemRegistry.getNameForObject(stack.getItem()) + "," + stack.getItemDamage());
+			itemProps = EM_Settings.itemProperties.get("" + Item.REGISTRY.getNameForObject(stack.getItem()) + "," + stack.getItemDamage());
 		} else
 		{
-			itemProps = EM_Settings.itemProperties.get("" + Item.itemRegistry.getNameForObject(stack.getItem()));
+			itemProps = EM_Settings.itemProperties.get("" + Item.REGISTRY.getNameForObject(stack.getItem()));
 		}
 		return itemProps;
 	}
@@ -220,12 +220,12 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 	public void GenDefaults()
 	{
 		@SuppressWarnings("unchecked")
-		Iterator<Item> iterator = Item.itemRegistry.iterator();
+		Iterator<Item> iterator = Item.REGISTRY.iterator();
 		
 		while(iterator.hasNext())
 		{
 			Item item = iterator.next();
-			Block block = Blocks.air;
+			Block block = Blocks.AIR;
 			
 			if(item == null)
 			{
@@ -237,7 +237,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				block = ((ItemBlock)item).field_150939_a;
 			}
 			
-			String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
+			String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
 			
 			if(regName.length <= 0)
 			{
@@ -265,9 +265,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 			
 			config.load();
 			
-			if(item == Items.glass_bottle)
+			if(item == Items.GLASS_BOTTLE)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], false).getBoolean(false);
 				config.get(category, IPName[3], 37D).getDouble(37D);
@@ -281,9 +281,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], -25).getInt(-25);
 				config.get(category, IPName[12], "minecraft:potion").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(item == Items.potionitem)
+			} else if(item == Items.POTIONITEM)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], false).getBoolean(false);
 				config.get(category, IPName[3], 0D).getDouble(0D);
@@ -300,7 +300,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				
 				category = category + "_(water)";
 				
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], 0).getInt(0);
 				config.get(category, IPName[2], false).getBoolean(false);
 				config.get(category, IPName[3], 0D).getDouble(0D);
@@ -314,9 +314,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 25).getInt(25);
 				config.get(category, IPName[12], "minecraft:glass_bottle").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(item == Items.melon || item == Items.carrot || item == Items.apple)
+			} else if(item == Items.MELON || item == Items.CARROT || item == Items.APPLE)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], false).getBoolean(false);
 				config.get(category, IPName[3], 0D).getDouble(0D);
@@ -330,9 +330,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(block == Blocks.snow || block == Blocks.snow_layer)
+			} else if(block == Blocks.SNOW || block == Blocks.SNOW_LAYER)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], true).getBoolean(true);
 				config.get(category, IPName[3], -0.1D).getDouble(-0.1D);
@@ -346,9 +346,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(block == Blocks.ice || block == Blocks.packed_ice)
+			} else if(block == Blocks.ICE || block == Blocks.PACKED_ICE)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], true).getBoolean(true);
 				config.get(category, IPName[3], -0.5D).getDouble(-0.5D);
@@ -361,9 +361,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[10], 37D).getDouble(37D);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(block == Blocks.netherrack || block == Blocks.nether_brick || block == Blocks.nether_brick_fence || block == Blocks.nether_brick_stairs)
+			} else if(block == Blocks.NETHERRACK || block == Blocks.NETHER_BRICK || block == Blocks.NETHER_BRICK_FENCE || block == Blocks.NETHER_BRICK_STAIRS)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], true).getBoolean(true);
 				config.get(category, IPName[3], 50D).getDouble(50D);
@@ -376,9 +376,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[10], 37D).getDouble(37D);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(block == Blocks.soul_sand || item == Items.skull || block == Blocks.skull)
+			} else if(block == Blocks.SOUL_SAND || item == Items.SKULL || block == Blocks.SKULL)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], false).getBoolean(false);
 				config.get(category, IPName[3], 0D).getDouble(0D);
@@ -392,9 +392,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if((block == Blocks.flower_pot || block == Blocks.grass || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.grass || block.getMaterial() == Material.leaves || block.getMaterial() == Material.plants || block.getMaterial() == Material.vine) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if((block == Blocks.FLOWER_POT || block == Blocks.GRASS || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.GRASS || block.getMaterial() == Material.LEAVES || block.getMaterial() == Material.PLANTS || block.getMaterial() == Material.VINE) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], false).getBoolean(false);
 				config.get(category, IPName[3], 0D).getDouble(0D);
@@ -408,9 +408,9 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if(item == Items.lava_bucket)
+			} else if(item == Items.LAVA_BUCKET)
 			{
-				config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);
 				config.get(category, IPName[2], true).getBoolean(true);
 				config.get(category, IPName[3], 100D).getDouble(100D);
@@ -450,7 +450,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 		
 		Item item = (Item)obj;
 		
-		String[] regName = Item.itemRegistry.getNameForObject(item).split(":");
+		String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
 		
 		if(regName.length <= 0)
 		{
@@ -460,7 +460,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 		
 		String category = this.categoryName() + "." + EnviroUtils.replaceULN(item.getUnlocalizedName() +"_"+ regName[1]);
 		
-		config.get(category, IPName[0], Item.itemRegistry.getNameForObject(item)).getString();
+		config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 		config.get(category, IPName[1], -1).getInt(-1);
 		config.get(category, IPName[2], false).getBoolean(false);
 		config.get(category, IPName[3], 37D).getDouble(37D);

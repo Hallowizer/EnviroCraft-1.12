@@ -4,7 +4,7 @@ import java.awt.Color;
 import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
 public class EnviroGas
@@ -82,7 +82,7 @@ public class EnviroGas
 			return amount;
 		} else
 		{
-			return amount + MathHelper.floor_float(extra * (diff - Math.abs(ratio - midPoint)));
+			return amount + MathHelper.floor(extra * (diff - Math.abs(ratio - midPoint)));
 		}
 	}
 	
@@ -110,7 +110,7 @@ public class EnviroGas
 	
 	public void applyEffects(EntityLivingBase entityLiving, int amplifier)
 	{
-		if(entityLiving.worldObj.isRemote)
+		if(entityLiving.world.isRemote)
 		{
 			return;
 		}

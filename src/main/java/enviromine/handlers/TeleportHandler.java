@@ -8,7 +8,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.LongHashMap;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
@@ -80,9 +80,9 @@ public class TeleportHandler extends Teleporter
 			}
 		} else
 		{
-            int i = MathHelper.floor_double(entity.posX);
-            int j = MathHelper.floor_double(entity.posY);
-            int k = MathHelper.floor_double(entity.posZ);
+            int i = MathHelper.floor(entity.posX);
+            int j = MathHelper.floor(entity.posY);
+            int k = MathHelper.floor(entity.posZ);
             
 			if(entity instanceof EntityPlayer)
 			{
@@ -96,13 +96,13 @@ public class TeleportHandler extends Teleporter
 					if(!player.inventory.addItemStackToInventory(itemTop))
 					{
 						EntityItem entityitem = new EntityItem(this.worldServerInstance, player.posX, player.posY, player.posZ, itemTop);
-						this.worldServerInstance.spawnEntityInWorld(entityitem);
+						this.worldServerInstance.spawnEntity(entityitem);
 					}
 					
 					if(!player.inventory.addItemStackToInventory(itemBot))
 					{
 						EntityItem entityitem = new EntityItem(this.worldServerInstance, player.posX, player.posY, player.posZ, itemBot);
-						this.worldServerInstance.spawnEntityInWorld(entityitem);
+						this.worldServerInstance.spawnEntity(entityitem);
 					}
 				}
 				
@@ -129,8 +129,8 @@ public class TeleportHandler extends Teleporter
 		int i = 0;
 		int j = 0;
 		int k = 0;
-		int l = MathHelper.floor_double(par1Entity.posX);
-		int i1 = MathHelper.floor_double(par1Entity.posZ);
+		int l = MathHelper.floor(par1Entity.posX);
+		int i1 = MathHelper.floor(par1Entity.posZ);
 		long j1 = ChunkCoordIntPair.chunkXZ2Int(l, i1);
 		boolean flag = true;
 		double d4;
@@ -222,12 +222,12 @@ public class TeleportHandler extends Teleporter
 	@Override
 	public boolean makePortal(Entity par1Entity)
 	{
-		int i = (int)(MathHelper.floor_double(par1Entity.posX) + Math.signum(par1Entity.posX < 0? par1Entity.posX : 0));
+		int i = (int)(MathHelper.floor(par1Entity.posX) + Math.signum(par1Entity.posX < 0? par1Entity.posX : 0));
 		int j = 5;//MathHelper.floor_double(par1Entity.posY);
-		int k = (int)(MathHelper.floor_double(par1Entity.posZ) + Math.signum(par1Entity.posZ < 0? par1Entity.posZ : 0));
+		int k = (int)(MathHelper.floor(par1Entity.posZ) + Math.signum(par1Entity.posZ < 0? par1Entity.posZ : 0));
 		boolean clearSpace = false;
 		
-		if(this.worldServerInstance.provider.dimensionId == EM_Settings.caveDimID)
+		if(this.worldServerInstance.provider.getDimension() == EM_Settings.caveDimID)
 		{
 			for(int checkH = 120; checkH >= 32; checkH--)
 			{
@@ -275,7 +275,7 @@ public class TeleportHandler extends Teleporter
 						{
 							if(!this.worldServerInstance.getBlock(x, y, z).isOpaqueCube());
 							{
-								this.worldServerInstance.setBlock(x, y, z, Blocks.cobblestone);
+								this.worldServerInstance.setBlock(x, y, z, Blocks.COBBLESTONE);
 								
 								if(x != i && z != k)
 								{
@@ -283,7 +283,7 @@ public class TeleportHandler extends Teleporter
 									
 									while(!this.worldServerInstance.getBlock(x, supY, z).isOpaqueCube() && supY >= 0)
 									{
-										this.worldServerInstance.setBlock(x, supY, z, Blocks.cobblestone_wall);
+										this.worldServerInstance.setBlock(x, supY, z, Blocks.COBBLESTONE_WALL);
 										supY -= 1;
 									}
 								}

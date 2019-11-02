@@ -111,7 +111,7 @@ public class HUDRegistry {
     {
         Minecraft mc = getMinecraftInstance();
 
-        ScaledResolution scaledresolution = new ScaledResolution(mc, mc.displayWidth, mc.displayHeight);
+        ScaledResolution scaledresolution = new ScaledResolution(mc);
         if (scaledresolution.getScaledWidth() != screenWidth || scaledresolution.getScaledHeight() != screenHeight) 
         {
             if (screenWidth != 0) {

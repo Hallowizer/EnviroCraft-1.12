@@ -6,7 +6,7 @@ import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -71,7 +71,7 @@ public class QuakeCommand extends CommandBase
 					int size = quake.length > quake.width? quake.length/2 : quake.width/2;
 					NBTTagCompound pData = new NBTTagCompound();
 					pData.setInteger("id", 3);
-					pData.setInteger("dimension", quake.world.provider.dimensionId);
+					pData.setInteger("dimension", quake.world.provider.getDimension());
 					pData.setInteger("posX", quake.posX);
 					pData.setInteger("posZ", quake.posZ);
 					pData.setInteger("length", quake.length);
@@ -79,7 +79,7 @@ public class QuakeCommand extends CommandBase
 					pData.setFloat("angle", quake.angle);
 					pData.setFloat("action", 2);
 					pData.setFloat("height", quake.passY);
-					EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(quake.world.provider.dimensionId, quake.posX, quake.passY, quake.posZ, 128 + size));
+					EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(quake.world.provider.getDimension(), quake.posX, quake.passY, quake.posZ, 128 + size));
 					iterator.remove();
 				}
 				Earthquake.pendingQuakes.clear();
@@ -103,7 +103,7 @@ public class QuakeCommand extends CommandBase
 		int z = sender.getPlayerCoordinates().posZ;
 		int l = 32 + world.rand.nextInt(128-32);
 		int w = 4 + world.rand.nextInt(32-4);
-		float a = MathHelper.clamp_float(world.rand.nextFloat() * 4F - 2F, -2F, 2F);
+		float a = MathHelper.clamp(world.rand.nextFloat() * 4F - 2F, -2F, 2F);
 		
 		try
 		{

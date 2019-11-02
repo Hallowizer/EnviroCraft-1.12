@@ -30,9 +30,9 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.FoodStats;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.Village;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -111,7 +111,7 @@ public class EM_StatusManager
 		pData.setFloat("sanity", tracker.sanity);
 		pData.setFloat("airTemp", tracker.airTemp);
 		
-		EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(tracker.trackedEntity.worldObj.provider.dimensionId, tracker.trackedEntity.posX, tracker.trackedEntity.posY, tracker.trackedEntity.posZ, 128D));
+		EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(tracker.trackedEntity.world.provider.getDimension(), tracker.trackedEntity.posX, tracker.trackedEntity.posY, tracker.trackedEntity.posZ, 128D));
 	}
 	
 	public static EnviroDataTracker lookupTracker(EntityLivingBase entity)
@@ -152,7 +152,7 @@ public class EM_StatusManager
 	
 	public static float[] getSurroundingData(EntityLivingBase entityLiving, int range)
 	{
-		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().thePlayer.getCommandSenderName()) && !timer.isRunning())
+		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().player.getCommandSenderName()) && !timer.isRunning())
 		{
 			timer.start();
 		}
@@ -177,23 +177,23 @@ public class EM_StatusManager
 		float dist = 0;
 		float solidBlocks = 0;
 		
-		int i = MathHelper.floor_double(entityLiving.posX);
-		int j = MathHelper.floor_double(entityLiving.posY);
-		int k = MathHelper.floor_double(entityLiving.posZ);
+		int i = MathHelper.floor(entityLiving.posX);
+		int j = MathHelper.floor(entityLiving.posY);
+		int k = MathHelper.floor(entityLiving.posZ);
 		
-		if(entityLiving.worldObj == null)
+		if(entityLiving.world == null)
 		{
 			return data;
 		}
 		
-		Chunk chunk = entityLiving.worldObj.getChunkFromBlockCoords(i, k);
+		Chunk chunk = entityLiving.world.getChunkFromBlockCoords(i, k);
 		
 		if(chunk == null)
 		{
 			return data;
 		}
 		
-		BiomeGenBase biome = chunk.getBiomeGenForWorldCoords(i & 15, k & 15, entityLiving.worldObj.getWorldChunkManager());
+		BiomeGenBase biome = chunk.getBiomeGenForWorldCoords(i & 15, k & 15, entityLiving.world.getWorldChunkManager());
 		
 		if(biome == null)
 		{
@@ -201,22 +201,22 @@ public class EM_StatusManager
 		}
 		
 		DimensionProperties dimensionProp = null;
-		if(DimensionProperties.base.hasProperty(entityLiving.worldObj.provider.dimensionId))
+		if(DimensionProperties.base.hasProperty(entityLiving.world.provider.getDimension()))
 		{ 
-			dimensionProp = DimensionProperties.base.getProperty(entityLiving.worldObj.provider.dimensionId);
+			dimensionProp = DimensionProperties.base.getProperty(entityLiving.world.provider.getDimension());
 		}
 		
 		
 		float surBiomeTemps = 0;
 		int biomeTempChecks = 0;
 		
-		boolean isDay = entityLiving.worldObj.isDaytime();
+		boolean isDay = entityLiving.world.isDaytime();
 		
 		//Note: This is offset slightly so that heat peaks after noon.
 		float scale = 1.25F; // Anything above 1 forces the maximum and minimum temperatures to plateau when they're reached
-		float dayPercent = MathHelper.clamp_float((float)(Math.sin(Math.toRadians(((entityLiving.worldObj.getWorldTime()%24000L)/24000D)*360F - 30F))*0.5F + 0.5F)*scale, 0F, 1F);
+		float dayPercent = MathHelper.clamp((float)(Math.sin(Math.toRadians(((entityLiving.world.getWorldTime()%24000L)/24000D)*360F - 30F))*0.5F + 0.5F)*scale, 0F, 1F);
 		
-		if(entityLiving.worldObj.provider.hasNoSky)
+		if(entityLiving.world.provider.hasNoSky)
 		{
 			isDay = false;
 		}
@@ -232,8 +232,8 @@ public class EM_StatusManager
 				blockLightLev = 15;
 			} else
 			{
-				lightLev = chunk.getSavedLightValue(EnumSkyBlock.Sky, i & 0xf, j, k & 0xf);
-				blockLightLev = chunk.getSavedLightValue(EnumSkyBlock.Block, i & 0xf, j, k & 0xf);
+				lightLev = chunk.getSavedLightValue(EnumSkyBlock.SKY, i & 0xf, j, k & 0xf);
+				blockLightLev = chunk.getSavedLightValue(EnumSkyBlock.BLOCK, i & 0xf, j, k & 0xf);
 			}
 		}
 		
@@ -254,8 +254,8 @@ public class EM_StatusManager
 				{
 					if(y == 0)
 					{
-						Chunk testChunk = entityLiving.worldObj.getChunkFromBlockCoords((i + x), (k + z));
-						BiomeGenBase checkBiome = testChunk.getBiomeGenForWorldCoords((i + x) & 15, (k + z) & 15, entityLiving.worldObj.getWorldChunkManager());
+						Chunk testChunk = entityLiving.world.getChunkFromBlockCoords((i + x), (k + z));
+						BiomeGenBase checkBiome = testChunk.getBiomeGenForWorldCoords((i + x) & 15, (k + z) & 15, entityLiving.world.getWorldChunkManager());
 						
 						if(checkBiome != null)
 						{
@@ -279,21 +279,21 @@ public class EM_StatusManager
 						}
 					}
 					
-					if(!EM_PhysManager.blockNotSolid(entityLiving.worldObj, x + i, y + j, z + k, false))
+					if(!EM_PhysManager.blockNotSolid(entityLiving.world, x + i, y + j, z + k, false))
 					{
 						solidBlocks += 1;
 					}
 					
 					dist = (float)entityLiving.getDistance(i + x, j + y, k + z);
 					
-					Block block = Blocks.air;
+					Block block = Blocks.AIR;
 					int meta = 0;
 					
-					block = entityLiving.worldObj.getBlock(i + x, j + y, k + z);
+					block = entityLiving.world.getBlock(i + x, j + y, k + z);
 					
-					if(block != Blocks.air)
+					if(block != Blocks.AIR)
 					{
-						meta = entityLiving.worldObj.getBlockMetadata(i + x, j + y, k + z);
+						meta = entityLiving.world.getBlockMetadata(i + x, j + y, k + z);
 					}
 					
 					if(BlockProperties.base.hasProperty(block, meta))
@@ -324,7 +324,7 @@ public class EM_StatusManager
 						{
 							if(block instanceof BlockFlower)
 							{
-								if(isDay || entityLiving.worldObj.provider.hasNoSky)
+								if(isDay || entityLiving.world.provider.hasNoSky)
 								{
 									if(sBoost < blockProps.sanity)
 									{
@@ -341,7 +341,7 @@ public class EM_StatusManager
 						}
 					}
 					
-					if(block.getMaterial() == Material.lava)
+					if(block.getMaterial() == Material.LAVA)
 					{
 						nearLava = true;
 					}
@@ -364,9 +364,9 @@ public class EM_StatusManager
 				
 				float stackMult = 1F;
 				
-				if(stack.stackSize > 1)
+				if(stack.getCount() > 1)
 				{
-					stackMult = (stack.stackSize-1F)/63F + 1F;
+					stackMult = (stack.getCount()-1F)/63F + 1F;
 				}
 				
 				if(ItemProperties.base.hasProperty(stack))
@@ -396,7 +396,7 @@ public class EM_StatusManager
 						{
 							if(((ItemBlock)stack.getItem()).field_150939_a instanceof BlockFlower)
 							{
-								if(isDay || entityLiving.worldObj.provider.hasNoSky)
+								if(isDay || entityLiving.world.provider.hasNoSky)
 								{
 									sBoost = itemProps.ambSanity * stackMult;
 								}
@@ -412,9 +412,9 @@ public class EM_StatusManager
 				} else if(stack.getItem() instanceof ItemBlock)
 				{
 					ItemBlock itemBlock = (ItemBlock)stack.getItem();
-					if(itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.worldObj.provider.hasNoSky) && sBoost <= 0.1F)
+					if(itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.world.provider.hasNoSky) && sBoost <= 0.1F)
 					{
-						if(((BlockFlower)itemBlock.field_150939_a).getPlantType(entityLiving.worldObj, i, j, k) == EnumPlantType.Plains)
+						if(((BlockFlower)itemBlock.field_150939_a).getPlantType(entityLiving.world, i, j, k) == EnumPlantType.Plains)
 						{
 							sBoost = 0.1F;
 						}
@@ -423,7 +423,7 @@ public class EM_StatusManager
 			}
 		}
 		
-		if(lightLev > 1 && !entityLiving.worldObj.provider.hasNoSky)
+		if(lightLev > 1 && !entityLiving.world.provider.hasNoSky)
 		{
 			quality = 2F;
 			sanityRate = 0.5F;
@@ -432,7 +432,7 @@ public class EM_StatusManager
 			sanityRate = -0.1F;
 		}
 		
-		if(dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.worldObj.provider.hasNoSky)
+		if(dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.world.provider.hasNoSky)
 		{
 			quality = 2F;
 		}
@@ -442,7 +442,7 @@ public class EM_StatusManager
 		float highTemp = -30F; // Max temp at high altitude
 		float lowTemp = 30F; // Min temp at low altitude (Geothermal Heating)
 		
-		if(!entityLiving.worldObj.provider.hasNoSky)
+		if(!entityLiving.world.provider.hasNoSky)
 		{
 			if(entityLiving.posY < 48)
 			{
@@ -478,12 +478,12 @@ public class EM_StatusManager
 		}
 		else 
 		{
-			if(entityLiving.worldObj.isRaining() && biome.rainfall != 0.0F)
+			if(entityLiving.world.isRaining() && biome.rainfall != 0.0F)
 			{
 				bTemp -= 10F;
 				animalHostility = -1;
 				
-				if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k))
+				if(entityLiving.world.canBlockSeeTheSky(i, j, k))
 				{
 					dropSpeed = 0.01F;
 				}
@@ -492,12 +492,12 @@ public class EM_StatusManager
 		} // Dimension Overrides End
 	
 		// 	Shade		
-		if(!entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.worldObj.isRaining())
+		if(!entityLiving.world.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.world.isRaining())
 		{
 			bTemp -= 2.5F;
 		}
 		
-		if ((!entityLiving.worldObj.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp))
+		if ((!entityLiving.world.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp))
 		{ 
 			bTemp -= (1F-dayPercent) * 10F;
 			
@@ -508,7 +508,7 @@ public class EM_StatusManager
 		}
 		
 		@SuppressWarnings("unchecked")
-		List<Entity> mobList = entityLiving.worldObj.getEntitiesWithinAABBExcludingEntity(entityLiving, AxisAlignedBB.getBoundingBox(entityLiving.posX - 2, entityLiving.posY - 2, entityLiving.posZ - 2, entityLiving.posX + 3, entityLiving.posY + 3, entityLiving.posZ + 3));
+		List<Entity> mobList = entityLiving.world.getEntitiesWithinAABBExcludingEntity(entityLiving, AxisAlignedBB.getBoundingBox(entityLiving.posX - 2, entityLiving.posY - 2, entityLiving.posZ - 2, entityLiving.posX + 3, entityLiving.posY + 3, entityLiving.posZ + 3));
 		
 		Iterator<Entity> iterator = mobList.iterator();
 		
@@ -557,10 +557,10 @@ public class EM_StatusManager
 			if(mob instanceof EntityVillager && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob) && EM_Settings.villageAssist)
 			{
 				EntityVillager villager = (EntityVillager)mob;
-				Village village = entityLiving.worldObj.villageCollectionObj.findNearestVillage(MathHelper.floor_double(villager.posX), MathHelper.floor_double(villager.posY), MathHelper.floor_double(villager.posZ), 32);
+				Village village = entityLiving.world.villageCollection.findNearestVillage(MathHelper.floor(villager.posX), MathHelper.floor(villager.posY), MathHelper.floor(villager.posZ), 32);
 				
 				long assistTime = villager.getEntityData().getLong("Enviro_Assist_Time");
-				long worldTime = entityLiving.worldObj.provider.getWorldTime();
+				long worldTime = entityLiving.world.provider.getWorldTime();
 				
 				if(village != null && village.getReputationForPlayer(entityLiving.getCommandSenderName()) >= 5 && !villager.isChild() && Math.abs(worldTime - assistTime) > 24000)
 				{
@@ -582,7 +582,7 @@ public class EM_StatusManager
 							{
 								tracker.bodyTemp -= 1F;
 							}
-							entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.drink", 1.0F, 1.0F);
+							entityLiving.world.playSoundAtEntity(entityLiving, "random.drink", 1.0F, 1.0F);
 							villager.playSound("mob.villager.yes", 1.0F, 1.0F);
 							villager.getEntityData().setLong("Enviro_Assist_Time", worldTime);
 							
@@ -594,7 +594,7 @@ public class EM_StatusManager
 						if(food.getFoodLevel() <= 10)
 						{
 							food.setFoodLevel(20);
-							entityLiving.worldObj.playSoundAtEntity(entityLiving, "random.burp", 0.5F, entityLiving.worldObj.rand.nextFloat() * 0.1F + 0.9F);
+							entityLiving.world.playSoundAtEntity(entityLiving, "random.burp", 0.5F, entityLiving.world.rand.nextFloat() * 0.1F + 0.9F);
 							villager.playSound("mob.villager.yes", 1.0F, 1.0F);
 							villager.getEntityData().setLong("Enviro_Assist_Time", worldTime);
 							
@@ -732,7 +732,7 @@ public class EM_StatusManager
 					
 					if(isDay)
 					{
-						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -788,7 +788,7 @@ public class EM_StatusManager
 					
 					if(isDay)
 					{
-						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -841,7 +841,7 @@ public class EM_StatusManager
 						
 					if(isDay)
 					{
-						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -894,7 +894,7 @@ public class EM_StatusManager
 					
 					if(isDay)
 					{
-						if(entityLiving.worldObj.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -1009,7 +1009,7 @@ public class EM_StatusManager
 		
 		if(!entityLiving.isPotionActive(Potion.fireResistance))
 		{
-			if(entityLiving.worldObj.getBlock(i, j, k) == Blocks.lava || entityLiving.worldObj.getBlock(i, j, k) == Blocks.flowing_lava)
+			if(entityLiving.world.getBlock(i, j, k) == Blocks.LAVA || entityLiving.world.getBlock(i, j, k) == Blocks.FLOWING_LAVA)
 			{
 				tempFin = 200F;
 				riseSpeed = 1.0F;
@@ -1064,7 +1064,7 @@ public class EM_StatusManager
 		data[6] = animalHostility;
 		data[7] = sanityRate * (float)EM_Settings.sanityMult;
 		
-		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().thePlayer.getCommandSenderName()) && timer.isRunning())
+		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().player.getCommandSenderName()) && timer.isRunning())
 		{
 			timer.stop();
 			Debug_Info.DB_timer = timer.toString();
@@ -1162,7 +1162,7 @@ public class EM_StatusManager
 		{
 			EnviroDataTracker tracker = iterator.next();
 			
-			if(tracker.trackedEntity.worldObj == world)
+			if(tracker.trackedEntity.world == world)
 			{
 				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
 				tags.setFloat("ENVIRO_AIR", tracker.airQuality);
@@ -1189,7 +1189,7 @@ public class EM_StatusManager
 		{
 			EnviroDataTracker tracker = iterator.next();
 			
-			if(tracker.trackedEntity.worldObj == world)
+			if(tracker.trackedEntity.world == world)
 			{
 				NBTTagCompound tags = tracker.trackedEntity.getEntityData();
 				tags.setFloat("ENVIRO_AIR", tracker.airQuality);
@@ -1211,7 +1211,7 @@ public class EM_StatusManager
 				worlds = MinecraftServer.getServer().worldServers;
 			} else
 			{
-				worlds[0] = Minecraft.getMinecraft().thePlayer.worldObj;
+				worlds[0] = Minecraft.getMinecraft().player.world;
 			}
 		} else
 		{
@@ -1254,12 +1254,12 @@ public class EM_StatusManager
 		{
 			if(tracker.bodyTemp >= 38F && UI_Settings.sweatParticals)
 			{
-				entityLiving.worldObj.spawnParticle("dripWater", entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 0.0D, 0.0D, 0.0D);
+				entityLiving.world.spawnParticle("dripWater", entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 0.0D, 0.0D, 0.0D);
 			}
 			
 			if(tracker.trackedEntity.isPotionActive(EnviroPotion.insanity) && UI_Settings.insaneParticals)
 			{
-				entityLiving.worldObj.spawnParticle("portal", entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 0.0D, 0.0D, 0.0D);
+				entityLiving.world.spawnParticle("portal", entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 0.0D, 0.0D, 0.0D);
 			}
 		}
 	}

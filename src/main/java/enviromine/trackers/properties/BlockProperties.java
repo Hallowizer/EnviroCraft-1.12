@@ -104,7 +104,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	
 	public boolean hasProperty(Block block, int meta)
 	{
-		return EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block) + "," + meta) || EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block));
+		return EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block) + "," + meta) || EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block));
 	}
 	/** 
 	 * 	<b>getProperty(Block block, int meta)</b><bR><br>
@@ -117,12 +117,12 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	{
 		BlockProperties blockProps = null;
 		
-		if(EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block) + "," + meta))
+		if(EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block) + "," + meta))
 		{
-			blockProps = EM_Settings.blockProperties.get("" + Block.blockRegistry.getNameForObject(block) + "," + meta);
+			blockProps = EM_Settings.blockProperties.get("" + Block.REGISTRY.getNameForObject(block) + "," + meta);
 		} else
 		{
-			blockProps = EM_Settings.blockProperties.get("" + Block.blockRegistry.getNameForObject(block));
+			blockProps = EM_Settings.blockProperties.get("" + Block.REGISTRY.getNameForObject(block));
 		}
 		return blockProps;
 	}
@@ -262,18 +262,18 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 	public void GenDefaults()
 	{
 		@SuppressWarnings("unchecked")
-		Iterator<Block> iterator = Block.blockRegistry.iterator();
+		Iterator<Block> iterator = Block.REGISTRY.iterator();
 		
 		while(iterator.hasNext())
 		{
 			Block block = iterator.next();
 			
-			if(block == null || block == Blocks.air)
+			if(block == null || block == Blocks.AIR)
 			{
 				continue;
 			}
 
-			String[] regName = Block.blockRegistry.getNameForObject(block).split(":");
+			String[] regName = Block.REGISTRY.getNameForObject(block).split(":");
 			
 			if(regName.length <= 0)
 			{
@@ -302,9 +302,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 			String category = this.categoryName() + "." + EnviroUtils.replaceULN(block.getUnlocalizedName() +"_"+ regName[1]);
 			StabilityType defStability = EnviroUtils.getDefaultStabilityType(block);
 			
-			if(block == Blocks.lava || block == Blocks.flowing_lava || block == ObjectHandler.fireGasBlock || (EM_Settings.genConfigs && block.getMaterial() == Material.lava))
+			if(block == Blocks.LAVA || block == Blocks.FLOWING_LAVA || block == ObjectHandler.fireGasBlock || (EM_Settings.genConfigs && block.getMaterial() == Material.LAVA))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -316,9 +316,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block == Blocks.fire || block == ObjectHandler.burningCoal || block == ObjectHandler.fireTorch || (EM_Settings.genConfigs && block.getMaterial() == Material.fire))
+			} else if(block == Blocks.FIRE || block == ObjectHandler.burningCoal || block == ObjectHandler.fireTorch || (EM_Settings.genConfigs && block.getMaterial() == Material.FIRE))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -330,9 +330,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block == Blocks.torch || block == Blocks.lit_furnace || block == ObjectHandler.fireTorch)
+			} else if(block == Blocks.TORCH || block == Blocks.LIT_FURNACE || block == ObjectHandler.fireTorch)
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -344,9 +344,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block == Blocks.netherrack || block == Blocks.nether_brick || block == Blocks.nether_brick_fence || block == Blocks.nether_brick_stairs)
+			} else if(block == Blocks.NETHERRACK || block == Blocks.NETHER_BRICK || block == Blocks.NETHER_BRICK_FENCE || block == Blocks.NETHER_BRICK_STAIRS)
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -358,11 +358,11 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if((block == Blocks.flower_pot || block == Blocks.grass || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.grass || block.getMaterial() == Material.leaves || block.getMaterial() == Material.vine || block.getMaterial() == Material.plants) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if((block == Blocks.FLOWER_POT || block == Blocks.GRASS || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.GRASS || block.getMaterial() == Material.LEAVES || block.getMaterial() == Material.VINE || block.getMaterial() == Material.PLANTS) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
-				config.get(category, BPName[2], block == Blocks.grass? Block.blockRegistry.getNameForObject(Blocks.dirt) : "").getString();
+				config.get(category, BPName[2], block == Blocks.GRASS? Block.REGISTRY.getNameForObject(Blocks.DIRT) : "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
 				config.get(category, BPName[4], -1).getInt(-1);
 				config.get(category, BPName[5], false).getBoolean(false);
@@ -372,9 +372,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if((block.getMaterial() == Material.snow || block.getMaterial() == Material.ice || block.getMaterial() == Material.packedIce) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if((block.getMaterial() == Material.SNOW || block.getMaterial() == Material.ICE || block.getMaterial() == Material.PACKED_ICE) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -385,10 +385,10 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[8], 0.0D).getDouble(0.0D);
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
-				config.get(category, BPName[11], (block == Blocks.snow || block == Blocks.snow_layer)).getBoolean((block == Blocks.snow || block == Blocks.snow_layer));
-			} else if((block == Blocks.skull || block == Blocks.soul_sand) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+				config.get(category, BPName[11], (block == Blocks.SNOW || block == Blocks.SNOW_LAYER)).getBoolean((block == Blocks.SNOW || block == Blocks.SNOW_LAYER));
+			} else if((block == Blocks.SKULL || block == Blocks.SOUL_SAND) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -400,9 +400,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block.getMaterial() == Material.web && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if(block.getMaterial() == Material.WEB && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -414,9 +414,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block.getMaterial() == Material.dragonEgg && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if(block.getMaterial() == Material.DRAGON_EGG && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -430,7 +430,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[11], false).getBoolean(false);
 			} else if(block instanceof BlockFalling && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -444,7 +444,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[11], false).getBoolean(false);
 			} else if(block == Blocks.dirt)
 			{
-				config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
 				config.get(category, BPName[2], "").getString();
 				config.get(category, BPName[3], -1).getInt(-1);
@@ -494,7 +494,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		
 		Block block = (Block)obj;
 		
-		String[] regName = Block.blockRegistry.getNameForObject(block).split(":");
+		String[] regName = Block.REGISTRY.getNameForObject(block).split(":");
 		
 		if(regName.length <= 0)
 		{
@@ -505,9 +505,9 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 		String category = this.categoryName() + "." + EnviroUtils.replaceULN(block.getUnlocalizedName() +"_"+ regName[1]);
 		StabilityType defStability = EnviroUtils.getDefaultStabilityType(block);
 		
-		config.get(category, BPName[0], Block.blockRegistry.getNameForObject(block)).getString();
+		config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 		config.get(category, BPName[1], -1).getInt(0);
-		config.get(category, BPName[2], block == Blocks.stone? Block.blockRegistry.getNameForObject(Blocks.cobblestone) : (block == Blocks.grass? Block.blockRegistry.getNameForObject(Blocks.dirt) : "")).getString();
+		config.get(category, BPName[2], block == Blocks.STONE? Block.REGISTRY.getNameForObject(Blocks.COBBLESTONE) : (block == Blocks.GRASS? Block.REGISTRY.getNameForObject(Blocks.DIRT) : "")).getString();
 		config.get(category, BPName[3], -1).getInt(0);
 		config.get(category, BPName[4], -1).getInt(0);
 		config.get(category, BPName[5], false).getBoolean(false);

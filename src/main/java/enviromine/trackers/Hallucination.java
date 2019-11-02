@@ -7,11 +7,11 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.biome.BiomeGenBase.SpawnListEntry;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.Biome.SpawnListEntry;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -53,9 +53,9 @@ public class Hallucination
 		y = (int)(this.type == Type.NORMAL ? (entityLiving.posY + rand.nextInt(2) - 1) : this.overriding.posY);
 		z = (int)(this.type == Type.NORMAL ? (entityLiving.posZ + rand.nextInt(20) - 10) : this.overriding.posZ);
 
-		BiomeGenBase biome = entityLiving.worldObj.getBiomeGenForCoords(MathHelper.floor_double(x), MathHelper.floor_double(z));
+		Biome biome = entityLiving.world.getBiomeGenForCoords(MathHelper.floor(x), MathHelper.floor(z));
 		
-		ArrayList<SpawnListEntry> spawnList = (ArrayList<SpawnListEntry>)biome.getSpawnableList(EnumCreatureType.monster);
+		ArrayList<SpawnListEntry> spawnList = (ArrayList<SpawnListEntry>)biome.getSpawnableList(EnumCreatureType.MONSTER);
 		
 		if(spawnList.size() <= 0)
 		{
@@ -66,7 +66,7 @@ public class Hallucination
 		
         try
         {
-            falseEntity = (EntityLiving)spawnList.get(spawnIndex).entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {entityLiving.worldObj});
+            falseEntity = (EntityLiving)spawnList.get(spawnIndex).entityClass.getConstructor(new Class[] {World.class}).newInstance(new Object[] {entityLiving.world});
         } catch (Exception exception)
         {
             exception.printStackTrace();
@@ -83,7 +83,7 @@ public class Hallucination
 		if(!isAtValidSpawn(falseEntity))
 		{
 			return;
-		} else if(!entityLiving.worldObj.spawnEntityInWorld(falseEntity))
+		} else if(!entityLiving.world.spawnEntity(falseEntity))
 		{
 			return;
 		}
@@ -92,7 +92,7 @@ public class Hallucination
 			players.put(entityLiving.getCommandSenderName(), this);
 		}
 		
-		if(falseEntity.worldObj.isRemote && falseEntity instanceof EntityLiving)
+		if(falseEntity.world.isRemote && falseEntity instanceof EntityLiving)
 		{
 			//Minecraft.getMinecraft().sndManager.playSound(falseSound, x, y, z, 1.0F, 1.0F);
 			falseEntity.getEntityData().setBoolean("EM_Hallucination", true);
@@ -114,7 +114,7 @@ public class Hallucination
 	{
 		List<EntityPlayer> players = new ArrayList<EntityPlayer>();
 		@SuppressWarnings("unchecked")
-		Iterator<Entity> ite = entity.worldObj.loadedEntityList.iterator();
+		Iterator<Entity> ite = entity.world.loadedEntityList.iterator();
 		
 		while (ite.hasNext())
 		{
@@ -165,7 +165,7 @@ public class Hallucination
 	
 	public static boolean isAtValidSpawn(EntityLivingBase creature)
 	{
-		return creature.worldObj.checkNoEntityCollision(creature.boundingBox) && creature.worldObj.getCollidingBoundingBoxes(creature, creature.boundingBox).isEmpty() && !creature.worldObj.isAnyLiquid(creature.boundingBox) && isValidLightLevel(creature);
+		return creature.world.checkNoEntityCollision(creature.boundingBox) && creature.world.getCollidingBoundingBoxes(creature, creature.boundingBox).isEmpty() && !creature.world.isAnyLiquid(creature.boundingBox) && isValidLightLevel(creature);
 	}
 	
 	/**
@@ -178,16 +178,16 @@ public class Hallucination
 			return true;
 		}
 		
-		int i = MathHelper.floor_double(creature.posX);
-		int j = MathHelper.floor_double(creature.boundingBox.minY);
-		int k = MathHelper.floor_double(creature.posZ);
+		int i = MathHelper.floor(creature.posX);
+		int j = MathHelper.floor(creature.boundingBox.minY);
+		int k = MathHelper.floor(creature.posZ);
 		
-		if(creature.worldObj.getSavedLightValue(EnumSkyBlock.Sky, i, j, k) > creature.getRNG().nextInt(32) && creature.worldObj.isDaytime() && !creature.worldObj.isThundering())
+		if(creature.world.getSavedLightValue(EnumSkyBlock.SKY, i, j, k) > creature.getRNG().nextInt(32) && creature.world.isDaytime() && !creature.world.isThundering())
 		{
 			return false;
 		} else
 		{
-			int l = creature.worldObj.getSavedLightValue(EnumSkyBlock.Block, i, j, k);
+			int l = creature.world.getSavedLightValue(EnumSkyBlock.BLOCK, i, j, k);
 			return l <= creature.getRNG().nextInt(8);
 		}
 	}

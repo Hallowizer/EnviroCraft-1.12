@@ -42,12 +42,12 @@ import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
@@ -88,8 +88,8 @@ import cpw.mods.fml.common.eventhandler.Event.Result;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import cpw.mods.fml.common.gameevent.TickEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.EntityPhysicsBlock;
 import enviromine.EnviroDamageSource;
 import enviromine.EnviroPotion;
@@ -120,13 +120,13 @@ public class EM_EventManager
 	{
 		boolean chunkPhys = true;
 		
-		DimensionProperties dProps = EM_Settings.dimensionProperties.get(event.world.provider.dimensionId);
+		DimensionProperties dProps = EM_Settings.dimensionProperties.get(event.getWorld().provider.getDimension());
 		
-		if(!event.world.isRemote)
+		if(!event.getWorld().isRemote)
 		{
-			if(EM_PhysManager.chunkDelay.containsKey(event.world.provider.dimensionId + "" + (MathHelper.floor_double(event.entity.posX) >> 4) + "," + (MathHelper.floor_double(event.entity.posZ) >> 4)))
+			if(EM_PhysManager.chunkDelay.containsKey(event.getWorld().provider.getDimension() + "" + (MathHelper.floor(event.getEntity().posX) >> 4) + "," + (MathHelper.floor(event.getEntity().posZ) >> 4)))
 			{
-				chunkPhys = (EM_PhysManager.chunkDelay.get(event.world.provider.dimensionId + "" + (MathHelper.floor_double(event.entity.posX) >> 4) + "," + (MathHelper.floor_double(event.entity.posZ) >> 4)) < event.world.getTotalWorldTime());
+				chunkPhys = (EM_PhysManager.chunkDelay.get(event.getWorld().provider.getDimension() + "" + (MathHelper.floor(event.getEntity().posX) >> 4) + "," + (MathHelper.floor(event.getEntity().posZ) >> 4)) < event.getWorld().getTotalWorldTime());
 			}
 		}
 		
@@ -137,39 +137,39 @@ public class EM_EventManager
 		
 		if(EM_Settings.foodSpoiling)
 		{
-			if(event.entity instanceof EntityItem)
+			if(event.getEntity() instanceof EntityItem)
 			{
-				EntityItem item = (EntityItem)event.entity;
-				ItemStack rotStack = RotHandler.doRot(event.world, item.getEntityItem());
+				EntityItem item = (EntityItem)event.getEntity();
+				ItemStack rotStack = RotHandler.doRot(event.getWorld(), item.getEntityItem());
 				
 				if(item.getEntityItem() != rotStack)
 				{
 					item.setEntityItemStack(rotStack);
 				}
-			} else if(event.entity instanceof EntityPlayer)
+			} else if(event.getEntity() instanceof EntityPlayer)
 			{
-				IInventory invo = ((EntityPlayer)event.entity).inventory;
-				RotHandler.rotInvo(event.world, invo);
-			} else if(event.entity instanceof IInventory)
+				IInventory invo = ((EntityPlayer)event.getEntity()).inventory;
+				RotHandler.rotInvo(event.getWorld(), invo);
+			} else if(event.getEntity() instanceof IInventory)
 			{
-				IInventory invo = (IInventory)event.entity;
-				RotHandler.rotInvo(event.world, invo);
+				IInventory invo = (IInventory)event.getEntity();
+				RotHandler.rotInvo(event.getWorld(), invo);
 			}
 		}
 		
-		if(event.entity instanceof EntityLivingBase)
+		if(event.getEntity() instanceof EntityLivingBase)
 		{
 			// Ensure that only one set of trackers are made per Minecraft instance.
-			boolean allowTracker = !(event.world.isRemote && EnviroMine.proxy.isClient() && Minecraft.getMinecraft().isIntegratedServerRunning());
+			boolean allowTracker = !(event.getWorld().isRemote && EnviroMine.proxy.isClient() && Minecraft.getMinecraft().isIntegratedServerRunning());
 			
-			if(EnviroDataTracker.isLegalType((EntityLivingBase)event.entity) && (event.entity instanceof EntityPlayer || EM_Settings.trackNonPlayer) && allowTracker)
+			if(EnviroDataTracker.isLegalType((EntityLivingBase)event.getEntity()) && (event.getEntity() instanceof EntityPlayer || EM_Settings.trackNonPlayer) && allowTracker)
 			{
-				EnviroDataTracker tracker = EM_StatusManager.lookupTracker((EntityLivingBase)event.entity);
+				EnviroDataTracker tracker = EM_StatusManager.lookupTracker((EntityLivingBase)event.getEntity());
 				boolean hasOld = tracker != null && !tracker.isDisabled;
 				
 				if(!hasOld)
 				{
-					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase)event.entity);
+					EnviroDataTracker emTrack = new EnviroDataTracker((EntityLivingBase)event.getEntity());
 					EM_StatusManager.addToManager(emTrack);
 					emTrack.loadNBTTags();
 					if(!EnviroMine.proxy.isClient() || EnviroMine.proxy.isOpenToLAN())
@@ -178,21 +178,21 @@ public class EM_EventManager
 					}
 				} else
 				{
-					tracker.trackedEntity = (EntityLivingBase)event.entity;
+					tracker.trackedEntity = (EntityLivingBase)event.getEntity();
 				}
 				
 				//TODO this is for updating clients gui
-				if (event.entity instanceof EntityPlayerMP && !event.world.isRemote) 
+				if (event.getEntity() instanceof EntityPlayerMP && !event.getWorld().isRemote) 
 				{
 					NBTTagCompound pData = new NBTTagCompound();
 					pData.setInteger("id", 4);
-					pData.setString("player", event.entity.getCommandSenderName());
+					pData.setString("player", event.getEntity().getCommandSenderName());
 					pData.setBoolean("enableAirQ", EM_Settings.enableAirQ);
 					pData.setBoolean("enableBodyTemp", EM_Settings.enableBodyTemp);
 					pData.setBoolean("enableHydrate", EM_Settings.enableHydrate);
 					pData.setBoolean("enableSanity", EM_Settings.enableSanity);
 					
-					EnviroMine.instance.network.sendTo(new PacketEnviroMine(pData), (EntityPlayerMP) event.entity);
+					EnviroMine.instance.network.sendTo(new PacketEnviroMine(pData), (EntityPlayerMP) event.getEntity());
 			
 				}
 			}
@@ -538,7 +538,7 @@ public class EM_EventManager
 	
 	public void RecordEasterEgg(EntityPlayer player, int x, int y, int z)
 	{
-		if(player.worldObj.isRemote)
+		if(player.world.isRemote)
 		{
 			return;
 		}
@@ -599,7 +599,7 @@ public class EM_EventManager
 				int j = movingobjectposition.blockY;
 				int k = movingobjectposition.blockZ;
 				
-				boolean isValidCauldron = (player.worldObj.getBlock(i, j, k) == Blocks.cauldron && player.worldObj.getBlockMetadata(i, j, k) > 0);
+				boolean isValidCauldron = (player.world.getBlock(i, j, k) == Blocks.CAULDRON && player.world.getBlockMetadata(i, j, k) > 0);
 				
 				if(!world.canMineBlock(player, i, j, k))
 				{
@@ -614,7 +614,7 @@ public class EM_EventManager
 				boolean isWater;
 				
 				
-				if(world.getBlock(i, j, k) == Blocks.water || world.getBlock(i, j, k) == Blocks.flowing_water)
+				if(world.getBlock(i, j, k) == Blocks.WATER || world.getBlock(i, j, k) == Blocks.FLOWING_WATER)
 				{
 					isWater = true;
 					
@@ -656,25 +656,25 @@ public class EM_EventManager
 						}
 					}
 					
-					if(isValidCauldron && (world.getBlock(i, j - 1, k) == Blocks.fire || world.getBlock(i, j - 1, k) == Blocks.flowing_lava || world.getBlock(i, j - 1, k) == Blocks.lava))
+					if(isValidCauldron && (world.getBlock(i, j - 1, k) == Blocks.FIRE || world.getBlock(i, j - 1, k) == Blocks.FLOWING_LAVA || world.getBlock(i, j - 1, k) == Blocks.LAVA))
 					{
 						newItem = Items.potionitem;
 					}
 					
 					if(isValidCauldron)
 					{
-						player.worldObj.setBlockMetadataWithNotify(i, j, k, player.worldObj.getBlockMetadata(i, j, k) - 1, 2);
+						player.world.setBlockMetadataWithNotify(i, j, k, player.world.getBlockMetadata(i, j, k) - 1, 2);
 					} else if(EM_Settings.finiteWater)
 					{
-						player.worldObj.setBlock(i, j, k, Blocks.flowing_water, player.worldObj.getBlockMetadata(i, j, k) + 1, 2);
+						player.world.setBlock(i, j, k, Blocks.FLOWING_WATER, player.world.getBlockMetadata(i, j, k) + 1, 2);
 					}
 					
-					--item.stackSize;
+					item.shrink(1);
 					
-					if(item.stackSize <= 0)
+					if(item.getCount() <= 0)
 					{
 						item = new ItemStack(newItem);
-						item.stackSize = 1;
+						item.setCount(1);
 						item.setItemDamage(0);
 						player.setCurrentItemOrArmor(0, item);
 					} else if(!player.inventory.addItemStackToInventory(new ItemStack(newItem,1,0)))
@@ -694,12 +694,12 @@ public class EM_EventManager
 	
 	public static void drinkWater(EntityPlayer entityPlayer, PlayerInteractEvent event)
 	{
-		if(entityPlayer.isInsideOfMaterial(Material.water))
+		if(entityPlayer.isInsideOfMaterial(Material.WATER))
 		{
 			return;
 		}
 		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(entityPlayer);
-		MovingObjectPosition mop = getMovingObjectPositionFromPlayer(entityPlayer.worldObj, entityPlayer, true);
+		MovingObjectPosition mop = getMovingObjectPositionFromPlayer(entityPlayer.world, entityPlayer, true);
 		
 		if(mop != null)
 		{
@@ -715,7 +715,7 @@ public class EM_EventManager
 				int y = hitBlock[1];
 				int z = hitBlock[2];
 				
-				if(entityPlayer.worldObj.getBlock(i, j, k).getMaterial() != Material.water && entityPlayer.worldObj.getBlock(x, y, z).getMaterial() == Material.water)
+				if(entityPlayer.world.getBlock(i, j, k).getMaterial() != Material.WATER && entityPlayer.world.getBlock(x, y, z).getMaterial() == Material.WATER)
 				{
 					i = x;
 					j = y;
@@ -724,12 +724,12 @@ public class EM_EventManager
 				
 				boolean isWater;
 				
-				if(entityPlayer.worldObj.getBlock(i, j, k) == Blocks.flowing_water  || entityPlayer.worldObj.getBlock(i, j, k) == Blocks.water)
+				if(entityPlayer.world.getBlock(i, j, k) == Blocks.FLOWING_WATER  || entityPlayer.world.getBlock(i, j, k) == Blocks.WATER)
 				{
 					isWater = true;
 					
 					// if finite is on.. make sure player cant drink from a infinite flowing water source
-					if(entityPlayer.worldObj.getBlockMetadata(i, j, k) > .2f && EM_Settings.finiteWater)
+					if(entityPlayer.world.getBlockMetadata(i, j, k) > .2f && EM_Settings.finiteWater)
 					{
 						isWater = false;
 					}
@@ -738,7 +738,7 @@ public class EM_EventManager
 					isWater = false;
 				}
 				
-				boolean isValidCauldron = (entityPlayer.worldObj.getBlock(i, j, k) == Blocks.cauldron && entityPlayer.worldObj.getBlockMetadata(i, j, k) > 0);
+				boolean isValidCauldron = (entityPlayer.world.getBlock(i, j, k) == Blocks.CAULDRON && entityPlayer.world.getBlockMetadata(i, j, k) > 0);
 
 				if(isWater || isValidCauldron)
 				{
@@ -746,12 +746,12 @@ public class EM_EventManager
 					{
 						int type = 0;
 						
-						if(isValidCauldron && (entityPlayer.worldObj.getBlock(i, j - 1, k) == Blocks.fire || entityPlayer.worldObj.getBlock(i, j - 1, k) == Blocks.flowing_lava || entityPlayer.worldObj.getBlock(i, j - 1, k) == Blocks.lava))
+						if(isValidCauldron && (entityPlayer.world.getBlock(i, j - 1, k) == Blocks.fire || entityPlayer.world.getBlock(i, j - 1, k) == Blocks.FLOWING_LAVA || entityPlayer.world.getBlock(i, j - 1, k) == Blocks.LAVA))
 						{
 							type = 0;
 						} else
 						{
-							type = getWaterType(entityPlayer.worldObj, i, j, k);
+							type = getWaterType(entityPlayer.world, i, j, k);
 						}
 						
 						if(type == 0)
@@ -805,13 +805,13 @@ public class EM_EventManager
 						
 						if(isValidCauldron)
 						{
-							entityPlayer.worldObj.setBlockMetadataWithNotify(i, j, k, entityPlayer.worldObj.getBlockMetadata(i, j, k) - 1, 2);
+							entityPlayer.world.setBlockMetadataWithNotify(i, j, k, entityPlayer.world.getBlockMetadata(i, j, k) - 1, 2);
 						} else if(EM_Settings.finiteWater)
 						{
-							entityPlayer.worldObj.setBlock(i, j, k, Blocks.flowing_water, entityPlayer.worldObj.getBlockMetadata(i, j, k) + 1, 2);
+							entityPlayer.world.setBlock(i, j, k, Blocks.FLOWING_WATER, entityPlayer.world.getBlockMetadata(i, j, k) + 1, 2);
 						}
 						
-						entityPlayer.worldObj.playSoundAtEntity(entityPlayer, "random.drink", 1.0F, 1.0F);
+						entityPlayer.world.playSoundAtEntity(entityPlayer, "random.drink", 1.0F, 1.0F);
 						
 						if(event != null)
 						{
@@ -1353,7 +1353,7 @@ public class EM_EventManager
 			{
 				if(stack.getItem() == fItem && (stack.getItemDamage() == fDamage || fDamage <= -1))
 				{
-					invo.setInventorySlotContents(i, new ItemStack(rItem, stack.stackSize, fDamage <= -1? stack.getItemDamage() : rDamage));
+					invo.setInventorySlotContents(i, new ItemStack(rItem, stack.getCount(), fDamage <= -1? stack.getItemDamage() : rDamage));
 				}
 			}
 		}

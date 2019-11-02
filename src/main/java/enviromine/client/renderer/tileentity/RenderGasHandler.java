@@ -6,8 +6,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.blocks.BlockGas;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.ObjectHandler;
@@ -24,7 +24,7 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
 	@Override
 	public void renderInventoryBlock(Block block, int metadata, int modelID, RenderBlocks renderer)
 	{
-		Tessellator tessellator = Tessellator.instance;
+		Tessellator tessellator = Tessellator.getInstance();
 		
 		float red = 1.0F;
 		float green = 1.0F;
@@ -119,7 +119,7 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
 		double sideMaxY;
 
 		verts = 0;
-		tessellator = Tessellator.instance;
+		tessellator = Tessellator.getInstance();
 		
 		tessellator.setBrightness(brightness);
 		tessellator.addTranslation((float)i, (float)j, (float)k);

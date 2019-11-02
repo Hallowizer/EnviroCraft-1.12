@@ -19,9 +19,9 @@ import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
-import cpw.mods.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.IConfigElement;
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
@@ -132,7 +132,7 @@ public class EM_ConfigMenu extends GuiConfig
 	  public void drawScreen(int mouseX, int mouseY, float partialTicks)
 	  {
  		  super.drawScreen(mouseX, mouseY, partialTicks);
-	        this.drawCenteredString(this.fontRendererObj, I18n.format("editor.enviromine.currentProfile") +": "+ EM_ConfigHandler.getProfileName(), this.width / 2, 18, 16777215);
+	        this.drawCenteredString(this.fontRenderer, I18n.format("editor.enviromine.currentProfile") +": "+ EM_ConfigHandler.getProfileName(), this.width / 2, 18, 16777215);
 	      //  this.searchBox.drawTextBox();
 	  }
 

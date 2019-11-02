@@ -6,13 +6,13 @@ import java.io.FileOutputStream;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 import org.apache.logging.log4j.Level;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.world.chunk.ChunkProviderCaves;
@@ -28,9 +28,9 @@ public class WorldProviderCaves extends WorldProvider
 	public void registerWorldChunkManager()
 	{
 		this.worldChunkMgr = new WorldChunkManagerCaves(EnviroMine.caves, 1.0F, 0.0F);
-		this.isHellWorld = false;
-		this.hasNoSky = true;
-		this.dimensionId = EM_Settings.caveDimID;
+		this.nether = false;
+		this.hasSkyLight = false;
+		this.setDimension(EM_Settings.caveDimID);
 	}
 	
 	/**
@@ -114,7 +114,7 @@ public class WorldProviderCaves extends WorldProvider
 			Earthquake.loadQuakes(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroEarthquakes"));
 		}
 		
-		long seed = this.worldObj.getSeed();
+		long seed = this.world.getSeed();
 		File dimDataF = new File(EM_Settings.worldDir, "data/");
 		File dimData = new File(EM_Settings.worldDir, "data/EnviroCaveData");
 		File dimFolder = new File(EM_Settings.worldDir, "DIM" + EM_Settings.caveDimID + "/region");
@@ -139,7 +139,7 @@ public class WorldProviderCaves extends WorldProvider
 				
 				if(!dimFolder.exists()) // Checks if a cave map exists already. If not randomize the seed
 				{
-					seed = this.worldObj.rand.nextLong();
+					seed = this.world.rand.nextLong();
 				}
 				
 				dataTags.setLong("CAVE_SEED", seed);
@@ -163,7 +163,7 @@ public class WorldProviderCaves extends WorldProvider
 			EnviroMine.logger.log(Level.ERROR, "Failed to save CaveDimension data to file: " + dimData.getAbsolutePath(), e);
 		}
 		
-		return new ChunkProviderCaves(this.worldObj, seed);
+		return new ChunkProviderCaves(this.world, seed);
 	}
 	
 	/**

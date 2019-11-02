@@ -4,7 +4,7 @@ import java.io.File;
 
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.world.biome.Biome;
 import net.minecraftforge.common.DimensionManager;
 import net.minecraftforge.common.config.Configuration;
 
@@ -258,7 +258,7 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 					file.createNewFile();
 				} catch(Exception e)
 				{
-					EnviroMine.logger.log(Level.ERROR, "Failed to create file for dimension '" + dimension.getDimensionName() + "'", e);
+					EnviroMine.logger.log(Level.ERROR, "Failed to create file for dimension '" + dimension.getDimensionType().getName() + "'", e);
 					continue;
 				}
 			}
@@ -267,11 +267,11 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 			
 			config.load();
 			
-			String catName = this.categoryName() + "." + EnviroUtils.replaceULN(dimension.getDimensionName());
+			String catName = this.categoryName() + "." + EnviroUtils.replaceULN(dimension.getDimensionType().getName());
 			
-			if(dimension.dimensionId == EM_Settings.caveDimID)
+			if(dimension.getDimension() == EM_Settings.caveDimID)
 			{
-				config.get(catName, DMName[0], dimension.dimensionId).getInt(dimension.dimensionId);
+				config.get(catName, DMName[0], dimension.getDimension()).getInt(dimension.getDimension());
 				config.get(catName, DMName[1], true).getBoolean(true);
 				config.get(catName, DMName[2], true).getBoolean(true);
 				config.get(catName, DMName[3], true).getBoolean(true);
@@ -292,9 +292,9 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, DMName[18], 0.0D).getDouble(0.0D);
 				config.get(catName, DMName[19], 0.0D).getDouble(0.0D);
 				config.get(catName, DMName[20], true).getBoolean(true);
-			} else if(dimension.dimensionId == -1)
+			} else if(dimension.getDimension() == -1)
 			{
-				config.get(catName, DMName[0], dimension.dimensionId).getInt(dimension.dimensionId);
+				config.get(catName, DMName[0], dimension.getDimension()).getInt(dimension.getDimension());
 				config.get(catName, DMName[1], true).getBoolean(true);
 				config.get(catName, DMName[2], true).getBoolean(true);
 				config.get(catName, DMName[3], true).getBoolean(true);
@@ -341,9 +341,9 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 		
 		WorldProvider dimension = (WorldProvider)obj;
 		
-		String catName = this.categoryName() + "." + EnviroUtils.replaceULN(dimension.getDimensionName());
+		String catName = this.categoryName() + "." + EnviroUtils.replaceULN(dimension.getDimensionType().getName());
 		
-		config.get(catName, DMName[0], dimension.dimensionId).getInt(dimension.dimensionId);
+		config.get(catName, DMName[0], dimension.getDimension()).getInt(dimension.getDimension());
 		config.get(catName, DMName[1], true).getBoolean(true);
 		config.get(catName, DMName[2], true).getBoolean(true);
 		config.get(catName, DMName[3], true).getBoolean(true);
@@ -354,10 +354,10 @@ public class DimensionProperties implements SerialisableProperty, PropertyBase
 		config.get(catName, DMName[8], 1.0D).getDouble(1.0D);
 		config.get(catName, DMName[9], true).getBoolean(true);
 		config.get(catName, DMName[10], 1.0D).getDouble(1.0D);
-		config.get(catName, DMName[11], !dimension.hasNoSky).getBoolean(!dimension.hasNoSky);
-		config.get(catName, DMName[12], !dimension.hasNoSky).getBoolean(!dimension.hasNoSky);
-		config.get(catName, DMName[13], !dimension.hasNoSky).getBoolean(!dimension.hasNoSky);
-		config.get(catName, DMName[14], dimension.hasNoSky? 340 : 64).getInt(dimension.hasNoSky? 340 : 64);
+		config.get(catName, DMName[11], dimension.hasSkyLight()).getBoolean(dimension.hasSkyLight());
+		config.get(catName, DMName[12], dimension.hasSkyLight()).getBoolean(dimension.hasSkyLight());
+		config.get(catName, DMName[13], dimension.hasSkyLight()).getBoolean(dimension.hasSkyLight());
+		config.get(catName, DMName[14], (!dimension.hasSkyLight())? 340 : 64).getInt((!dimension.hasSkyLight())? 340 : 64);
 		config.getInt(DMName[15], catName, 12, -255, 255, "Use a negitive value to skip shaft entrance checks");
 		config.get(catName, DMName[16], 0.0D).getDouble(0.0D);
 		config.get(catName, DMName[17], 0.0D).getDouble(0.0D);

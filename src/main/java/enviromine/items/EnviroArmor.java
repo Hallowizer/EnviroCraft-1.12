@@ -11,8 +11,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.World;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 public class EnviroArmor extends ItemArmor //implements ITextureProvider, IArmorTextureProvider
 {
@@ -86,13 +86,13 @@ public class EnviroArmor extends ItemArmor //implements ITextureProvider, IArmor
 	 */
 	public boolean getIsRepairable(ItemStack par1ItemStack, ItemStack par2ItemStack)
 	{
-		if (par1ItemStack.getItem() == ObjectHandler.hardHat && (par2ItemStack.getItem() == ObjectHandler.hardHat || par2ItemStack.getItem() == Items.iron_ingot))
+		if (par1ItemStack.getItem() == ObjectHandler.hardHat && (par2ItemStack.getItem() == ObjectHandler.hardHat || par2ItemStack.getItem() == Items.IRON_INGOT))
 		{
 			return true;
-		} else if (par1ItemStack.getItem() == ObjectHandler.gasMask && (par2ItemStack.getItem() == ObjectHandler.gasMask || par2ItemStack.getItem() == Items.iron_ingot))
+		} else if (par1ItemStack.getItem() == ObjectHandler.gasMask && (par2ItemStack.getItem() == ObjectHandler.gasMask || par2ItemStack.getItem() == Items.IRON_INGOT))
 		{
 			return true;
-		} else if (par1ItemStack.getItem() == ObjectHandler.camelPack && (par2ItemStack.getItem() == ObjectHandler.camelPack || par2ItemStack.getItem() == Items.leather))
+		} else if (par1ItemStack.getItem() == ObjectHandler.camelPack && (par2ItemStack.getItem() == ObjectHandler.camelPack || par2ItemStack.getItem() == Items.LEATHER))
 		{
 			return true;
 		} else

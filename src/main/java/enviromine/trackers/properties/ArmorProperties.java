@@ -77,7 +77,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	 */
 	public boolean hasProperty(ItemStack stack)
 	{
-		return EM_Settings.armorProperties.containsKey(Item.itemRegistry.getNameForObject(stack.getItem()));
+		return EM_Settings.armorProperties.containsKey(Item.REGISTRY.getNameForObject(stack.getItem()));
 	}
 	/** 
 	 * 	<b>getProperty(ItemStack stack)</b><bR><br>
@@ -87,14 +87,14 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	 */
 	public ArmorProperties getProperty(ItemStack stack)
 	{
-		return EM_Settings.armorProperties.get(Item.itemRegistry.getNameForObject(stack.getItem()));
+		return EM_Settings.armorProperties.get(Item.REGISTRY.getNameForObject(stack.getItem()));
 	}
 	
 	@Override
 	public NBTTagCompound WriteToNBT()
 	{
 		NBTTagCompound tags = new NBTTagCompound();
-		tags.setString("name", Item.itemRegistry.getNameForObject(item));
+		tags.setString("name", Item.REGISTRY.getNameForObject(item));
 		tags.setFloat("nightTemp", nightTemp);
 		tags.setFloat("shadeTemp", shadeTemp);
 		tags.setFloat("sunTemp", sunTemp);
@@ -111,7 +111,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	public void ReadFromNBT(NBTTagCompound tags)
 	{
 		this.name = tags.getString("name");
-		item = (Item)Item.itemRegistry.getObject(this.name);
+		item = (Item)Item.REGISTRY.getObject(this.name);
 		this.nightTemp = tags.getFloat("nightTemp");
 		this.shadeTemp = tags.getFloat("shadeTemp");
 		this.sunTemp = tags.getFloat("sunTemp");
@@ -150,7 +150,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		float air = (float)config.get(category, APName[8], 0.00).getDouble(0.00);
 		String filename = config.getConfigFile().getName();
 		
-		Object item = Item.itemRegistry.getObject(name);
+		Object item = Item.REGISTRY.getObject(name);
 		boolean allowCamelPack = true;
 		if (item instanceof ItemArmor && ((ItemArmor)item).armorType == 1)
 		{
@@ -183,7 +183,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 	public void GenDefaults()
 	{
 		@SuppressWarnings("unchecked")
-		Iterator<Item> itemList = Item.itemRegistry.iterator();
+		Iterator<Item> itemList = Item.REGISTRY.iterator();
 		
 		while(itemList.hasNext())
 		{
@@ -195,7 +195,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 			}
 			
 			ItemArmor armor = (ItemArmor)regItem;
-			String[] regName = Item.itemRegistry.getNameForObject(armor).split(":");
+			String[] regName = Item.REGISTRY.getNameForObject(armor).split(":");
 			
 			if(regName.length <= 0)
 			{
@@ -222,9 +222,9 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 			
 			String catName = this.categoryName() + "." + EnviroUtils.replaceULN(armor.getUnlocalizedName() +"_"+ regName[1]);
 			
-			if(armor == Items.diamond_helmet || armor == Items.diamond_chestplate || armor == Items.diamond_leggings || armor == Items.diamond_boots || (armor.getArmorMaterial() == ArmorMaterial.DIAMOND && EM_Settings.genConfigs))
+			if(armor == Items.DIAMOND_HELMET || armor == Items.DIAMOND_CHESTPLATE || armor == Items.DIAMOND_LEGGINGS || armor == Items.DIAMOND_BOOTS || (armor.getArmorMaterial() == ArmorMaterial.DIAMOND && EM_Settings.genConfigs))
 			{
-				config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();
+				config.get(catName, APName[0], Item.REGISTRY.getNameForObject(armor)).getString();
 				config.get(catName, APName[1], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[2], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[3], 0.0D).getDouble(0.0D);
@@ -238,9 +238,9 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}
-			} else if(armor == Items.iron_helmet || armor == Items.iron_chestplate || armor == Items.iron_leggings || armor == Items.iron_boots || (armor.getArmorMaterial() == ArmorMaterial.IRON && EM_Settings.genConfigs))
+			} else if(armor == Items.IRON_HELMET || armor == Items.IRON_CHESTPLATE || armor == Items.IRON_LEGGINGS || armor == Items.IRON_BOOTS || (armor.getArmorMaterial() == ArmorMaterial.IRON && EM_Settings.genConfigs))
 			{
-				config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();
+				config.get(catName, APName[0], Item.REGISTRY.getNameForObject(armor)).getString();
 				config.get(catName, APName[1], -1.0D).getDouble(-1.0D);
 				config.get(catName, APName[2], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[3], 2.0D).getDouble(2.0D);
@@ -254,9 +254,9 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}
-			} else if(armor == Items.golden_helmet || armor == Items.golden_chestplate || armor == Items.golden_leggings || armor == Items.golden_boots || (armor.getArmorMaterial() == ArmorMaterial.GOLD && EM_Settings.genConfigs))
+			} else if(armor == Items.GOLDEN_HELMET || armor == Items.GOLDEN_CHESTPLATE || armor == Items.GOLDEN_LEGGINGS || armor == Items.GOLDEN_BOOTS || (armor.getArmorMaterial() == ArmorMaterial.GOLD && EM_Settings.genConfigs))
 			{
-				config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();
+				config.get(catName, APName[0], Item.REGISTRY.getNameForObject(armor)).getString();
 				config.get(catName, APName[1], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[2], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[3], 2.5D).getDouble(2.5D);
@@ -270,9 +270,9 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}
-			} else if(armor == Items.leather_helmet || armor == Items.leather_chestplate || armor == Items.leather_leggings || armor == Items.leather_boots || (armor.getArmorMaterial() == ArmorMaterial.CLOTH && EM_Settings.genConfigs))
+			} else if(armor == Items.LEATHER_HELMET || armor == Items.LEATHER_CHESTPLATE || armor == Items.LEATHER_LEGGINGS || armor == Items.LEATHER_BOOTS || (armor.getArmorMaterial() == ArmorMaterial.CLOTH && EM_Settings.genConfigs))
 			{
-				config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();
+				config.get(catName, APName[0], Item.REGISTRY.getNameForObject(armor)).getString();
 				config.get(catName, APName[1], 1.0D).getDouble(1.0D);
 				config.get(catName, APName[2], 1.0D).getDouble(1.0D);
 				config.get(catName, APName[3], 1.0D).getDouble(1.0D);
@@ -326,7 +326,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		
 		ItemArmor armor = (ItemArmor)obj;
 		
-		String[] regName = Item.itemRegistry.getNameForObject(armor).split(":");
+		String[] regName = Item.REGISTRY.getNameForObject(armor).split(":");
 		
 		if(regName.length <= 0)
 		{
@@ -337,7 +337,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		String catName = this.categoryName() + "." + EnviroUtils.replaceULN(armor.getUnlocalizedName() +"_"+ regName);
 		
 		config.addCustomCategoryComment(catName, "");
-		config.get(catName, APName[0], Item.itemRegistry.getNameForObject(armor)).getString();
+		config.get(catName, APName[0], Item.REGISTRY.getNameForObject(armor)).getString();
 		config.get(catName, APName[1], 0.0D).getDouble(0.0D);
 		config.get(catName, APName[2], 0.0D).getDouble(0.0D);
 		config.get(catName, APName[3], 0.0D).getDouble(0.0D);

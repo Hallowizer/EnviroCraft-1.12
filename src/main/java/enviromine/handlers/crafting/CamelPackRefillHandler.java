@@ -42,8 +42,8 @@ public class CamelPackRefillHandler implements IRecipe
 				continue;
 			}
 			
-			ItemProperties itemProps  = EM_Settings.itemProperties.get(Item.itemRegistry.getNameForObject(item.getItem()) + "," + item.getItemDamage());
-			itemProps = itemProps != null? itemProps : EM_Settings.itemProperties.get(Item.itemRegistry.getNameForObject(item.getItem()));
+			ItemProperties itemProps  = EM_Settings.itemProperties.get(Item.REGISTRY.getNameForObject(item.getItem()) + "," + item.getItemDamage());
+			itemProps = itemProps != null? itemProps : EM_Settings.itemProperties.get(Item.REGISTRY.getNameForObject(item.getItem()));
 			
 			if (item.hasTagCompound() && item.getTagCompound().hasKey("camelPackFill"))
 			{
@@ -58,7 +58,7 @@ public class CamelPackRefillHandler implements IRecipe
 				}
 			} else if(itemProps != null && itemProps.camelFill != 0)
 			{
-				Item outItem = (Item)Item.itemRegistry.getObject(itemProps.fillReturnItem);
+				Item outItem = (Item)Item.REGISTRY.getObject(itemProps.fillReturnItem);
 				ItemStack outStack = null;
 				if(outItem != null)
 				{
@@ -160,13 +160,13 @@ public class CamelPackRefillHandler implements IRecipe
 						continue;
 					} else if (slot.hasTagCompound() && slot.getTagCompound().hasKey("camelPackFill") && totalFill < 0)
 					{
-						slot.stackSize += 1;
+						slot.grow(1);
 						slot.getTagCompound().setInteger("camelPackFill", slot.getTagCompound().getInteger("camelPackFill") + totalFill);
-					} else if(slot.getItem() == Items.potionitem && totalFill >= 0)
+					} else if(slot.getItem() == Items.POTIONITEM && totalFill >= 0)
 					{
-						if(!event.player.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle)))
+						if(!event.player.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE)))
 						{
-							event.player.dropPlayerItemWithRandomChoice(new ItemStack(Items.glass_bottle), false);
+							event.player.dropPlayerItemWithRandomChoice(new ItemStack(Items.GLASS_BOTTLE), false);
 						}
 					}
 				}

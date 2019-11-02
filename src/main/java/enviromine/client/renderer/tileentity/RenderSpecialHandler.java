@@ -9,8 +9,8 @@ import net.minecraft.client.renderer.tileentity.TileEntityRendererDispatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.blocks.tiles.*;
 import enviromine.handlers.ObjectHandler;
 
@@ -26,12 +26,12 @@ public class RenderSpecialHandler implements ISimpleBlockRenderingHandler
 		{
             GL11.glRotatef(90.0F, 0.0F, 1.0F, 0.0F);
             GL11.glTranslatef(-0.5F, -0.5F, -0.5F);
-            if(!blockToTile.get(block).hasWorldObj())
+            if(!blockToTile.get(block).hasWorld())
             {
             	blockToTile.get(block).setWorldObj(renderer.minecraftRB.theWorld);
             }
             
-            if(blockToTile.get(block).blockType == null)
+            if(blockToTile.get(block).getBlockType() == null)
             {
             	blockToTile.get(block).blockType = block;
             }

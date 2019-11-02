@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Random;
 import net.minecraft.block.material.Material;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import enviromine.core.EM_Settings;
@@ -103,7 +104,7 @@ public class MineshaftBuilder
 		{
 			for(int k = gridZ - 1; k <= gridZ + 1; k++)
 			{
-				if(scannedGrids.containsKey("" + i + "," + k + "," + world.provider.dimensionId))
+				if(scannedGrids.containsKey("" + i + "," + k + "," + world.provider.getDimension()))
 				{
 					continue;
 				} else
@@ -150,7 +151,7 @@ public class MineshaftBuilder
 						}
 					}
 					
-					scannedGrids.put("" + i + "," + k + "," + world.provider.dimensionId, foundBuilders);
+					scannedGrids.put("" + i + "," + k + "," + world.provider.getDimension(), foundBuilders);
 				}
 			}
 		}
@@ -251,10 +252,10 @@ public class MineshaftBuilder
 		if(segmentMap.size() <= 0)
 		{
 			pendingBuilders.remove(this);
-			if(scannedGrids.containsKey("" + (this.origX/1024) + "," + (this.origZ/1024) + "," + world.provider.dimensionId))
+			if(scannedGrids.containsKey("" + (this.origX/1024) + "," + (this.origZ/1024) + "," + world.provider.getDimension()))
 			{
-				int remBuilders = scannedGrids.get("" + (this.origX/1024) + "," + (this.origZ/1024) + "," + world.provider.dimensionId);
-				scannedGrids.put("" + (this.origX/1024) + "," + (this.origZ/1024) + "," + world.provider.dimensionId, remBuilders - 1);
+				int remBuilders = scannedGrids.get("" + (this.origX/1024) + "," + (this.origZ/1024) + "," + world.provider.getDimension());
+				scannedGrids.put("" + (this.origX/1024) + "," + (this.origZ/1024) + "," + world.provider.getDimension(), remBuilders - 1);
 			}
 		}
 	}
@@ -265,7 +266,7 @@ public class MineshaftBuilder
 		//DO NOT call .build() in this function, it may cause additional chunks to be force loaded.
 		//Any segment that already has all chunks loaded should not be added to the segment map.
 		
-		DimensionProperties dProps = EM_Settings.dimensionProperties.get(this.world.provider.dimensionId);
+		DimensionProperties dProps = EM_Settings.dimensionProperties.get(this.world.provider.getDimension());
 		int seaLvl = dProps != null? dProps.sealevel : 64;
 		int mineDepth = dProps != null? dProps.mineDepth : 12 + (seaLvl > 32? (this.rand.nextInt(5)*4) : 4 * this.rand.nextInt((seaLvl-12)/4));
 		boolean shaft = true;
@@ -281,7 +282,7 @@ public class MineshaftBuilder
 		
 		if(shaft)
 		{
-			if(this.world.getBlock(origX, origY - 1, origX).getMaterial() == Material.water || this.world.getBlock(origX, origY - 1, origX).getMaterial() == Material.lava || origY < (float)seaLvl * 0.75F || seaLvl < 24)
+			if(this.world.getBlockState(new BlockPos(origX, origY - 1, origX)).getBlock().getMaterial() == Material.WATER || this.world.getBlockState(new BlockPos(origX, origY - 1, origX)).getBlock().getMaterial() == Material.LAVA || origY < (float)seaLvl * 0.75F || seaLvl < 24)
 			{
 				return false;
 			}
@@ -332,7 +333,7 @@ public class MineshaftBuilder
 		
 		if(this.segmentMap.size() > 0)
 		{
-			EnviroMine.logger.log(Level.INFO, "New mine at " + this.origX + "," + this.origY + "," + this.origZ + " with rotation " + this.rot + " in dimension " + world.provider.dimensionId);
+			EnviroMine.logger.log(Level.INFO, "New mine at " + this.origX + "," + this.origY + "," + this.origZ + " with rotation " + this.rot + " in dimension " + world.provider.getDimension());
 			return true;
 		} else
 		{

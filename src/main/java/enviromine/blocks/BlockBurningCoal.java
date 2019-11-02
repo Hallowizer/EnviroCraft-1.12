@@ -13,11 +13,12 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.blocks.tiles.TileEntityBurningCoal;
 import enviromine.blocks.tiles.TileEntityGas;
 import enviromine.core.EM_Settings;
@@ -60,9 +61,9 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
 	{
 		super.updateTick(world, x, y, z, rand);
 		
-		if(world.isAirBlock(x, y + 1, z))
+		if(world.isAirBlock(new BlockPos(x, y + 1, z)))
 		{
-			world.setBlock(x, y + 1, z, Blocks.fire);
+			world.setBlock(x, y + 1, z, Blocks.FIRE);
 		}
 		
 		if(!world.scheduledUpdatesAreImmediate)
@@ -97,9 +98,9 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
         	if(EM_Settings.noGases)
         	{
         		coalTile.fuel -= 1;
-        	} else if(world.rand.nextInt(20) == 0 && (world.getBlock(xOff, yOff, zOff) == Blocks.air || world.getBlock(xOff, yOff, zOff) instanceof BlockGas))
+        	} else if(world.rand.nextInt(20) == 0 && (world.getBlock(xOff, yOff, zOff) == Blocks.AIR || world.getBlock(xOff, yOff, zOff) instanceof BlockGas))
         	{
-        		if(world.getBlock(xOff, yOff, zOff) == Blocks.air)
+        		if(world.getBlock(xOff, yOff, zOff) == Blocks.AIR)
         		{
         			world.setBlock(xOff, yOff, zOff, ObjectHandler.gasBlock);
         		}
@@ -121,7 +122,7 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
         	
         	if(coalTile.fuel <= 0)
         	{
-        		world.setBlock(x, y, z, Blocks.air, 0, 2);
+        		world.setBlock(x, y, z, Blocks.AIR, 0, 2);
         		return;
         	}
         }
@@ -167,7 +168,7 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
                                     k2 = 15;
                                 }
 
-                                world.setBlock(i1, k1, j1, Blocks.fire, k2, 3);
+                                world.setBlock(i1, k1, j1, Blocks.FIRE, k2, 3);
                             }
                         }
                     }
@@ -178,7 +179,7 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
 
     public void breakBlock(World world, int x, int y, int z, Block block, int meta)
     {
-    	world.setBlock(x, y, z, Blocks.fire);
+    	world.setBlock(x, y, z, Blocks.FIRE);
 		/*TileEntity tile = world.getTileEntity(x, y, z);
 		
 		if(tile != null && tile instanceof TileEntityGas)
@@ -191,11 +192,11 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
 	
     private void tryCatchFire(World world, int x, int y, int z, int p_149841_5_, Random random, int chance, ForgeDirection face)
     {
-        int j1 = world.getBlock(x, y, z).getFlammability(world, x, y, z, face);
+        int j1 = world.getBlockState(new BlockPos(x, y, z)).getFlammability(world, x, y, z, face);
 
         if (random.nextInt(p_149841_5_) < j1)
         {
-            boolean flag = world.getBlock(x, y, z) == Blocks.tnt;
+            boolean flag = world.getBlockState(new BlockPos(x, y, z)).getBlock() == Blocks.TNT;
 
             if (random.nextInt(chance + 10) < 5 && !world.canLightningStrikeAt(x, y, z))
             {
@@ -206,16 +207,16 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
                     k1 = 15;
                 }
 
-                world.setBlock(x, y, z, Blocks.fire, k1, 3);
+                world.setBlock(x, y, z, Blocks.FIRE, k1, 3);
             }
             else
             {
-                world.setBlockToAir(x, y, z);
+                world.setBlockToAir(new BlockPos(x, y, z));
             }
 
             if (flag)
             {
-                Blocks.tnt.onBlockDestroyedByPlayer(world, x, y, z, 1);
+                Blocks.TNT.onBlockDestroyedByPlayer(world, new BlockPos(x, y, z), 1);
             }
         }
     }
@@ -227,7 +228,7 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
     {
         byte b0 = 0;
 
-        if (!world.isAirBlock(x, y, z))
+        if (!world.isAirBlock(new BlockPos(x, y, z)))
         {
             return 0;
         }

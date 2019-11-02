@@ -3,6 +3,7 @@ package enviromine.blocks;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
@@ -11,14 +12,15 @@ import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.IIcon;
 import net.minecraft.world.Explosion;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.blocks.tiles.TileEntityGas;
 import enviromine.core.EM_Settings;
 import enviromine.gases.EnviroGas;
@@ -43,48 +45,48 @@ public class BlockGas extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
 	
 	@Override
-	public void onBlockAdded(World world, int i, int j, int k)
+	public void onBlockAdded(World world, BlockPos pos, IBlockState state)
 	{
-		super.onBlockAdded(world, i, j, k);
+		super.onBlockAdded(world, pos, state);
 		
-		TileEntity tile = world.getTileEntity(i, j, k);
+		TileEntity tile = world.getTileEntity(pos);
 		
 		if(tile == null)
 		{
 			tile = new TileEntityGas(world);
-			world.setTileEntity(i, j, k, tile);
+			world.setTileEntity(pos, tile);
 		}
 		
 		if(this == ObjectHandler.fireGasBlock)
 		{
 			for(int dir = 0; dir < ForgeDirection.VALID_DIRECTIONS.length; dir++)
 			{
-				int xOff = ForgeDirection.VALID_DIRECTIONS[dir].offsetX + i;
-				int yOff = ForgeDirection.VALID_DIRECTIONS[dir].offsetY + j;
-				int zOff = ForgeDirection.VALID_DIRECTIONS[dir].offsetZ + k;
+				int xOff = ForgeDirection.VALID_DIRECTIONS[dir].offsetX + pos.getX();
+				int yOff = ForgeDirection.VALID_DIRECTIONS[dir].offsetY + pos.getY();
+				int zOff = ForgeDirection.VALID_DIRECTIONS[dir].offsetZ + pos.getZ();
 				
 				Block sBlock = world.getBlock(xOff, yOff, zOff);
 				
-				if((sBlock.isFlammable(world, xOff, yOff, zOff, ForgeDirection.VALID_DIRECTIONS[dir].getOpposite()) && !(sBlock instanceof BlockGas)) || sBlock == Blocks.air)
+				if((sBlock.isFlammable(world, xOff, yOff, zOff, ForgeDirection.VALID_DIRECTIONS[dir].getOpposite()) && !(sBlock instanceof BlockGas)) || sBlock == Blocks.AIR)
 				{
-					world.setBlock(xOff, yOff, zOff, Blocks.fire, 0, 3);
+					world.setBlock(xOff, yOff, zOff, Blocks.FIRE, 0, 3);
 				}
 			}
 		}
 		
-		GasBuffer.scheduleUpdate(world, i, j, k, this);
+		GasBuffer.scheduleUpdate(world, pos, this);
 	}
 	
 	@Override
-	public void onBlockPlacedBy(World world, int i, int j, int k, EntityLivingBase entityLiving, ItemStack itemStack)
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entityLiving, ItemStack itemStack)
 	{
-		TileEntity tile = world.getTileEntity(i, j, k);
+		TileEntity tile = world.getTileEntity(pos);
 		
 		if(tile != null && tile instanceof TileEntityGas)
 		{
@@ -108,7 +110,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 	@Override
 	public int colorMultiplier(IBlockAccess blockAccess, int i, int j, int k)
 	{
-		TileEntity tile = blockAccess.getTileEntity(i, j, k);
+		TileEntity tile = blockAccess.getTileEntity(new BlockPos(i, j, k));
 		
 		if(tile != null && tile instanceof TileEntityGas)
 		{
@@ -120,14 +122,14 @@ public class BlockGas extends Block implements ITileEntityProvider
 		}
 	}
 	
-	public float getOpacity(IBlockAccess blockAccess, int i, int j, int k)
+	public float getOpacity(IBlockAccess blockAccess, BlockPos pos)
 	{
 		if(EM_Settings.renderGases)
 		{
 			return 0.75F;
 		} else
 		{
-			TileEntity tile = blockAccess.getTileEntity(i, j, k);
+			TileEntity tile = blockAccess.getTileEntity(pos);
 			
 			if(tile != null && tile instanceof TileEntityGas)
 			{
@@ -140,25 +142,25 @@ public class BlockGas extends Block implements ITileEntityProvider
 		}
 	}
 	
-	public void swtichIgnitionState(World world, int i, int j, int k)
+	public void swtichIgnitionState(World world, BlockPos pos)
 	{
-        TileEntity tile = world.getTileEntity(i, j, k);
+        TileEntity tile = world.getTileEntity(pos);
         Block newBlock = this;
         
         if(this == ObjectHandler.gasBlock)
         {
-            world.setBlock(i, j, k, ObjectHandler.fireGasBlock);
+            world.setBlock(pos, ObjectHandler.fireGasBlock);
             newBlock = ObjectHandler.fireGasBlock;
         } else
         {
-            world.setBlock(i, j, k, ObjectHandler.gasBlock);
+            world.setBlock(pos, ObjectHandler.gasBlock);
             newBlock = ObjectHandler.gasBlock;
         }
         
         if (tile != null)
         {
             tile.validate();
-            world.setTileEntity(i, j, k, tile);
+            world.setTileEntity(pos, tile);
             tile.blockType = newBlock;
             
             if(tile instanceof TileEntityGas)
@@ -220,7 +222,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 	{
 		double yMax = this.getMaxY(blockAccess, i, j, k);
 		double yMin = this.getMinY(blockAccess, i, j, k);
-		float opacity = this.getOpacity(blockAccess, i, j, k);
+		float opacity = this.getOpacity(blockAccess, new BlockPos(i, j, k));
 		
 		if(opacity <= 0.1F)
 		{
@@ -228,12 +230,12 @@ public class BlockGas extends Block implements ITileEntityProvider
 		}
 		
 		int[] sideCoord = EnviroUtils.getAdjacentBlockCoordsFromSide(i, j, k, side);
-		if(blockAccess.getBlock(sideCoord[0], sideCoord[1], sideCoord[2]) == ObjectHandler.gasBlock || blockAccess.getBlock(sideCoord[0], sideCoord[1], sideCoord[2]) == ObjectHandler.fireGasBlock)
+		if(blockAccess.getBlockState(new BlockPos(sideCoord[0], sideCoord[1], sideCoord[2])).getBlock() == ObjectHandler.gasBlock || blockAccess.getBlockState(new BlockPos(sideCoord[0], sideCoord[1], sideCoord[2])).getBlock() == ObjectHandler.fireGasBlock)
 		{
 			double sideYMax = this.getMaxY(blockAccess, sideCoord[0], sideCoord[1], sideCoord[2]);
 			double sideYMin = this.getMinY(blockAccess, sideCoord[0], sideCoord[1], sideCoord[2]);
 			
-			if(this.getOpacity(blockAccess, sideCoord[0], sideCoord[1], sideCoord[2]) <= 0.1F)
+			if(this.getOpacity(blockAccess, new BlockPos(sideCoord[0], sideCoord[1], sideCoord[2])) <= 0.1F)
 			{
 				return true;
 			} else if(side > 1) // Sides
@@ -278,7 +280,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 				return true;
 			} else
 			{
-				return !blockAccess.getBlock(sideCoord[0], sideCoord[1], sideCoord[2]).isOpaqueCube();
+				return !blockAccess.getBlockState(new BlockPos(sideCoord[0], sideCoord[1], sideCoord[2])).isOpaqueCube();
 			}
 		}
 	}
@@ -297,24 +299,24 @@ public class BlockGas extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public void updateTick(World world, int x, int y, int z, Random rand)
+	public void updateTick(World world, BlockPos pos, IBlockState state, Random rand)
 	{
 		if(world.isRemote)
 		{
 			return;
 		} else if(EM_Settings.noGases)
 		{
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return;
 		}
 		
 		boolean scheduleTick = false;
 		
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		
 		if(tile == null || !(tile instanceof TileEntityGas))
 		{
-			world.setBlockToAir(x, y, z);
+			world.setBlockToAir(pos);
 			return;
 		} else
 		{
@@ -330,7 +332,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 			
 			int fireNum = gasTile.getGasQuantity(0);
 			
-			if(isTouchingIgnition(world, x, y, z) && this == ObjectHandler.gasBlock)
+			if(isTouchingIgnition(world, pos) && this == ObjectHandler.gasBlock)
 			{
 				if(gasTile.burnGases())
 				{
@@ -345,17 +347,17 @@ public class BlockGas extends Block implements ITileEntityProvider
 				return;
 			} else if(fireNum <= 0 && this == ObjectHandler.fireGasBlock)
 			{
-				this.swtichIgnitionState(world, x, y, z);
+				this.swtichIgnitionState(world, pos);
 				return;
 			}
 			
 			if(gasTile.gases.size() <= 0 || gasTile.amount <= 0)
 			{
-				world.setBlockToAir(x, y, z);
+				world.setBlockToAir(pos);
 				return;
 			} else if(gasTile.spreadGas())
 			{
-				world.notifyBlocksOfNeighborChange(x, y, z, this);
+				world.notifyBlocksOfNeighborChange(pos, this);
 			} else if(gasTile.amount > 10 || this == ObjectHandler.fireGasBlock)
 			{
 				scheduleTick = true;
@@ -366,11 +368,11 @@ public class BlockGas extends Block implements ITileEntityProvider
 			if(fireNum >= 1 && this == ObjectHandler.gasBlock)
 			{
 				gasTile.burnGases();
-				this.swtichIgnitionState(world, x, y, z);
+				this.swtichIgnitionState(world, pos);
 				return;
 			} else if(fireNum <= 0 && this == ObjectHandler.fireGasBlock)
 			{
-				this.swtichIgnitionState(world, x, y, z);
+				this.swtichIgnitionState(world, pos);
 				return;
 			}
 			
@@ -379,13 +381,13 @@ public class BlockGas extends Block implements ITileEntityProvider
 				if(gasTile.firePressure >= 10)
 				{
 					scheduleTick = false;
-					world.setBlockToAir(x, y, z);
+					world.setBlockToAir(pos);
 					if(fireNum > 80)
 					{
-						world.newExplosion(null, x, y, z, 16F, true, true);
+						world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), 16F, true, true);
 					} else
 					{
-						world.newExplosion(null, x, y, z, fireNum/5F, true, true);
+						world.newExplosion(null, pos.getX(), pos.getY(), pos.getZ(), fireNum/5F, true, true);
 					}
 					return;
 				} else
@@ -399,7 +401,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 			
 			if(gasTile.gases.size() <= 0 || gasTile.amount <= 0)
 			{
-				world.setBlockToAir(x, y, z);
+				world.setBlockToAir(pos);
 				scheduleTick = false;
 				return;
 			} else
@@ -410,7 +412,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 		
 		if(scheduleTick)
 		{
-			GasBuffer.scheduleUpdate(world, x, y, z, this);
+			GasBuffer.scheduleUpdate(world, pos, this);
 		}
 	}
 	
@@ -428,7 +430,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 		for(int i = 0; i < dir.size(); i++)
 		{
 			int[] pos = dir.get(i);
-			Block block = world.getBlock(x + pos[0], y + pos[1], z + pos[2]);
+			Block block = world.getBlockState(new BlockPos(x + pos[0], y + pos[1], z + pos[2])).getBlock();
 			int meta = world.getBlockMetadata(x + pos[0], y + pos[1], z + pos[2]);
 			
 			if(ObjectHandler.igniteList.containsKey(block) && (ObjectHandler.igniteList.get(block).isEmpty() || ObjectHandler.igniteList.get(block).contains(meta)))
@@ -436,7 +438,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 				return true;
 			} else
 			{
-				TileEntity tile = world.getTileEntity(x + pos[0], y + pos[1], z + pos[2]);
+				TileEntity tile = world.getTileEntity(new BlockPos(x + pos[0], y + pos[1], z + pos[2]));
 				
 				if(tile != null && tile instanceof TileEntityGas)
 				{
@@ -454,13 +456,13 @@ public class BlockGas extends Block implements ITileEntityProvider
 	}
 
 	@Override
-	public void onNeighborBlockChange(World world, int x, int y, int z, Block block)
+	public void onNeighborBlockChange(World world, BlockPos pos, Block block)
 	{
-		GasBuffer.scheduleUpdate(world, x, y, z, this);
+		GasBuffer.scheduleUpdate(world, pos, this);
 		
 		if(world.isRemote && (block == ObjectHandler.gasBlock || block == ObjectHandler.fireGasBlock))
 		{
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(pos);
 			
 			if(tile != null && tile instanceof TileEntityGas)
 			{
@@ -475,10 +477,10 @@ public class BlockGas extends Block implements ITileEntityProvider
 	}
 	
 	@Override
-	public void onEntityCollidedWithBlock(World world, int x, int y, int z, Entity entity)
+	public void onEntityCollidedWithBlock(World world, BlockPos pos, Entity entity)
 	{
 		
-		TileEntity tile = world.getTileEntity(x, y, z);
+		TileEntity tile = world.getTileEntity(pos);
 		
 		if(tile instanceof TileEntityGas)
 		{
@@ -589,7 +591,7 @@ public class BlockGas extends Block implements ITileEntityProvider
     {
     	if(world.isBlockNormalCubeDefault(x, y - 1, z, false) && this == ObjectHandler.fireGasBlock)
     	{
-    		world.setBlock(x, y, z, Blocks.fire);
+    		world.setBlock(x, y, z, Blocks.FIRE);
     	}
     	
 
@@ -606,7 +608,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 		{
 			int[] pos = dir.get(i);
 			
-			TileEntity tile = world.getTileEntity(x + pos[0], y + pos[1], z + pos[2]);
+			TileEntity tile = world.getTileEntity(new BlockPos(x + pos[0], y + pos[1], z + pos[2]));
 			
 			if(tile != null && tile instanceof TileEntityGas)
 			{
@@ -616,7 +618,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 				{
 					if(gasTile.getBlockType() == ObjectHandler.fireGasBlock)
 					{
-						((BlockGas)gasTile.getBlockType()).swtichIgnitionState(world, x + pos[0], y + pos[1], z + pos[2]);
+						((BlockGas)gasTile.getBlockType()).swtichIgnitionState(world, new BlockPos(x + pos[0], y + pos[1], z + pos[2]));
 			            world.playSoundEffect(x, y, z, "enviromine:gas_ignite", 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 					}
 				}
@@ -626,7 +628,7 @@ public class BlockGas extends Block implements ITileEntityProvider
     
     public ArrayList<int[]> getGasInfo(World world, int i, int j, int k)
     {
-    	TileEntity tile = world.getTileEntity(i, j, k);
+    	TileEntity tile = world.getTileEntity(new BlockPos(i, j, k));
 		
 		if(tile != null && tile instanceof TileEntityGas)
 		{
@@ -663,7 +665,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 	
 	public double getMinY(IBlockAccess blockAccess, int i, int j, int k)
 	{
-		TileEntity tile = blockAccess.getTileEntity(i, j, k);
+		TileEntity tile = blockAccess.getTileEntity(new BlockPos(i, j, k));
 		
 		if(tile != null && tile instanceof TileEntityGas)
 		{
@@ -677,7 +679,7 @@ public class BlockGas extends Block implements ITileEntityProvider
 	
 	public double getMaxY(IBlockAccess blockAccess, int i, int j, int k)
 	{
-		TileEntity tile = blockAccess.getTileEntity(i, j, k);
+		TileEntity tile = blockAccess.getTileEntity(new BlockPos(i, j, k));
 		
 		if(tile instanceof TileEntityGas)
 		{

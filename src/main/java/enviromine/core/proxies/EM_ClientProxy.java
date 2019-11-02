@@ -20,14 +20,14 @@ import net.minecraftforge.common.MinecraftForge;
 import org.apache.logging.log4j.Level;
 
 import cpw.mods.fml.client.registry.ClientRegistry;
-import cpw.mods.fml.client.registry.RenderingRegistry;
+import net.minecraftforge.fml.client.registry.RenderingRegistry;
 import cpw.mods.fml.common.FMLCommonHandler;
 import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.EntityPhysicsBlock;
 import enviromine.blocks.tiles.TileEntityDavyLamp;
 import enviromine.blocks.tiles.TileEntityElevator;
@@ -155,14 +155,14 @@ public class EM_ClientProxy extends EM_CommonProxy
 	public static void armoredCamelRenderers()
 	{
 		@SuppressWarnings("unchecked")
-		Iterator<Item> tmp = Item.itemRegistry.iterator();
+		Iterator<Item> tmp = Item.REGISTRY.iterator();
 		
 		while (tmp.hasNext())
 		{
 			Item itemArmor = tmp.next();
 			if (itemArmor instanceof ItemArmor && ((ItemArmor)itemArmor).armorType == 1)
 			{
-				String name = Item.itemRegistry.getNameForObject(itemArmor);
+				String name = Item.REGISTRY.getNameForObject(itemArmor);
 				
 				if(EM_Settings.armorProperties.containsKey(name) && EM_Settings.armorProperties.get(name).allowCamelPack)
 				{

@@ -30,7 +30,7 @@ public class CamelPackExpandHandler implements IRecipe
 			if (item == null)
 			{
 				continue;
-			} else if (item.hasTagCompound() && item.stackTagCompound.hasKey("isCamelPack"))
+			} else if (item.hasTagCompound() && item.getTagCompound().hasKey("isCamelPack"))
 			{
 				if (item.getTagCompound().getInteger("camelPackMax") > 100) {
 					return false; //Temp thing to disable more than double sized packs

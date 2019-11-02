@@ -13,7 +13,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -23,6 +23,7 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.EM_PhysManager;
 import enviromine.network.packet.PacketEnviroMine;
+import net.minecraft.util.math.BlockPos;
 
 public class Earthquake
 {
@@ -53,7 +54,7 @@ public class Earthquake
 		if(world != null)
 		{
 			this.world = world;
-			this.angle = MathHelper.clamp_float(world.rand.nextFloat() * 4F - 2F, -2F, 2F);
+			this.angle = MathHelper.clamp(world.rand.nextFloat() * 4F - 2F, -2F, 2F);
 			this.markRavine(angle);
 			pendingQuakes.add(this);
 			
@@ -64,7 +65,7 @@ public class Earthquake
 					int size = length > width? length/2 : width/2;
 					NBTTagCompound pData = new NBTTagCompound();
 					pData.setInteger("id", 3);
-					pData.setInteger("dimension", world.provider.dimensionId);
+					pData.setInteger("dimension", world.provider.getDimension());
 					pData.setInteger("posX", posX);
 					pData.setInteger("posZ", posZ);
 					pData.setInteger("length", length);
@@ -72,7 +73,7 @@ public class Earthquake
 					pData.setFloat("angle", angle);
 					pData.setFloat("action", 0);
 					pData.setFloat("height", 1);
-					EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(world.provider.dimensionId, posX, passY, posZ, 128 + size));
+					EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(world.provider.getDimension(), posX, passY, posZ, 128 + size));
 				}
 			}
 		}
@@ -88,7 +89,7 @@ public class Earthquake
 		if(world != null)
 		{
 			this.world = world;
-			this.angle = MathHelper.clamp_float(a, -2F, 2F);
+			this.angle = MathHelper.clamp(a, -2F, 2F);
 			this.markRavine(angle);
 			
 			if(save)
@@ -97,7 +98,7 @@ public class Earthquake
 				int size = length > width? length/2 : width/2;
 				NBTTagCompound pData = new NBTTagCompound();
 				pData.setInteger("id", 3);
-				pData.setInteger("dimension", world.provider.dimensionId);
+				pData.setInteger("dimension", world.provider.getDimension());
 				pData.setInteger("posX", posX);
 				pData.setInteger("posZ", posZ);
 				pData.setInteger("length", length);
@@ -105,7 +106,7 @@ public class Earthquake
 				pData.setFloat("angle", angle);
 				pData.setFloat("action", 0);
 				pData.setFloat("height", 1);
-				EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(world.provider.dimensionId, posX, passY, posZ, 128 + size));
+				EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(world.provider.getDimension(), posX, passY, posZ, 128 + size));
 			}
 		}
 	}
@@ -116,9 +117,9 @@ public class Earthquake
 		
 		for(int i = -length / 2; i < length / 2; i++)
 		{
-			int fx = MathHelper.floor_float(Math.abs(angle) > 1F ? i * (angle > 0 ? angle - 1F : angle + 1F) : i);
-			int fz = MathHelper.floor_float(Math.abs(angle) > 1F ? i : i * angle);
-			int widthFactor = MathHelper.ceiling_double_int(Math.cos(i / (length / 3D)) * width);
+			int fx = MathHelper.floor(Math.abs(angle) > 1F ? i * (angle > 0 ? angle - 1F : angle + 1F) : i);
+			int fz = MathHelper.floor(Math.abs(angle) > 1F ? i : i * angle);
+			int widthFactor = MathHelper.ceil(Math.cos(i / (length / 3D)) * width);
 			
 			if(Math.abs(angle) <= 1F)
 			{
@@ -173,7 +174,7 @@ public class Earthquake
 	
 	public double trigDist(double a, double b)
 	{
-		return (double)MathHelper.sqrt_double(Math.pow(a - posX, 2) + Math.pow(b - posZ, 2));
+		return (double)MathHelper.sqrt(Math.pow(a - posX, 2) + Math.pow(b - posZ, 2));
 	}
 	
 	public boolean removeBlock()
@@ -197,7 +198,7 @@ public class Earthquake
 				
 				for(int yy = y; yy >= 1; yy--)
 				{
-					if((world.getBlock(x, yy, z).getMaterial() == Material.lava && yy > 10) || world.getBlock(x, yy, z).getMaterial() == Material.water || world.getBlock(x, yy, z).getMaterial() == Material.rock || world.getBlock(x, yy, z).getMaterial() == Material.clay || world.getBlock(x, yy, z).getMaterial() == Material.sand || world.getBlock(x, yy, z).getMaterial() == Material.ground || world.getBlock(x, yy, z).getMaterial() == Material.grass || (yy <= 10 && world.getBlock(x, yy, z).getMaterial() == Material.air))
+					if((world.getBlockState(x, yy, z).getMaterial() == Material.LAVA && yy > 10) || world.getBlock(x, yy, z).getMaterial() == Material.WATER || world.getBlock(x, yy, z).getMaterial() == Material.ROCK || world.getBlock(x, yy, z).getMaterial() == Material.CLAY || world.getBlock(x, yy, z).getMaterial() == Material.SAND || world.getBlock(x, yy, z).getMaterial() == Material.GROUND || world.getBlock(x, yy, z).getMaterial() == Material.GRASS || (yy <= 10 && world.getBlock(x, yy, z).getMaterial() == Material.AIR))
 					{
 						if(world.getBlock(x, yy, z).getBlockHardness(world, x, yy, z) < 0)
 						{
@@ -206,11 +207,11 @@ public class Earthquake
 						
 						if(yy <= 10)
 						{
-							if(world.getBlock(x, yy, z).getMaterial() == Material.rock || world.getBlock(x, yy, z).getMaterial() == Material.ground)
+							if(world.getBlock(x, yy, z).getMaterial() == Material.ROCK || world.getBlock(x, yy, z).getMaterial() == Material.GROUND)
 							{
 								//world.playSoundEffect(x, yy, z, "enviromine:cave_in", 1.0F, world.rand.nextFloat() * 0.5F + 0.75F);
 							}
-							world.setBlock(x, yy, z, Blocks.flowing_lava);
+							world.setBlock(x, yy, z, Blocks.FLOWING_LAVA);
 							//System.out.println("Placed lava at (" + x + "," + yy + "," + z + ")");
 							
 							if(yy == y)
@@ -225,7 +226,7 @@ public class Earthquake
 							}
 						} else
 						{
-							if(world.getBlock(x, yy, z).getMaterial() == Material.rock || world.getBlock(x, yy, z).getMaterial() == Material.ground)
+							if(world.getBlock(x, yy, z).getMaterial() == Material.ROCK || world.getBlock(x, yy, z).getMaterial() == Material.GROUND)
 							{
 								//world.playSoundEffect(x, yy, z, "enviromine:cave_in", 1.0F, world.rand.nextFloat() * 0.5F + 0.75F);
 							}
@@ -253,7 +254,7 @@ public class Earthquake
 				
 				Chunk chunk = world.getChunkFromBlockCoords(x, z);
 				
-				if((chunk != null && chunk.getSavedLightValue(EnumSkyBlock.Sky, x & 0xf, y, z & 0xf) >= 15) || world.getTopSolidOrLiquidBlock(x, z) < 16 || world.canBlockSeeTheSky(x, y, z))
+				if((chunk != null && chunk.getSavedLightValue(EnumSkyBlock.SKY, x & 0xf, y, z & 0xf) >= 15) || world.getTopSolidOrLiquidBlock(x, z) < 16 || world.canBlockSeeTheSky(x, y, z))
 				{
 					ravineMask.remove(i);
 				} else
@@ -266,7 +267,7 @@ public class Earthquake
 			int size = length > width? length/2 : width/2;
 			NBTTagCompound pData = new NBTTagCompound();
 			pData.setInteger("id", 3);
-			pData.setInteger("dimension", world.provider.dimensionId);
+			pData.setInteger("dimension", world.provider.getDimension());
 			pData.setInteger("posX", posX);
 			pData.setInteger("posZ", posZ);
 			pData.setInteger("length", length);
@@ -274,7 +275,7 @@ public class Earthquake
 			pData.setFloat("angle", angle);
 			pData.setFloat("action", 1);
 			pData.setFloat("height", passY);
-			EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(world.provider.dimensionId, posX, passY, posZ, 128 + size));
+			EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(world.provider.getDimension(), posX, passY, posZ, 128 + size));
 		}
 		
 		return false;
@@ -291,7 +292,7 @@ public class Earthquake
 				int x = pos[0];
 				int z = pos[2];
 				
-				if((world.getBlock(x, y, z).getMaterial() == Material.lava && y > 10) || world.getBlock(x, y, z).getMaterial() == Material.water || world.getBlock(x, y, z).getMaterial() == Material.rock || world.getBlock(x, y, z).getMaterial() == Material.clay || world.getBlock(x, y, z).getMaterial() == Material.sand || world.getBlock(x, y, z).getMaterial() == Material.ground || world.getBlock(x, y, z).getMaterial() == Material.grass || (y <= 10 && world.getBlock(x, y, z).getMaterial() == Material.air))
+				if((world.getBlock(x, y, z).getMaterial() == Material.LAVA && y > 10) || world.getBlock(x, y, z).getMaterial() == Material.WATER || world.getBlock(x, y, z).getMaterial() == Material.ROCK || world.getBlock(x, y, z).getMaterial() == Material.CLAY || world.getBlock(x, y, z).getMaterial() == Material.SAND || world.getBlock(x, y, z).getMaterial() == Material.GROUND || world.getBlock(x, y, z).getMaterial() == Material.GRASS || (y <= 10 && world.getBlock(x, y, z).getMaterial() == Material.AIR))
 				{
 					if(world.getBlock(x, y, z).getBlockHardness(world, x, y, z) < 0)
 					{
@@ -300,10 +301,10 @@ public class Earthquake
 					
 					if(y <= 10)
 					{
-						world.setBlock(x, y, z, Blocks.flowing_lava);
+						world.setBlock(x, y, z, Blocks.FLOWING_LAVA);
 					} else
 					{
-						world.setBlockToAir(x, y, z);
+						world.setBlockToAir(new BlockPos(x, y, z));
 					}
 				}
 			}
@@ -345,7 +346,7 @@ public class Earthquake
 				int size = quake.length > quake.width? quake.length/2 : quake.width/2;
 				NBTTagCompound pData = new NBTTagCompound();
 				pData.setInteger("id", 3);
-				pData.setInteger("dimension", quake.world.provider.dimensionId);
+				pData.setInteger("dimension", quake.world.provider.getDimension());
 				pData.setInteger("posX", quake.posX);
 				pData.setInteger("posZ", quake.posZ);
 				pData.setInteger("length", quake.length);
@@ -353,7 +354,7 @@ public class Earthquake
 				pData.setFloat("angle", quake.angle);
 				pData.setFloat("action", 2);
 				pData.setFloat("height", quake.passY);
-				EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(quake.world.provider.dimensionId, quake.posX, quake.passY, quake.posZ, 128 + size));
+				EnviroMine.instance.network.sendToAllAround(new PacketEnviroMine(pData), new TargetPoint(quake.world.provider.getDimension(), quake.posX, quake.passY, quake.posZ, 128 + size));
 				pendingQuakes.remove(i);
 			}
 		}
@@ -365,8 +366,8 @@ public class Earthquake
 		{
 			Entity player = (Entity)world.playerEntities.get(world.rand.nextInt(world.playerEntities.size()));
 			
-			int posX = MathHelper.floor_double(player.posX) + (world.rand.nextInt(1024) - 512);
-			int posZ = MathHelper.floor_double(player.posZ) + (world.rand.nextInt(1024) - 512);
+			int posX = MathHelper.floor(player.posX) + (world.rand.nextInt(1024) - 512);
+			int posZ = MathHelper.floor(player.posZ) + (world.rand.nextInt(1024) - 512);
 			
 			 // Chunk check can be disabled but may cause a large amount of chunks to be generated where the earthquake passes through
 			if(world.getChunkProvider().chunkExists(posX >> 4, posZ >> 4))
@@ -396,7 +397,7 @@ public class Earthquake
 			{
 				Earthquake quake = pendingQuakes.get(i);
 				float[] entry = new float[7];
-				entry[0] = quake.world.provider.dimensionId;
+				entry[0] = quake.world.provider.getDimension();
 				entry[1] = quake.posX;
 				entry[2] = quake.posZ;
 				entry[3] = quake.length;

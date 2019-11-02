@@ -8,8 +8,8 @@ import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import enviromine.blocks.tiles.TileEntityFreezer;
 
@@ -23,7 +23,7 @@ public class TileEntityFreezerRenderer extends TileEntitySpecialRenderer
     {
         int i = 0;
 
-        if (p_147500_1_.hasWorldObj())
+        if (p_147500_1_.hasWorld())
         {
             i = p_147500_1_.getBlockMetadata();
         }

@@ -12,10 +12,10 @@ import net.minecraft.item.ItemStack;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.common.Loader;
-import cpw.mods.fml.common.ModContainer;
-import cpw.mods.fml.common.registry.EntityRegistry;
-import cpw.mods.fml.common.registry.EntityRegistry.EntityRegistration;
+import net.minecraftforge.fml.common.Loader;
+import net.minecraftforge.fml.common.ModContainer;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.EntityRegistry.EntityRegistration;
 import enviromine.core.EnviroMine;
 
 public class ModIdentification
@@ -51,15 +51,15 @@ public class ModIdentification
 		// Shortcut for known IDs
 		if(obj instanceof ItemStack)
 		{
-			String tmpID = Item.itemRegistry.getNameForObject(((ItemStack)obj).getItem());
+			String tmpID = Item.REGISTRY.getNameForObject(((ItemStack)obj).getItem());
 			return tmpID.isEmpty()? "unknown" : tmpID;
 		} else if(obj instanceof Item)
 		{
-			String tmpID = Item.itemRegistry.getNameForObject(obj);
+			String tmpID = Item.REGISTRY.getNameForObject(obj);
 			String[] split = tmpID.split(":");
 			return tmpID.isEmpty()? "unknown" : split[0];		} else if(obj instanceof Block)
 		{
-			String tmpID = Block.blockRegistry.getNameForObject(obj);
+			String tmpID = Block.REGISTRY.getNameForObject(obj);
 			String[] split = tmpID.split(":");
 			return tmpID.isEmpty()? "unknown" : split[0];
 		} else if(obj instanceof Entity || (obj instanceof Class && Entity.class.isAssignableFrom((Class)obj)))

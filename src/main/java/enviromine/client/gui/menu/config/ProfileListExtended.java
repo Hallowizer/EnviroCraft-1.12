@@ -10,8 +10,8 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.server.MinecraftServer;
 import com.google.common.collect.Lists;
 import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
@@ -91,8 +91,8 @@ public class ProfileListExtended extends GuiListExtended{
 		public void drawEntry(int p_148279_1_, int p_148279_2_, int p_148279_3_, int p_148279_4_, int p_148279_5_, Tessellator p_148279_6_, int p_148279_7_, int p_148279_8_, boolean p_148279_9_)
 		{
 	
-			this.bntProfile.xPosition = (ProfileListExtended.this.width /2) - (this.bntProfile.width/2);
-            this.bntProfile.yPosition = p_148279_3_;
+			this.bntProfile.x = (ProfileListExtended.this.width /2) - (this.bntProfile.width/2);
+            this.bntProfile.y = p_148279_3_;
             this.bntProfile.displayString = profileName;
     
             this.bntProfile.drawButton(ProfileListExtended.this.mc, p_148279_7_, p_148279_8_);

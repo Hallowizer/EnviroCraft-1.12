@@ -9,8 +9,8 @@ import net.minecraft.network.play.server.S29PacketSoundEffect;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.EM_GuiFakeDeath;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
@@ -45,7 +45,7 @@ public class EnviroPotion extends Potion
 	
 	public static void checkAndApplyEffects(EntityLivingBase entityLiving)
 	{
-		if(entityLiving.worldObj.isRemote)
+		if(entityLiving.world.isRemote)
 		{
 			return;
 		}
@@ -125,10 +125,10 @@ public class EnviroPotion extends Potion
 					if(entityLiving.getRNG().nextInt(20) == 0)
 					{
 						EntityItem item = entityLiving.entityDropItem(entityLiving.getHeldItem(), 0.0F);
-						item.delayBeforeCanPickup = 40;
+						item.setPickupDelay(40);
 						entityLiving.setCurrentItemOrArmor(0, null);
 					
-						entityLiving.worldObj.playSoundAtEntity(entityLiving, "enviromine:shiver", 1f, 1f);
+						entityLiving.world.playSoundAtEntity(entityLiving, "enviromine:shiver", 1f, 1f);
 						
 						if(entityLiving instanceof EntityPlayer)
 						{
@@ -279,9 +279,9 @@ public class EnviroPotion extends Potion
 				if(!EnviroMine.proxy.isClient() && player instanceof EntityPlayerMP)
 				{
 					((EntityPlayerMP)player).playerNetServerHandler.sendPacket(packet);
-				} else if(EnviroMine.proxy.isClient() && !player.worldObj.isRemote)
+				} else if(EnviroMine.proxy.isClient() && !player.world.isRemote)
 				{
-					player.worldObj.playSoundEffect(entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, sound, 1.0F, (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
+					player.world.playSoundEffect(entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, sound, 1.0F, (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
 				}
 			}
 		}

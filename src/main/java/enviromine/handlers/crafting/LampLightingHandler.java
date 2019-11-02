@@ -34,7 +34,7 @@ public class LampLightingHandler
 				if(stack.getItem() == Item.getItemFromBlock(ObjectHandler.davyLampBlock) && !hasLamp)
 				{
 					hasLamp = true;
-				} else if(stack.getItem() == Items.flint_and_steel && lighter == null)
+				} else if(stack.getItem() == Items.FLINT_AND_STEEL && lighter == null)
 				{
 					lighter = stack;
 				} else
@@ -46,9 +46,9 @@ public class LampLightingHandler
 		
 		if(hasLamp && lighter != null && lighter.getItemDamage() < lighter.getMaxDamage())
 		{
-			if(!event.player.inventory.addItemStackToInventory(new ItemStack(Items.flint_and_steel, 1, lighter.getItemDamage() + 1)))
+			if(!event.player.inventory.addItemStackToInventory(new ItemStack(Items.FLINT_AND_STEEL, 1, lighter.getItemDamage() + 1)))
 			{
-				event.player.dropPlayerItemWithRandomChoice(new ItemStack(Items.flint_and_steel, 1, lighter.getItemDamage() + 1), false);
+				event.player.dropPlayerItemWithRandomChoice(new ItemStack(Items.FLINT_AND_STEEL, 1, lighter.getItemDamage() + 1), false);
 			}
 		}
 	}

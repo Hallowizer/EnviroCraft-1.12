@@ -9,7 +9,9 @@ import net.minecraft.block.*;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.potion.Potion;
-import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeProvider;
 
 import java.awt.*;
 import java.lang.reflect.Field;
@@ -164,13 +166,13 @@ public class EnviroUtils
 	}
 	
 	
-	public static double getBiomeTemp(BiomeGenBase biome)
+	public static double getBiomeTemp(Biome biome)
 	{
-		return getBiomeTemp(biome.temperature);
+		return getBiomeTemp(biome.getDefaultTemperature());
 	}
-	public static double getBiomeTemp(int x, int y, int z, BiomeGenBase biome)
+	public static double getBiomeTemp(int x, int y, int z, Biome biome)
 	{
-		return getBiomeTemp(biome.getFloatTemperature(x, y, z));
+		return getBiomeTemp(biome.getTemperature(new BlockPos(x, y, z)));
 	}
 	private static double getBiomeTemp(float biomeTemp)
 	{
@@ -186,7 +188,7 @@ public class EnviroUtils
 	/*
 	 * This isn't accurate enough to 
 	 */
-	public static String getBiomeWater(BiomeGenBase biome)
+	public static String getBiomeWater(Biome biome)
 	{
 		int waterColour = biome.getWaterColorMultiplier();
 		boolean looksBad = false;
@@ -215,7 +217,7 @@ public class EnviroUtils
 		} else if(typeList.contains(Type.OCEAN) || typeList.contains(Type.BEACH))
 		{
 			return "salty";
-		} else if(typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.temperature < 0F)
+		} else if(typeList.contains(Type.SNOWY) || typeList.contains(Type.CONIFEROUS) || biome.getDefaultTemperature() < 0F)
 		{
 			return "cold";
 		} else
@@ -230,7 +232,7 @@ public class EnviroUtils
 		
 		Material material = block.getMaterial();
 		
-		if(block instanceof BlockMobSpawner || block instanceof BlockLadder || block instanceof BlockWeb || block instanceof BlockSign || block instanceof BlockBed || block instanceof BlockDoor || block instanceof BlockAnvil || block instanceof BlockGravel || block instanceof BlockPortal || block instanceof BlockEndPortal || block instanceof BlockEndPortalFrame || block == ObjectHandler.elevator || block == Blocks.end_stone || block.getMaterial() == Material.vine || !block.getMaterial().blocksMovement())
+		if(block instanceof BlockMobSpawner || block instanceof BlockLadder || block instanceof BlockWeb || block instanceof BlockSign || block instanceof BlockBed || block instanceof BlockDoor || block instanceof BlockAnvil || block instanceof BlockGravel || block instanceof BlockPortal || block instanceof BlockEndPortal || block instanceof BlockEndPortalFrame || block == ObjectHandler.elevator || block == Blocks.END_STONE || block.getMaterial() == Material.VINE || !block.getMaterial().blocksMovement())
 		{
 			type = EM_Settings.stabilityTypes.get("none");
 		} else if(block instanceof BlockGlowstone)
@@ -239,10 +241,10 @@ public class EnviroUtils
 		} else if(block instanceof BlockFalling)
 		{
 			type = EM_Settings.stabilityTypes.get("sand-like");
-		} else if(material == Material.iron || material == Material.wood || block instanceof BlockObsidian || block == Blocks.stonebrick || block == Blocks.brick_block || block == Blocks.quartz_block)
+		} else if(material == Material.IRON || material == Material.WOOD || block instanceof BlockObsidian || block == Blocks.STONEBRICK || block == Blocks.BRICK_BLOCK || block == Blocks.QUARTZ_BLOCK)
 		{
 			type = EM_Settings.stabilityTypes.get("strong");
-		} else if(material == Material.rock || material == Material.glass || material == Material.ice || block instanceof BlockLeavesBase)
+		} else if(material == Material.ROCK || material == Material.GLASS || material == Material.ICE || block instanceof BlockLeaves)
 		{
 			type = EM_Settings.stabilityTypes.get("average");
 		} else

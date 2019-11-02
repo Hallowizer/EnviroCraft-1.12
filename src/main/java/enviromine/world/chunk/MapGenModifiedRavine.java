@@ -2,7 +2,7 @@ package enviromine.world.chunk;
 
 import net.minecraft.block.Block;
 import net.minecraft.init.Blocks;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.gen.MapGenBase;
@@ -17,7 +17,7 @@ public class MapGenModifiedRavine extends MapGenBase
 	public void func_151539_a(ChunkProviderCaves chunkProviderCaves, World worldObj, long seed, int chunkX, int chunkY, Block[] ablock)
 	{
         int k = this.range;
-        this.worldObj = worldObj;
+        this.world = worldObj;
         this.rand.setSeed(seed);
         long l = this.rand.nextLong();
         long i1 = this.rand.nextLong();
@@ -101,12 +101,12 @@ public class MapGenModifiedRavine extends MapGenBase
 				
 				if (p_151540_6_ >= d4 - 16.0D - d12 * 2.0D && p_151540_10_ >= d5 - 16.0D - d12 * 2.0D && p_151540_6_ <= d4 + 16.0D + d12 * 2.0D && p_151540_10_ <= d5 + 16.0D + d12 * 2.0D)
 				{
-					int i4 = MathHelper.floor_double(p_151540_6_ - d12) - p_151540_3_ * 16 - 1;
-					int l1 = MathHelper.floor_double(p_151540_6_ + d12) - p_151540_3_ * 16 + 1;
-					int j4 = MathHelper.floor_double(p_151540_8_ - d6) - 1;
-					int i2 = MathHelper.floor_double(p_151540_8_ + d6) + 1;
-					int k4 = MathHelper.floor_double(p_151540_10_ - d12) - p_151540_4_ * 16 - 1;
-					int j2 = MathHelper.floor_double(p_151540_10_ + d12) - p_151540_4_ * 16 + 1;
+					int i4 = MathHelper.floor(p_151540_6_ - d12) - p_151540_3_ * 16 - 1;
+					int l1 = MathHelper.floor(p_151540_6_ + d12) - p_151540_3_ * 16 + 1;
+					int j4 = MathHelper.floor(p_151540_8_ - d6) - 1;
+					int i2 = MathHelper.floor(p_151540_8_ + d6) + 1;
+					int k4 = MathHelper.floor(p_151540_10_ - d12) - p_151540_4_ * 16 - 1;
+					int j2 = MathHelper.floor(p_151540_10_ + d12) - p_151540_4_ * 16 + 1;
 					
 					if (i4 < 0)
 					{
@@ -233,7 +233,7 @@ public class MapGenModifiedRavine extends MapGenBase
 	
 	protected boolean isOceanBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ)
 	{
-		return data[index] == Blocks.water || data[index] == Blocks.flowing_water;
+		return data[index] == Blocks.WATER || data[index] == Blocks.FLOWING_WATER;
 	}
 	
 	//Exception biomes to make sure we generate like vanilla
@@ -250,8 +250,8 @@ public class MapGenModifiedRavine extends MapGenBase
 	//Vanilla bugs to make sure that we generate the map the same way vanilla does.
 	private boolean isTopBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ)
 	{
-		BiomeGenBase biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
-		return (isExceptionBiome(biome) ? data[index] == Blocks.grass : data[index] == biome.topBlock);
+		BiomeGenBase biome = world.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
+		return (isExceptionBiome(biome) ? data[index] == Blocks.GRASS : data[index] == biome.topBlock);
 	}
 	
 	/**
@@ -271,16 +271,16 @@ public class MapGenModifiedRavine extends MapGenBase
 	 */
 	protected void digBlock(Block[] data, int index, int x, int y, int z, int chunkX, int chunkZ, boolean foundTop)
 	{
-		BiomeGenBase biome = worldObj.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
-		Block top    = (isExceptionBiome(biome) ? Blocks.grass : biome.topBlock);
-		Block filler = (isExceptionBiome(biome) ? Blocks.dirt  : biome.fillerBlock);
+		BiomeGenBase biome = world.getBiomeGenForCoords(x + chunkX * 16, z + chunkZ * 16);
+		Block top    = (isExceptionBiome(biome) ? Blocks.GRASS : biome.topBlock);
+		Block filler = (isExceptionBiome(biome) ? Blocks.DIRT  : biome.fillerBlock);
 		Block block  = data[index];
 		
-		if (block == Blocks.stone || block == filler || block == top)
+		if (block == Blocks.STONE || block == filler || block == top)
 		{
 			if (y < (EM_Settings.caveFlood? EM_Settings.caveLiquidY - 1 : 10))
 			{
-				data[index] = (EM_Settings.caveFlood && !EM_Settings.caveLava? Blocks.water : Blocks.lava);
+				data[index] = (EM_Settings.caveFlood && !EM_Settings.caveLava? Blocks.WATER : Blocks.LAVA);
 			}
 			else
 			{

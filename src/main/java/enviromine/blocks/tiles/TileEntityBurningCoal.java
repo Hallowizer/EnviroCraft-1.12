@@ -3,7 +3,8 @@ package enviromine.blocks.tiles;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.Packet;
-import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+//import net.minecraft.network.play.server.S35PacketUpdateTileEntity;
+import net.minecraft.network.play.server.SPacketUpdateTileEntity;
 import net.minecraft.tileentity.TileEntity;
 
 public class TileEntityBurningCoal extends TileEntity
@@ -24,14 +25,16 @@ public class TileEntityBurningCoal extends TileEntity
     }
 	
 	@Override
-	public void writeToNBT(NBTTagCompound tags)
+	public NBTTagCompound writeToNBT(NBTTagCompound tags)
     {
-		super.writeToNBT(tags);
+		NBTTagCompound returnedNBT;
+		returnedNBT = super.writeToNBT(tags);
 		
 		if(tags.hasKey("Fuel"))
 		{
 			fuel = tags.getInteger("Fuel");
 		}
+		return returnedNBT;
     }
 
     /**
@@ -42,11 +45,11 @@ public class TileEntityBurningCoal extends TileEntity
     {
     	NBTTagCompound tags = new NBTTagCompound();
     	this.writeToNBT(tags);
-        return new S35PacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tags);
+        return new SPacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tags);
     }
 	
 	@Override
-	public void onDataPacket(NetworkManager netManager, S35PacketUpdateTileEntity packet)
+	public void onDataPacket(NetworkManager netManager, SPacketUpdateTileEntity packet)
 	{
 		this.readFromNBT(packet.func_148857_g());
 	}

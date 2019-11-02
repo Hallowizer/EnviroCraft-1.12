@@ -12,11 +12,12 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import enviromine.blocks.tiles.TileEntityEsky;
 import enviromine.handlers.ObjectHandler;
@@ -45,7 +46,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 		}
 		else
 		{
-			IInventory iinventory = (TileEntityEsky)world.getTileEntity(x, y, z);
+			IInventory iinventory = (TileEntityEsky)world.getTileEntity(new BlockPos(x, y, z));
 			
 			if (iinventory != null)
 			{
@@ -90,12 +91,12 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 	@Override
 	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack)
 	{
-		Block block = world.getBlock(x, y, z - 1);
-		Block block1 = world.getBlock(x, y, z + 1);
-		Block block2 = world.getBlock(x - 1, y, z);
-		Block block3 = world.getBlock(x + 1, y, z);
+		Block block = world.getBlockState(new BlockPos(x, y, z - 1)).getBlock();
+		Block block1 = world.getBlockState(new BlockPos(x, y, z + 1)).getBlock();
+		Block block2 = world.getBlockState(new BlockPos(x - 1, y, z)).getBlock();
+		Block block3 = world.getBlockState(new BlockPos(x + 1, y, z)).getBlock();
 		byte b0 = 0;
-		int l = MathHelper.floor_double((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
+		int l = MathHelper.floor((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		
 		if (l == 0)
 		{
@@ -156,7 +157,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 	@Override
 	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
 	{
-		TileEntityEsky tileentitychest = (TileEntityEsky)p_149749_1_.getTileEntity(p_149749_2_, p_149749_3_, p_149749_4_);
+		TileEntityEsky tileentitychest = (TileEntityEsky)p_149749_1_.getTileEntity(new BlockPos(p_149749_2_, p_149749_3_, p_149749_4_));
 		
 		if (tileentitychest != null)
 		{
@@ -170,16 +171,16 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 					float f1 = this.field_149955_b.nextFloat() * 0.8F + 0.1F;
 					EntityItem entityitem;
 					
-					for (float f2 = this.field_149955_b.nextFloat() * 0.8F + 0.1F; itemstack.stackSize > 0; p_149749_1_.spawnEntityInWorld(entityitem))
+					for (float f2 = this.field_149955_b.nextFloat() * 0.8F + 0.1F; itemstack.getCount() > 0; p_149749_1_.spawnEntity(entityitem))
 					{
 						int j1 = this.field_149955_b.nextInt(21) + 10;
 						
-						if (j1 > itemstack.stackSize)
+						if (j1 > itemstack.getCount())
 						{
-							j1 = itemstack.stackSize;
+							j1 = itemstack.getCount();
 						}
 						
-						itemstack.stackSize -= j1;
+						itemstack.shrink(j1);
 						entityitem = new EntityItem(p_149749_1_, (double)((float)p_149749_2_ + f), (double)((float)p_149749_3_ + f1), (double)((float)p_149749_4_ + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 						float f3 = 0.05F;
 						entityitem.motionX = (double)((float)this.field_149955_b.nextGaussian() * f3);
@@ -188,7 +189,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 						
 						if (itemstack.hasTagCompound())
 						{
-							entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+							entityitem.getItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
 						}
 					}
 				}

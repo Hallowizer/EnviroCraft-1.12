@@ -7,8 +7,8 @@ import static net.minecraftforge.common.util.ForgeDirection.SOUTH;
 import static net.minecraftforge.common.util.ForgeDirection.UP;
 import static net.minecraftforge.common.util.ForgeDirection.WEST;
 import java.util.Random;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EM_Settings;
 import enviromine.handlers.ObjectHandler;
 import net.minecraft.block.BlockTorch;
@@ -17,6 +17,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.util.ForgeDirection;
@@ -34,7 +35,7 @@ public class BlockFireTorch extends BlockTorch
 	@Override
     public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
     {
-		return this.isLit? Item.getItemFromBlock(Blocks.torch) : Items.stick;
+		return this.isLit? Item.getItemFromBlock(Blocks.TORCH) : Items.STICK;
     }
 
     /**
@@ -52,7 +53,7 @@ public class BlockFireTorch extends BlockTorch
 	{
 		ItemStack stack = player.getEquipmentInSlot(0);
 		
-		if (stack != null && stack.getItem() == Items.flint_and_steel)
+		if (stack != null && stack.getItem() == Items.FLINT_AND_STEEL)
 		{
 			stack.damageItem(1, player);
 			world.setBlock(i, j, k, ObjectHandler.fireTorch, world.getBlockMetadata(i, j, k), 3);
@@ -67,11 +68,11 @@ public class BlockFireTorch extends BlockTorch
 		// Reset the torch back to vanilla
 		if(!EM_Settings.torchesBurn && !EM_Settings.torchesGoOut)
 		{
-			world.setBlock(x, y, z, Blocks.torch, world.getBlockMetadata(x, y, z), 3);
+			world.setBlock(x, y, z, Blocks.TORCH, world.getBlockMetadata(x, y, z), 3);
 			return;
 		}
 		
-		if((world.rand.nextInt(10000) == 0 || (world.isRaining() && world.canBlockSeeTheSky(x, y, z))) && EM_Settings.torchesGoOut)
+		if((world.rand.nextInt(10000) == 0 || (world.isRaining() && world.canSeeSky(new BlockPos(x, y, z)))) && EM_Settings.torchesGoOut)
 		{
 			world.playSoundEffect((double)x + 0.5D, (double)y + 0.5D, (double)z + 0.5D, "random.fizz", 0.5F, 2.6F + (world.rand.nextFloat() - world.rand.nextFloat()) * 0.8F);
 			world.setBlock(x, y, z, ObjectHandler.offTorch, world.getBlockMetadata(x, y, z), 3);
@@ -139,7 +140,7 @@ public class BlockFireTorch extends BlockTorch
                                     k2 = 15;
                                 }
 
-                                world.setBlock(i1, k1, j1, Blocks.fire, k2, 3);
+                                world.setBlock(i1, k1, j1, Blocks.FIRE, k2, 3);
                             }
                         }
                     }
@@ -162,11 +163,11 @@ public class BlockFireTorch extends BlockTorch
 	
     private void tryCatchFire(World p_149841_1_, int p_149841_2_, int p_149841_3_, int p_149841_4_, int p_149841_5_, Random p_149841_6_, int p_149841_7_, ForgeDirection face)
     {
-        int j1 = p_149841_1_.getBlock(p_149841_2_, p_149841_3_, p_149841_4_).getFlammability(p_149841_1_, p_149841_2_, p_149841_3_, p_149841_4_, face);
+        int j1 = p_149841_1_.getBlockState(new BlockPos(p_149841_2_, p_149841_3_, p_149841_4_)).getFlammability(p_149841_1_, p_149841_2_, p_149841_3_, p_149841_4_, face);
 
         if (p_149841_6_.nextInt(p_149841_5_) < j1)
         {
-            boolean flag = p_149841_1_.getBlock(p_149841_2_, p_149841_3_, p_149841_4_) == Blocks.tnt;
+            boolean flag = p_149841_1_.getBlockState(new BlockPos(p_149841_2_, p_149841_3_, p_149841_4_)).getBlock() == Blocks.TNT;
 
             if (p_149841_6_.nextInt(p_149841_7_ + 10) < 5 && !p_149841_1_.canLightningStrikeAt(p_149841_2_, p_149841_3_, p_149841_4_))
             {
@@ -177,16 +178,16 @@ public class BlockFireTorch extends BlockTorch
                     k1 = 15;
                 }
 
-                p_149841_1_.setBlock(p_149841_2_, p_149841_3_, p_149841_4_, Blocks.fire, k1, 3);
+                p_149841_1_.setBlock(p_149841_2_, p_149841_3_, p_149841_4_, Blocks.FIRE, k1, 3);
             }
             else
             {
-                p_149841_1_.setBlockToAir(p_149841_2_, p_149841_3_, p_149841_4_);
+                p_149841_1_.setBlockToAir(new BlockPos(p_149841_2_, p_149841_3_, p_149841_4_));
             }
 
             if (flag)
             {
-                Blocks.tnt.onBlockDestroyedByPlayer(p_149841_1_, p_149841_2_, p_149841_3_, p_149841_4_, 1);
+                Blocks.TNT.onBlockDestroyedByPlayer(p_149841_1_, new BlockPos(p_149841_2_, p_149841_3_, p_149841_4_), 1);
             }
         }
     }
@@ -198,7 +199,7 @@ public class BlockFireTorch extends BlockTorch
     {
         byte b0 = 0;
 
-        if (!p_149845_1_.isAirBlock(p_149845_2_, p_149845_3_, p_149845_4_))
+        if (!p_149845_1_.isAirBlock(new BlockPos(p_149845_2_, p_149845_3_, p_149845_4_)))
         {
             return 0;
         }
@@ -228,7 +229,7 @@ public class BlockFireTorch extends BlockTorch
      */
     public int getChanceToEncourageFire(IBlockAccess world, int x, int y, int z, int oldChance, ForgeDirection face)
     {
-        int newChance = world.getBlock(x, y, z).getFireSpreadSpeed(world, x, y, z, face);
+        int newChance = world.getBlockState(new BlockPos(x, y, z)).getFireSpreadSpeed(world, x, y, z, face);
         return (newChance > oldChance ? newChance : oldChance);
     }
 }

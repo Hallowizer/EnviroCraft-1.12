@@ -1,7 +1,7 @@
 package enviromine.items;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import enviromine.EnviroPotion;
 import enviromine.handlers.EM_StatusManager;
@@ -39,7 +39,7 @@ public class EnviroItemSaltWaterBottle extends Item
 	{
 		if(!par3EntityPlayer.capabilities.isCreativeMode)
 		{
-			--par1ItemStack.stackSize;
+			par1ItemStack.shrink(1);
 		}
 		
 		if(!par2World.isRemote)
@@ -70,12 +70,12 @@ public class EnviroItemSaltWaterBottle extends Item
 		
 		if(!par3EntityPlayer.capabilities.isCreativeMode)
 		{
-			if(par1ItemStack.stackSize <= 0)
+			if(par1ItemStack.getCount() <= 0)
 			{
-				return new ItemStack(Items.glass_bottle);
+				return new ItemStack(Items.GLASS_BOTTLE);
 			}
 			
-			par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Items.glass_bottle));
+			par3EntityPlayer.inventory.addItemStackToInventory(new ItemStack(Items.GLASS_BOTTLE));
 		}
 		
 		return par1ItemStack;
@@ -120,7 +120,7 @@ public class EnviroItemSaltWaterBottle extends Item
 	@Override
 	public EnumAction getItemUseAction(ItemStack par1ItemStack)
 	{
-		return EnumAction.drink;
+		return EnumAction.DRINK;
 	}
 	
 	/**

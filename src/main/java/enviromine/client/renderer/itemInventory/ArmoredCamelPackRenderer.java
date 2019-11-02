@@ -8,8 +8,8 @@ import net.minecraft.util.IIcon;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.client.IItemRenderer;
 import org.lwjgl.opengl.GL11;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.utils.RenderAssist;
 
 @SideOnly(Side.CLIENT)
@@ -61,7 +61,7 @@ public class ArmoredCamelPackRenderer implements IItemRenderer
 			GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 			Minecraft.getMinecraft().renderEngine.bindTexture(camelpackOverlay);
 			
-			Tessellator tessellator = Tessellator.instance;
+			Tessellator tessellator = Tessellator.getInstance();
 			tessellator.startDrawingQuads();
 			tessellator.addVertexWithUV(2, 6, 1, 0, 0);
 			tessellator.addVertexWithUV(2, 14, 1, 0, 1);
@@ -103,7 +103,7 @@ public class ArmoredCamelPackRenderer implements IItemRenderer
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
 		GL11.glDisable(GL11.GL_ALPHA_TEST);
 		GL11.glDisable(GL11.GL_BLEND);
-		Tessellator tessellator = Tessellator.instance;
+		Tessellator tessellator = Tessellator.getInstance();
 		//int l = 255 - k << 16 | k << 8;
 		//int i1 = (255 - k) / 4 << 16 | 16128;
 		this.renderQuad(tessellator, 0 + x, 1 + y, width + 1, height, RenderAssist.getColorFromRGBA(172, 172, 172, 255));

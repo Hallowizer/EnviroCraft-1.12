@@ -21,7 +21,7 @@ public class GasFire extends EnviroGas
 	public void applyEffects(EntityLivingBase entityLiving, int amplifier)
 	{
 		super.applyEffects(entityLiving, amplifier);
-		entityLiving.attackEntityFrom(DamageSource.onFire, 3F);
+		entityLiving.attackEntityFrom(DamageSource.ON_FIRE, 3F);
 		entityLiving.setFire(10);
 	}
 	

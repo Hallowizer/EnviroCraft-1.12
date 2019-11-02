@@ -15,8 +15,8 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.AxisAlignedBB;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.Level;
@@ -50,15 +50,15 @@ public class EM_PhysManager
 		if(world.isRemote || world.getTotalWorldTime() < worldStartTime + EM_Settings.worldDelay)
 		{
 			return;
-		} else if(chunkDelay.containsKey(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)))
+		} else if(chunkDelay.containsKey(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)))
 		{
-			if(chunkDelay.get(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
+			if(chunkDelay.get(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
 			{
 				return;
 			}
 		}
 		
-		DimensionProperties dProps = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
+		DimensionProperties dProps = EM_Settings.dimensionProperties.get(world.provider.getDimension());
 		
 		if(dProps != null && !dProps.physics)
 		{
@@ -81,15 +81,15 @@ public class EM_PhysManager
 		if(world.isRemote || world.getTotalWorldTime() < worldStartTime + EM_Settings.worldDelay)
 		{
 			return;
-		} else if(chunkDelay.containsKey(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)))
+		} else if(chunkDelay.containsKey(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)))
 		{
-			if(chunkDelay.get(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
+			if(chunkDelay.get(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
 			{
 				return;
 			}
 		}
 		
-		DimensionProperties dProps = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
+		DimensionProperties dProps = EM_Settings.dimensionProperties.get(world.provider.getDimension());
 		
 		if(dProps != null && !dProps.physics)
 		{
@@ -186,15 +186,15 @@ public class EM_PhysManager
 		if(world.isRemote || world.getTotalWorldTime() < worldStartTime + EM_Settings.worldDelay)
 		{
 			return;
-		} else if(chunkDelay.containsKey(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)))
+		} else if(chunkDelay.containsKey(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)))
 		{
-			if(chunkDelay.get(world.provider.dimensionId + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
+			if(chunkDelay.get(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
 			{
 				return;
 			}
 		}
 		
-		DimensionProperties dProps = EM_Settings.dimensionProperties.get(world.provider.dimensionId);
+		DimensionProperties dProps = EM_Settings.dimensionProperties.get(world.provider.getDimension());
 		
 		if(dProps != null && !dProps.physics)
 		{
@@ -205,7 +205,7 @@ public class EM_PhysManager
 		
 		if(world.getChunkProvider().chunkExists(x >> 4, z >> 4))
 		{
-			locLoaded = world.getChunkFromChunkCoords(x >> 4, z >> 4).isChunkLoaded;
+			locLoaded = world.getChunkFromChunkCoords(x >> 4, z >> 4).isLoaded();
 		} else
 		{
 			locLoaded = false;
@@ -239,14 +239,14 @@ public class EM_PhysManager
 		boolean validSlideType = false;
 		boolean emptyBelow = BlockFalling.func_149831_e(world, x, y - 1, z);
 		
-		if(EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block) + "," + meta) || EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block)))
+		if(EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block) + "," + meta) || EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block)))
 		{
-			if(EM_Settings.blockProperties.containsKey("" + Block.blockRegistry.getNameForObject(block) + "," + meta))
+			if(EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block) + "," + meta))
 			{
-				blockProps = EM_Settings.blockProperties.get("" + Block.blockRegistry.getNameForObject(block) + "," + meta);
+				blockProps = EM_Settings.blockProperties.get("" + Block.REGISTRY.getNameForObject(block) + "," + meta);
 			} else
 			{
-				blockProps = EM_Settings.blockProperties.get("" + Block.blockRegistry.getNameForObject(block));
+				blockProps = EM_Settings.blockProperties.get("" + Block.REGISTRY.getNameForObject(block));
 			}
 			
 			validSlideType = blockProps.slides || ((waterLogged || touchingWater) && blockProps.wetSlide);
@@ -294,9 +294,9 @@ public class EM_PhysManager
 					{
 						physBlock.field_145810_d = nbtTC;
 					}
-					world.setBlock(x, y, z, Blocks.air);
+					world.setBlock(x, y, z, Blocks.AIR);
 					physBlock.isLandSlide = true;
-					world.spawnEntityInWorld(physBlock);
+					world.spawnEntity(physBlock);
 					EM_PhysManager.schedulePhysUpdate(world, x, y, z, true, "Collapse");
 					return;
 				}
@@ -310,9 +310,9 @@ public class EM_PhysManager
 				{
 					physBlock.field_145810_d = nbtTC;
 				}
-				world.setBlock(x, y, z, Blocks.air);
+				world.setBlock(x, y, z, Blocks.AIR);
 				physBlock.isLandSlide = true;
-				world.spawnEntityInWorld(physBlock);
+				world.spawnEntity(physBlock);
 				EM_PhysManager.schedulePhysUpdate(world, x, y, z, true, "Collapse");
 				return;
 			} else if(!(pos[0] == ppos[0] && pos[1] == ppos[1] && pos[2] == ppos[2]))
@@ -376,7 +376,7 @@ public class EM_PhysManager
 			
 			if(!defaultDrop)
 			{
-			} else if(dropBlock == null || dropBlock == Blocks.air || block.getMaterial() == Material.glass || block.getMaterial() == Material.ice)
+			} else if(dropBlock == null || dropBlock == Blocks.AIR || block.getMaterial() == Material.GLASS || block.getMaterial() == Material.ICE)
 			{
 				dropType = 0;
 			} else if(block instanceof BlockLeavesBase)
@@ -443,7 +443,7 @@ public class EM_PhysManager
 				dropChance = 1;
 			}
 			
-			boolean supported = hasSupports(world, x, y, z, touchingWaterDirect? MathHelper.floor_double(supportDist/2D) : supportDist);
+			boolean supported = hasSupports(world, x, y, z, touchingWaterDirect? MathHelper.floor(supportDist/2D) : supportDist);
 			//missingBlocks total = 25 - 26
 			
 			if(missingBlocks > 0 && blockNotSolid(world, x, y - 1, z, false) && !supported)
@@ -454,7 +454,7 @@ public class EM_PhysManager
 					{
 						world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (world.getBlockMetadata(x, y, z) << 12));
 						block.dropBlockAsItem(world, x, y, z, meta, 0);
-						world.setBlock(x, y, z, Blocks.air);
+						world.setBlock(x, y, z, Blocks.AIR);
 						return;
 					} else if(dropType == 2)
 					{
@@ -484,30 +484,30 @@ public class EM_PhysManager
 						{
 							block.dropBlockAsItem(world, x, y, z, meta, 0);
 						}
-						world.setBlock(x, y, z, Blocks.air);
+						world.setBlock(x, y, z, Blocks.AIR);
 						schedulePhysUpdate(world, x, y, z, true, "Normal");
 						return;
 					} else if(dropType == 0)
 					{
 						world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (world.getBlockMetadata(x, y, z) << 12));
 						
-						if(block == Blocks.ice)
+						if(block == Blocks.ICE)
 						{
 							Material mat = world.getBlock(x, y - 1, z).getMaterial();
 							
 							if((mat.blocksMovement() || mat.isLiquid()) && !world.provider.isHellWorld)
 							{
-								world.setBlock(x, y, z, Blocks.flowing_water);
+								world.setBlock(x, y, z, Blocks.FLOWING_WATER);
 							} else
 							{
-								world.setBlock(x, y, z, Blocks.air);
+								world.setBlock(x, y, z, Blocks.AIR);
 							}
 						} else
 						{
-							world.setBlock(x, y, z, Blocks.air);
+							world.setBlock(x, y, z, Blocks.AIR);
 						}
 						
-						if(block.getMaterial() != Material.ice || EM_Settings.spreadIce)
+						if(block.getMaterial() != Material.ICE || EM_Settings.spreadIce)
 						{
 							schedulePhysUpdate(world, x, y, z, true, "Break");
 						}
@@ -518,14 +518,14 @@ public class EM_PhysManager
 					{
 						return;
 					}
-					if(block == Blocks.stone && EM_Settings.stoneCracks && !isCustom)
+					if(block == Blocks.STONE && EM_Settings.stoneCracks && !isCustom)
 					{
-						world.setBlock(x, y, z, Blocks.cobblestone);
-						dropBlock = Blocks.cobblestone;
-					} else if(block == Blocks.grass && !isCustom)
+						world.setBlock(x, y, z, Blocks.COBBLESTONE);
+						dropBlock = Blocks.COBBLESTONE;
+					} else if(block == Blocks.GRASS && !isCustom)
 					{
-						world.setBlock(x, y, z, Blocks.dirt);
-						dropBlock = Blocks.dirt;
+						world.setBlock(x, y, z, Blocks.DIRT);
+						dropBlock = Blocks.DIRT;
 					} else
 					{
 						if(world.getBlock(x, y, z) != dropBlock)
@@ -557,16 +557,16 @@ public class EM_PhysManager
 					}
 					//world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(entityphysblock.block) + (entityphysblock.meta << 12));
 					world.playSoundEffect((double)((float)x + 0.5F), (double)((float)y + 0.5F), (double)((float)z + 0.5F), entityphysblock.block.stepSound.func_150496_b(), (entityphysblock.block.stepSound.getVolume() + 1.0F) / 2.0F, entityphysblock.block.stepSound.getPitch() * 1.2F);
-					world.spawnEntityInWorld(entityphysblock);
+					world.spawnEntity(entityphysblock);
 					
 				} else if(missingBlocks > minThreshold && !world.isRemote && EM_Settings.stoneCracks)
 				{
-					if(block == Blocks.stone && !isCustom)
+					if(block == Blocks.STONE && !isCustom)
 					{
-						world.setBlock(x, y, z, Blocks.cobblestone);
-					} else if(block == Blocks.grass && !isCustom)
+						world.setBlock(x, y, z, Blocks.COBBLESTONE);
+					} else if(block == Blocks.GRASS && !isCustom)
 					{
-						world.setBlock(x, y, z, Blocks.dirt);
+						world.setBlock(x, y, z, Blocks.DIRT);
 					}
 				}
 			}
@@ -593,9 +593,9 @@ public class EM_PhysManager
 					Block block = world.getBlock(i, j, k);
 					Material material = block.getMaterial();
 					int metaID = world.getBlockMetadata(i, j, k);
-					String name = Block.blockRegistry.getNameForObject(block);
+					String name = Block.REGISTRY.getNameForObject(block);
 					
-					if(block == Blocks.air)
+					if(block == Blocks.AIR)
 					{
 						if(j < y + 1)
 						{
@@ -655,7 +655,7 @@ public class EM_PhysManager
 						}
 						
 						data[0] += 1;
-					} else if((blockNotSolid(world, i, j, k, false) || (world.getBlock(x, y, z).getMaterial() != Material.leaves && material == Material.leaves)) && !(i == x && j < y + 1 && k == z))
+					} else if((blockNotSolid(world, i, j, k, false) || (world.getBlock(x, y, z).getMaterial() != Material.LEAVES && material == Material.LEAVES)) && !(i == x && j < y + 1 && k == z))
 					{
 						if(j < y + 1)
 						{
@@ -680,9 +680,9 @@ public class EM_PhysManager
 		}
 		
 		Block baseBlock = world.getBlock(x, y, z);
-		Material baseMat = baseBlock == null? Material.air : baseBlock.getMaterial();
+		Material baseMat = baseBlock == null? Material.AIR : baseBlock.getMaterial();
 		
-		boolean isLeaves = baseMat == Material.leaves;
+		boolean isLeaves = baseMat == Material.LEAVES;
 		
 		for(int i = x - 1; i <= x + 1; i++)
 		{
@@ -690,10 +690,10 @@ public class EM_PhysManager
 			{
 				int j = y - 1;
 				Block block = world.getBlock(i, j, k);
-				Material material = block == null? Material.air : block.getMaterial();
+				Material material = block == null? Material.AIR : block.getMaterial();
 				
 				
-				if(!(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves)))
+				if(!(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves)))
 				{
 					return true;
 				}
@@ -708,11 +708,11 @@ public class EM_PhysManager
 			for(int j = y - 1; j <= y; j++)
 			{
 				Block block = world.getBlock(i, j, k);
-				Material material = block == null? Material.air : block.getMaterial();
+				Material material = block == null? Material.AIR : block.getMaterial();
 				
 				if(j == y)
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						cancel = true;
 						break;
@@ -722,7 +722,7 @@ public class EM_PhysManager
 					}
 				} else
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						continue;
 					} else
@@ -747,11 +747,11 @@ public class EM_PhysManager
 			for(int j = y - 1; j <= y; j++)
 			{
 				Block block = world.getBlock(i, j, k);
-				Material material = block == null? Material.air : block.getMaterial();
+				Material material = block == null? Material.AIR : block.getMaterial();
 				
 				if(j == y)
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						cancel = true;
 						break;
@@ -761,7 +761,7 @@ public class EM_PhysManager
 					}
 				} else
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						continue;
 					} else
@@ -786,11 +786,11 @@ public class EM_PhysManager
 			for(int j = y - 1; j <= y; j++)
 			{
 				Block block = world.getBlock(i, j, k);
-				Material material = block == null? Material.air : block.getMaterial();
+				Material material = block == null? Material.AIR : block.getMaterial();
 				
 				if(j == y)
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						cancel = true;
 						break;
@@ -800,7 +800,7 @@ public class EM_PhysManager
 					}
 				} else
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						continue;
 					} else
@@ -825,11 +825,11 @@ public class EM_PhysManager
 			for(int j = y - 1; j <= y; j++)
 			{
 				Block block = world.getBlock(i, j, k);
-				Material material = block == null? Material.air : block.getMaterial();
+				Material material = block == null? Material.AIR : block.getMaterial();
 				
 				if(j == y)
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						cancel = true;
 						break;
@@ -839,7 +839,7 @@ public class EM_PhysManager
 					}
 				} else
 				{
-					if(blockNotSolid(world, i, j, k, false) || (material == Material.leaves && !isLeaves))
+					if(blockNotSolid(world, i, j, k, false) || (material == Material.LEAVES && !isLeaves))
 					{
 						continue;
 					} else
@@ -867,8 +867,8 @@ public class EM_PhysManager
 			double d1 = (double)(par1World.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
 			double d2 = (double)(par1World.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
 			EntityItem entityitem = new EntityItem(par1World, (double)par2 + d0, (double)par3 + d1, (double)par4 + d2, par5ItemStack);
-			entityitem.delayBeforeCanPickup = 10;
-			par1World.spawnEntityInWorld(entityitem);
+			entityitem.setPickupDelay(10);
+			par1World.spawnEntity(entityitem);
 		}
 	}
 	
@@ -881,7 +881,7 @@ public class EM_PhysManager
 			return false;
 		}
 		
-		String name = Block.blockRegistry.getNameForObject(block);
+		String name = Block.REGISTRY.getNameForObject(block);
 		int meta = world.getBlockMetadata(x, y, z);
 		
 		if(EM_Settings.blockProperties.containsKey("" + name + "," + meta) || EM_Settings.blockProperties.containsKey("" + name))
@@ -925,7 +925,7 @@ public class EM_PhysManager
 		Block block = world.getBlock(x, y, z);
 		Material material = block.getMaterial();
 		
-		if(block == Blocks.fire)
+		if(block == Blocks.FIRE)
 		{
 			return true;
 		} else if(material.isLiquid())

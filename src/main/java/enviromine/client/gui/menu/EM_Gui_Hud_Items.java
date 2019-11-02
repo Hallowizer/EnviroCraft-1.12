@@ -1,7 +1,7 @@
 package enviromine.client.gui.menu;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
@@ -160,13 +160,13 @@ public class EM_Gui_Hud_Items extends GuiScreen implements GuiYesNoCallback
 	public void drawScreen(int par1, int par2, float par3)
 	{
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRendererObj, StatCollector.translateToLocal("options.enviromine.guiBarPos.title"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.guiBarPos.title"), this.width / 2, 15, 16777215);
 		
 		
 		int hudCnt = 0;
 		for(HudItem hudItem : HUDRegistry.getHudItemList())
 		{
-			this.drawString(this.fontRendererObj,  hudItem.getButtonLabel()+": ", this.width / 2 - 75 - 22, this.height / 6 + 24 + (hudCnt * 24), 16777215);
+			this.drawString(this.fontRenderer,  hudItem.getButtonLabel()+": ", this.width / 2 - 75 - 22, this.height / 6 + 24 + (hudCnt * 24), 16777215);
 			
 			hudCnt++;
 		}

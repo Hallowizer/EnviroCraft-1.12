@@ -3,8 +3,8 @@ package enviromine.client.gui.menu;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.StatCollector;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EM_Settings;
 
 @SideOnly(Side.CLIENT)
@@ -57,7 +57,7 @@ public class EM_Gui_General extends GuiScreen
 	public void drawScreen(int par1, int par2, float par3)
 	{
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRendererObj,  StatCollector.translateToLocal("options.enviromine.configSetting.title"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(this.fontRenderer,  StatCollector.translateToLocal("options.enviromine.configSetting.title"), this.width / 2, 15, 16777215);
 		super.drawScreen(par1, par2, par3);
 	}
 }

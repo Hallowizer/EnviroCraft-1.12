@@ -20,13 +20,13 @@ public class RotHandler
 		RotProperties rotProps = null;
 		long rotTime = (long)(EM_Settings.foodRotTime * 24000L);
 		
-		if(EM_Settings.rotProperties.containsKey("" + Item.itemRegistry.getNameForObject(item.getItem())))
+		if(EM_Settings.rotProperties.containsKey("" + Item.REGISTRY.getNameForObject(item.getItem())))
 		{
-			rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(item.getItem()));
+			rotProps = EM_Settings.rotProperties.get("" + Item.REGISTRY.getNameForObject(item.getItem()));
 			rotTime = (long)(rotProps.days * 24000L);
-		} else if(EM_Settings.rotProperties.containsKey("" + Item.itemRegistry.getNameForObject(item.getItem()) + "," + item.getItemDamage()))
+		} else if(EM_Settings.rotProperties.containsKey("" + Item.REGISTRY.getNameForObject(item.getItem()) + "," + item.getItemDamage()))
 		{
-			rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(item.getItem()) + "," + item.getItemDamage());
+			rotProps = EM_Settings.rotProperties.get("" + Item.REGISTRY.getNameForObject(item.getItem()) + "," + item.getItemDamage());
 			rotTime = (long)(rotProps.days * 24000L);
 		}
 		
@@ -63,10 +63,10 @@ public class RotHandler
 			{
 				if(rotProps == null)
 				{
-					return new ItemStack(ObjectHandler.rottenFood, item.stackSize);
+					return new ItemStack(ObjectHandler.rottenFood, item.getCount());
 				} else
 				{
-					return Item.itemRegistry.getObject(rotProps.rotID) == null? null : new ItemStack((Item)Item.itemRegistry.getObject(rotProps.rotID), item.stackSize, rotProps.rotMeta < 0? item.getItemDamage() : rotProps.rotMeta);
+					return Item.REGISTRY.getObject(rotProps.rotID) == null? null : new ItemStack((Item)Item.REGISTRY.getObject(rotProps.rotID), item.stackSize, rotProps.rotMeta < 0? item.getItemDamage() : rotProps.rotMeta);
 				}
 			} else
 			{

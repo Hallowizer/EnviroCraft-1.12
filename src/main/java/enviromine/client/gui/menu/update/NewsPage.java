@@ -1,7 +1,7 @@
 package enviromine.client.gui.menu.update;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.util.StatCollector;
@@ -48,7 +48,7 @@ public class NewsPage  extends GuiScreen{
 		
 		this.buttonList.add(new GuiButton(200, this.width / 2 - 100, this.height - 26, StatCollector.translateToLocal("gui.back")));
 
-		this.newsPostList = new PostGuiList(this.mc, this.width, this.height, 32, this.height - 32, this.fontRendererObj.FONT_HEIGHT, tabSelection);
+		this.newsPostList = new PostGuiList(this.mc, this.width, this.height, 32, this.height - 32, this.fontRenderer.FONT_HEIGHT, tabSelection);
 	}
 	
 	@Override
@@ -105,7 +105,7 @@ public class NewsPage  extends GuiScreen{
 	public void drawScreen(int par1, int par2, float par3)
 	{
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRendererObj,  StatCollector.translateToLocal("options.enviromine.newsPage"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(this.fontRenderer,  StatCollector.translateToLocal("options.enviromine.newsPage"), this.width / 2, 15, 16777215);
 		
         this.newsPostList.drawScreen(par1, par2, par3);
 		//drawNewsPost();

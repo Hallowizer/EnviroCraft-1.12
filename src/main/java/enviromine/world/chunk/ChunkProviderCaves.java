@@ -11,6 +11,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.IProgressUpdate;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.ChunkPosition;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
@@ -26,7 +27,7 @@ import net.minecraftforge.event.terraingen.ChunkProviderEvent;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.terraingen.TerrainGen;
-import cpw.mods.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import enviromine.core.EM_Settings;
 import enviromine.trackers.properties.CaveGenProperties;
 
@@ -136,12 +137,12 @@ public class ChunkProviderCaves implements IChunkProvider
 								
 								if(k1 * 8 + l1 < b1)
 								{
-									block = EM_Settings.caveLava ? Blocks.lava : Blocks.water;
+									block = EM_Settings.caveLava ? Blocks.LAVA : Blocks.WATER;
 								}
 								
 								if(d15 > 0.0D)
 								{
-									block = Blocks.stone;
+									block = Blocks.STONE;
 								}
 								
 								p_147419_3_[j2 += short1] = block;
@@ -191,8 +192,8 @@ public class ChunkProviderCaves implements IChunkProvider
 				boolean flag1 = this.gravelNoise[k + l * 16] + this.hellRNG.nextDouble() * 0.2D > 0.0D;
 				int i1 = (int)(this.netherrackExclusivityNoise[k + l * 16] / 3.0D + 3.0D + this.hellRNG.nextDouble() * 0.25D);
 				int j1 = -1;
-				Block block = Blocks.stone;
-				Block block1 = Blocks.stone;
+				Block block = Blocks.STONE;
+				Block block1 = Blocks.STONE;
 				
 				for(int k1 = 255; k1 >= 0; --k1)
 				{
@@ -202,37 +203,37 @@ public class ChunkProviderCaves implements IChunkProvider
 					{
 						Block block2 = p_147418_3_[l1];
 						
-						if(block2 != null && block2.getMaterial() != Material.air)
+						if(block2 != null && block2.getMaterial() != Material.AIR)
 						{
-							if(block2 == Blocks.stone)
+							if(block2 == Blocks.STONE)
 							{
 								if(j1 == -1)
 								{
 									if(i1 <= 0)
 									{
 										block = null;
-										block1 = Blocks.stone;
+										block1 = Blocks.STONE;
 									} else if(k1 >= b0 - 4 && k1 <= b0 + 1)
 									{
-										block = Blocks.stone;
-										block1 = Blocks.stone;
+										block = Blocks.STONE;
+										block1 = Blocks.STONE;
 										
 										if(flag1)
 										{
-											block = Blocks.gravel;
-											block1 = Blocks.stone;
+											block = Blocks.GRAVEL;
+											block1 = Blocks.STONE;
 										}
 										
 										if(flag)
 										{
-											block = Blocks.dirt;
-											block1 = Blocks.dirt;
+											block = Blocks.DIRT;
+											block1 = Blocks.DIRT;
 										}
 									}
 									
-									if(k1 < b0 && (block == null || block.getMaterial() == Material.air))
+									if(k1 < b0 && (block == null || block.getMaterial() == Material.AIR))
 									{
-										block = EM_Settings.caveLava ? Blocks.lava : Blocks.water;
+										block = EM_Settings.caveLava ? Blocks.LAVA : Blocks.WATER;
 									}
 									
 									j1 = i1;
@@ -256,7 +257,7 @@ public class ChunkProviderCaves implements IChunkProvider
 						}
 					} else
 					{
-						p_147418_3_[l1] = Blocks.bedrock;
+						p_147418_3_[l1] = Blocks.BEDROCK;
 					}
 				}
 			}
@@ -487,7 +488,7 @@ public class ChunkProviderCaves implements IChunkProvider
 			k1 = k + this.hellRNG.nextInt(16) + 8;
 			l1 = this.hellRNG.nextInt(this.hellRNG.nextInt(248) + 8);
 			i2 = l + this.hellRNG.nextInt(16) + 8;
-			(new WorldGenLakes(Blocks.lava)).generate(this.worldObj, this.hellRNG, k1, l1, i2);
+			(new WorldGenLakes(Blocks.LAVA)).generate(this.worldObj, this.hellRNG, new BlockPos(k1, l1, i2));
 		}
 		
 		boolean doGen = TerrainGen.populate(p_73153_1_, worldObj, hellRNG, p_73153_2_, p_73153_3_, false, DUNGEON);
@@ -496,7 +497,7 @@ public class ChunkProviderCaves implements IChunkProvider
 			l1 = k + this.hellRNG.nextInt(16) + 8;
 			i2 = this.hellRNG.nextInt(256);
 			int j2 = l + this.hellRNG.nextInt(16) + 8;
-			(new WorldGenDungeons()).generate(this.worldObj, this.hellRNG, l1, i2, j2);
+			(new WorldGenDungeons()).generate(this.worldObj, this.hellRNG, new BlockPos(l1, i2, j2));
 		}
 		
 		doGen = TerrainGen.decorate(worldObj, hellRNG, k, l, SHROOM);
@@ -505,7 +506,7 @@ public class ChunkProviderCaves implements IChunkProvider
 			j1 = k + this.hellRNG.nextInt(16) + 8;
 			k1 = this.hellRNG.nextInt(256);
 			l1 = l + this.hellRNG.nextInt(16) + 8;
-			(new WorldGenFlowers(Blocks.brown_mushroom)).generate(this.worldObj, this.hellRNG, j1, k1, l1);
+			(new WorldGenFlowers(Blocks.BROWN_MUSHROOM)).generate(this.worldObj, this.hellRNG, new BlockPos(j1, k1, l1));
 		}
 		
 		if(doGen && this.hellRNG.nextInt(1) == 0)
@@ -513,7 +514,7 @@ public class ChunkProviderCaves implements IChunkProvider
 			j1 = k + this.hellRNG.nextInt(16) + 8;
 			k1 = this.hellRNG.nextInt(256);
 			l1 = l + this.hellRNG.nextInt(16) + 8;
-			(new WorldGenFlowers(Blocks.red_mushroom)).generate(this.worldObj, this.hellRNG, j1, k1, l1);
+			(new WorldGenFlowers(Blocks.RED_MUSHROOM)).generate(this.worldObj, this.hellRNG, new BlockPos(j1, k1, l1));
 		}
 		
 		int j2;

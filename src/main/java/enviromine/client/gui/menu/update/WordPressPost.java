@@ -8,8 +8,8 @@ import java.util.Date;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EnviroMine;
 
 @SideOnly(Side.CLIENT)

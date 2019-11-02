@@ -22,8 +22,8 @@ import org.lwjgl.opengl.GL11;
 import cpw.mods.fml.client.config.GuiConfig;
 import cpw.mods.fml.client.config.IConfigElement;
 import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.hud.HUDRegistry;
 import enviromine.client.gui.hud.HudItem;
 import enviromine.client.gui.hud.items.Debug_Info;
@@ -54,10 +54,10 @@ public class Gui_EventManager
 	@SubscribeEvent
 	public void renderevent(InitGuiEvent.Post event)
 	{
-		width = event.gui.width;
-		height = event.gui.height;
+		width = event.getGui().width;
+		height = event.getGui().height;
 		
-		if(event.gui instanceof GuiIngameMenu && !EM_Settings.voxelMenuExists)
+		if(event.getGui() instanceof GuiIngameMenu && !EM_Settings.voxelMenuExists)
 		{
 			String newPost = UpdateNotification.isNewPost() ? " " + StatCollector.translateToLocal("news.enviromine.newpost") : "";
 
@@ -66,13 +66,13 @@ public class Gui_EventManager
 				byte b0 = -16;
 				//enviromine = new GuiButton(1348, width / 2 - 100, height / 4 + 24 + b0, StatCollector.translateToLocal("options.enviromine.menu.title") + newPost);
 				enviromine = new EM_Button(1348, width / 2 - 100, height / 4 + 24 + b0, StatCollector.translateToLocal("options.enviromine.menu.title") , newPost);
-				event.buttonList.set(1, new GuiButton(4, width / 2 - 100, height / 4 + 0 + b0, I18n.format("menu.returnToGame", new Object[0])));
-				event.buttonList.add(enviromine);
+				event.getButtonList().set(1, new GuiButton(4, width / 2 - 100, height / 4 + 0 + b0, I18n.format("menu.returnToGame", new Object[0])));
+				event.getButtonList().add(enviromine);
 			} catch(Exception e)
 			{
 				enviromine = new GuiButton(1348, width - 175, height - 30, 160, 20, StatCollector.translateToLocal("options.enviromine.menu.title") + newPost);
 				EnviroMine.logger.log(Level.ERROR, "Error shifting Minecrafts Menu to add in new button: " + e);
-				event.buttonList.add(enviromine);
+				event.getButtonList().add(enviromine);
 			}
 		}
 	}
@@ -81,11 +81,11 @@ public class Gui_EventManager
 	@SubscribeEvent
 	public void action(ActionPerformedEvent.Post event)
 	{
-		if(event.gui instanceof GuiIngameMenu)
+		if(event.getGui() instanceof GuiIngameMenu)
 		{
-			if(event.button.id == enviromine.id)
+			if(event.getButton().id == enviromine.id)
 			{
-				Minecraft.getMinecraft().displayGuiScreen(new EM_Gui_Menu(event.gui));
+				Minecraft.getMinecraft().displayGuiScreen(new EM_Gui_Menu(event.getGui()));
 			}
 			
 		}
@@ -108,28 +108,28 @@ public class Gui_EventManager
 	@SideOnly(Side.CLIENT)
 	public void onGuiRender(RenderGameOverlayEvent.Post event)
 	{
-		if(event.type != ElementType.HELMET || event.isCancelable())
+		if(event.getType() != ElementType.HELMET || event.isCancelable())
 		{
 			return;
 		}
 		
-		mc.thePlayer.yOffset = 1.62F;
-		if(ClientQuake.GetQuakeShake(mc.theWorld, mc.thePlayer) > 0)
+		mc.player.yOffset = 1.62F;
+		if(ClientQuake.GetQuakeShake(mc.world, mc.player) > 0)
 		{
-			if(mc.thePlayer == null || mc.thePlayer.isPlayerSleeping() || !mc.thePlayer.onGround || (mc.currentScreen != null && mc.currentScreen.doesGuiPauseGame()))
+			if(mc.player == null || mc.player.isPlayerSleeping() || !mc.player.onGround || (mc.currentScreen != null && mc.currentScreen.doesGuiPauseGame()))
 			{
 			} else
 			{
-				float shakeMult = ClientQuake.GetQuakeShake(mc.theWorld, mc.thePlayer);
+				float shakeMult = ClientQuake.GetQuakeShake(mc.world, mc.player);
 				
 				double shakeSpeed = 2D * shakeMult;
 				float offsetY = 0.2F * shakeMult;
 				
-				double shake = (int)(mc.theWorld.getTotalWorldTime() % 24000L) * shakeSpeed;
+				double shake = (int)(mc.world.getTotalWorldTime() % 24000L) * shakeSpeed;
 				
-				mc.thePlayer.yOffset -= (Math.sin(shake) * (offsetY / 2F)) + (offsetY / 2F);
-				mc.thePlayer.cameraPitch = (float)(Math.sin(shake) * offsetY / 4F);
-				mc.thePlayer.cameraYaw = (float)(Math.sin(shake) * offsetY / 4F);
+				mc.player.yOffset -= (Math.sin(shake) * (offsetY / 2F)) + (offsetY / 2F);
+				mc.player.cameraPitch = (float)(Math.sin(shake) * offsetY / 4F);
+				mc.player.cameraYaw = (float)(Math.sin(shake) * offsetY / 4F);
 			}
 		}
 		
@@ -140,7 +140,7 @@ public class Gui_EventManager
 			if(!(EM_Settings.enableAirQ == false && EM_Settings.enableBodyTemp == false && EM_Settings.enableHydrate == false && EM_Settings.enableSanity == false))
 			{
 				//Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("NO ENVIRONMENT DATA", xPos, (height - yPos) - 8, 16777215);
-				tracker = EM_StatusManager.lookupTrackerFromUsername(this.mc.thePlayer.getCommandSenderName());
+				tracker = EM_StatusManager.lookupTrackerFromUsername(this.mc.player.getCommandSenderName());
 			} 
 		} else if(tracker.isDisabled || !EM_StatusManager.trackerList.containsValue(tracker))
 		{
@@ -170,7 +170,7 @@ public class Gui_EventManager
 					continue;
 				}
 
-				if(mc.thePlayer.ridingEntity instanceof EntityLivingBase)
+				if(mc.player.getRidingEntity() instanceof EntityLivingBase)
 				{
 					if(huditem.shouldDrawOnMount())
 					{

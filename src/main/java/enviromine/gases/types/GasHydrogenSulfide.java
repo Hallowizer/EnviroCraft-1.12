@@ -22,7 +22,7 @@ public class GasHydrogenSulfide extends EnviroGas
 	{
 		super.applyEffects(entityLiving, amplifier);
 		
-		if(entityLiving.worldObj.isRemote || entityLiving.isEntityUndead() || (entityLiving.getEquipmentInSlot(4) != null && entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask))
+		if(entityLiving.world.isRemote || entityLiving.isEntityUndead() || (entityLiving.getEquipmentInSlot(4) != null && entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask))
 		{
 			return;
 		}

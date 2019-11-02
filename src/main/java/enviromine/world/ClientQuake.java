@@ -2,8 +2,8 @@ package enviromine.world;
 
 import java.util.Random;
 
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.entity.Entity;
@@ -20,7 +20,7 @@ public class ClientQuake extends Earthquake
 	{
 		super(null, i, k, l, w, a, false);
 		clientQuakes.add(this);
-		duration = Minecraft.getMinecraft().theWorld.getTotalWorldTime();
+		duration = Minecraft.getMinecraft().world.getTotalWorldTime();
 	}
 	
 	public static void UpdateQuakeHeight(int d, int x, int z, int l, int w, float a, int height)
@@ -34,7 +34,7 @@ public class ClientQuake extends Earthquake
 				Minecraft mc = Minecraft.getMinecraft();
 				mc.getSoundHandler().playSound(PositionedSoundRecord.func_147674_a(new ResourceLocation("enviromine:earthquake"), new Random().nextFloat() * 0.25F + 0.75F));
 				quake.passY = height;
-				quake.duration = Minecraft.getMinecraft().theWorld.getTotalWorldTime();
+				quake.duration = Minecraft.getMinecraft().world.getTotalWorldTime();
 				return;
 			}
 		}
@@ -80,7 +80,7 @@ public class ClientQuake extends Earthquake
 					dist = dist < 0? 0 : dist;
 				}
 				
-				if(entity.getDistance(quake.posX, quake.passY, quake.posZ) > 256 + size || Minecraft.getMinecraft().theWorld.getWorldTime() - quake.duration > 3000L)
+				if(entity.getDistance(quake.posX, quake.passY, quake.posZ) > 256 + size || Minecraft.getMinecraft().world.getWorldTime() - quake.duration > 3000L)
 				{
 					clientQuakes.remove(i);
 				}
