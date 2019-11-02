@@ -215,3 +215,5 @@ pip-log.txt
 run/config/forge.cfg
 run/config/forgeChunkLoading.cfg
 run/config/splash.properties
+run/
+.gradle/
