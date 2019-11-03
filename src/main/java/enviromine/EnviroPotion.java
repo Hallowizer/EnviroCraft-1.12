@@ -5,7 +5,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
-import net.minecraft.network.play.server.S29PacketSoundEffect;
+import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.ResourceLocation;
@@ -274,7 +274,7 @@ public class EnviroPotion extends Potion
 				float rndY = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
 				float rndZ = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
 				
-				S29PacketSoundEffect packet = new S29PacketSoundEffect(sound, entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 1.0F, player.getRNG().nextBoolean()? 0.2F : (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
+				SPacketSoundEffect packet = new SPacketSoundEffect(sound, entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ, 1.0F, player.getRNG().nextBoolean()? 0.2F : (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
 				
 				if(!EnviroMine.proxy.isClient() && player instanceof EntityPlayerMP)
 				{

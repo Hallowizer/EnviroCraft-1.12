@@ -8,7 +8,7 @@ import org.apache.logging.log4j.Level;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.BlockFlower;
-import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;

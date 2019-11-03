@@ -10,7 +10,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.core.EnviroMine;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.world.Earthquake;

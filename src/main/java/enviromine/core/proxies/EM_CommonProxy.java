@@ -2,11 +2,11 @@ package enviromine.core.proxies;
 
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.oredict.RecipeSorter;
-import cpw.mods.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import enviromine.client.gui.UpdateNotification;
 import enviromine.handlers.EM_EventManager;
 import enviromine.handlers.EM_ServerScheduledTickHandler;

@@ -16,7 +16,7 @@ import net.minecraftforge.common.config.Configuration;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
 
-import cpw.mods.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;

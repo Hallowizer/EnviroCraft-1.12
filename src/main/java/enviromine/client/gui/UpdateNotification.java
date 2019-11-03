@@ -14,7 +14,7 @@ import net.minecraft.util.StatCollector;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent;
 import cpw.mods.fml.common.gameevent.PlayerEvent.PlayerLoggedInEvent;
 import enviromine.client.gui.menu.update.WordPressParser;

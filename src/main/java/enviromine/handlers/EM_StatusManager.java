@@ -31,6 +31,7 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.potion.Potion;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.FoodStats;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.village.Village;
@@ -45,8 +46,8 @@ import java.util.List;
 
 import com.google.common.base.Stopwatch;
 
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
-import cpw.mods.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.common.EnumPlantType;
 
 import org.apache.logging.log4j.Level;
@@ -216,7 +217,7 @@ public class EM_StatusManager
 		float scale = 1.25F; // Anything above 1 forces the maximum and minimum temperatures to plateau when they're reached
 		float dayPercent = MathHelper.clamp((float)(Math.sin(Math.toRadians(((entityLiving.world.getWorldTime()%24000L)/24000D)*360F - 30F))*0.5F + 0.5F)*scale, 0F, 1F);
 		
-		if(entityLiving.world.provider.hasNoSky)
+		if(!entityLiving.world.provider.hasSkyLight())
 		{
 			isDay = false;
 		}
@@ -324,7 +325,7 @@ public class EM_StatusManager
 						{
 							if(block instanceof BlockFlower)
 							{
-								if(isDay || entityLiving.world.provider.hasNoSky)
+								if(isDay || !entityLiving.world.provider.hasSkyLight())
 								{
 									if(sBoost < blockProps.sanity)
 									{
@@ -396,7 +397,7 @@ public class EM_StatusManager
 						{
 							if(((ItemBlock)stack.getItem()).field_150939_a instanceof BlockFlower)
 							{
-								if(isDay || entityLiving.world.provider.hasNoSky)
+								if(isDay || !entityLiving.world.provider.hasSkyLight())
 								{
 									sBoost = itemProps.ambSanity * stackMult;
 								}
@@ -412,9 +413,9 @@ public class EM_StatusManager
 				} else if(stack.getItem() instanceof ItemBlock)
 				{
 					ItemBlock itemBlock = (ItemBlock)stack.getItem();
-					if(itemBlock.field_150939_a instanceof BlockFlower && (isDay || entityLiving.world.provider.hasNoSky) && sBoost <= 0.1F)
+					if(itemBlock.field_150939_a instanceof BlockFlower && (isDay || !entityLiving.world.provider.hasSkyLight()) && sBoost <= 0.1F)
 					{
-						if(((BlockFlower)itemBlock.field_150939_a).getPlantType(entityLiving.world, i, j, k) == EnumPlantType.Plains)
+						if(((BlockFlower)itemBlock.field_150939_a).getPlantType(entityLiving.world, new BlockPos(i, j, k)) == EnumPlantType.Plains)
 						{
 							sBoost = 0.1F;
 						}
@@ -423,7 +424,7 @@ public class EM_StatusManager
 			}
 		}
 		
-		if(lightLev > 1 && !entityLiving.world.provider.hasNoSky)
+		if(lightLev > 1 && entityLiving.world.provider.hasSkyLight())
 		{
 			quality = 2F;
 			sanityRate = 0.5F;
@@ -432,7 +433,7 @@ public class EM_StatusManager
 			sanityRate = -0.1F;
 		}
 		
-		if(dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && !entityLiving.world.provider.hasNoSky)
+		if(dimensionProp != null && entityLiving.posY > dimensionProp.sealevel * 0.75 && entityLiving.world.provider.hasSkyLight())
 		{
 			quality = 2F;
 		}
@@ -442,7 +443,7 @@ public class EM_StatusManager
 		float highTemp = -30F; // Max temp at high altitude
 		float lowTemp = 30F; // Min temp at low altitude (Geothermal Heating)
 		
-		if(!entityLiving.world.provider.hasNoSky)
+		if(entityLiving.world.provider.hasSkyLight())
 		{
 			if(entityLiving.posY < 48)
 			{
@@ -497,7 +498,7 @@ public class EM_StatusManager
 			bTemp -= 2.5F;
 		}
 		
-		if ((!entityLiving.world.provider.hasNoSky && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp))
+		if ((entityLiving.world.provider.hasSkyLight() && dimensionProp == null) || (dimensionProp != null && dimensionProp.override && dimensionProp.dayNightTemp))
 		{ 
 			bTemp -= (1F-dayPercent) * 10F;
 			

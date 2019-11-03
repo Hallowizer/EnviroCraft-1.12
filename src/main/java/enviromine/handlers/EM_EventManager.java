@@ -83,11 +83,11 @@ import net.minecraftforge.event.world.WorldEvent.Unload;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.event.ConfigChangedEvent;
+import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import cpw.mods.fml.common.eventhandler.Event.Result;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
-import cpw.mods.fml.common.gameevent.TickEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
+import net.minecraftforge.fml.common.gameevent.TickEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.EntityPhysicsBlock;
@@ -140,11 +140,11 @@ public class EM_EventManager
 			if(event.getEntity() instanceof EntityItem)
 			{
 				EntityItem item = (EntityItem)event.getEntity();
-				ItemStack rotStack = RotHandler.doRot(event.getWorld(), item.getEntityItem());
+				ItemStack rotStack = RotHandler.doRot(event.getWorld(), item.getItem());
 				
-				if(item.getEntityItem() != rotStack)
+				if(item.getItem() != rotStack)
 				{
-					item.setEntityItemStack(rotStack);
+					item.setItem(rotStack);
 				}
 			} else if(event.getEntity() instanceof EntityPlayer)
 			{
@@ -196,20 +196,20 @@ public class EM_EventManager
 			
 				}
 			}
-		} else if(event.entity instanceof EntityFallingBlock && !(event.entity instanceof EntityPhysicsBlock) && !event.world.isRemote && event.world.getTotalWorldTime() > EM_PhysManager.worldStartTime + EM_Settings.worldDelay && chunkPhys)
+		} else if(event.getEntity() instanceof EntityFallingBlock && !(event.getEntity() instanceof EntityPhysicsBlock) && !event.getWorld().isRemote && event.getWorld().getTotalWorldTime() > EM_PhysManager.worldStartTime + EM_Settings.worldDelay && chunkPhys)
 		{
-			EntityFallingBlock oldSand = (EntityFallingBlock)event.entity;
+			EntityFallingBlock oldSand = (EntityFallingBlock)event.getEntity();
 			
-			if(oldSand.func_145805_f() != Blocks.air)
+			if(oldSand.func_145805_f() != Blocks.AIR)
 			{
 				NBTTagCompound oldTags = new NBTTagCompound();
 				oldSand.writeToNBT(oldTags);
 				
-				EntityPhysicsBlock newSand = new EntityPhysicsBlock(oldSand.worldObj, oldSand.prevPosX, oldSand.prevPosY, oldSand.prevPosZ, oldSand.func_145805_f(), oldSand.field_145814_a, true);
+				EntityPhysicsBlock newSand = new EntityPhysicsBlock(oldSand.world, oldSand.prevPosX, oldSand.prevPosY, oldSand.prevPosZ, oldSand.func_145805_f(), oldSand.field_145814_a, true);
 				newSand.readFromNBT(oldTags);
-				event.world.spawnEntityInWorld(newSand);
+				event.getWorld().spawnEntity(newSand);
 				event.setCanceled(true);
-				event.entity.setDead();
+				event.getEntity().setDead();
 				return;
 			}
 		}
@@ -220,11 +220,11 @@ public class EM_EventManager
 	{
 		if(EM_Settings.enforceWeights)
 		{
-			if(EnviroMine.caves.totalSpawnWeight > 0 && event.world.provider.dimensionId == EM_Settings.caveDimID && EM_Settings.caveSpawnProperties.containsKey(EntityList.getEntityID(event.entity)))
+			if(EnviroMine.caves.totalSpawnWeight > 0 && event.getWorld().provider.getDimension() == EM_Settings.caveDimID && EM_Settings.caveSpawnProperties.containsKey(EntityList.getEntityID(event.getEntity())))
 			{
-				CaveSpawnProperties props = EM_Settings.caveSpawnProperties.get(EntityList.getEntityID(event.entity));
+				CaveSpawnProperties props = EM_Settings.caveSpawnProperties.get(EntityList.getEntityID(event.getEntity()));
 				
-				if(event.world.rand.nextInt(EnviroMine.caves.totalSpawnWeight) > props.weight)
+				if(event.getWorld().rand.nextInt(EnviroMine.caves.totalSpawnWeight) > props.weight)
 				{
 					event.setResult(Result.DENY);
 					return;
@@ -236,17 +236,17 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onPlayerClone(PlayerEvent.Clone event)
 	{
-		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.original);
+		EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.getOriginal());
 		
 		if(tracker != null && !tracker.isDisabled)
 		{
-			tracker.trackedEntity = event.entityPlayer;
+			tracker.trackedEntity = event.getEntityPlayer();
 			
-			if(event.wasDeath && !EM_Settings.keepStatus)
+			if(event.isWasDeath() && !EM_Settings.keepStatus)
 			{
 				tracker.resetData();
 				EM_StatusManager.saveTracker(tracker);
-			} else if(event.wasDeath)
+			} else if(event.isWasDeath())
 			{
 				tracker.ClampSafeRange();
 				EM_StatusManager.saveTracker(tracker);
@@ -255,21 +255,21 @@ public class EM_EventManager
 			tracker.loadNBTTags();
 		}
 		
-		if(event.wasDeath)
+		if(event.isWasDeath())
 		{
-			doDeath(event.entityPlayer);
-			doDeath(event.original);
+			doDeath(event.getEntityPlayer());
+			doDeath(event.getOriginal());
 		}
 	}
 	
 	@SubscribeEvent
 	public void onLivingDeath(LivingDeathEvent event)
 	{
-		doDeath(event.entityLiving);
+		doDeath(event.getEntityLiving());
 		
-		if(event.entityLiving instanceof EntityMob && event.source.getEntity() != null && event.source.getEntity() instanceof EntityPlayer)
+		if(event.getEntityLiving() instanceof EntityMob && event.getSource().getEntity() != null && event.getSource().getEntity() instanceof EntityPlayer)
 		{
-			EntityPlayer player = (EntityPlayer)event.source.getEntity();
+			EntityPlayer player = (EntityPlayer)event.getSource().getEntity();
 			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
 
 			
@@ -285,9 +285,9 @@ public class EM_EventManager
 			}
 
 			// If player kill mob give some sanity back
-			if(tracker != null && tracker.sanity < 100 && !(event.entityLiving instanceof EntityAnimal))
+			if(tracker != null && tracker.sanity < 100 && !(event.getEntityLiving() instanceof EntityAnimal))
 			{
-				tracker.sanity += event.entityLiving.worldObj.rand.nextInt(5);
+				tracker.sanity += event.getEntityLiving().world.rand.nextInt(5);
 			}
 			
 
@@ -343,54 +343,54 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onEntityAttacked(LivingAttackEvent event)
 	{
-		if(event.entityLiving.worldObj.isRemote)
+		if(event.getEntityLiving().world.isRemote)
 		{
 			return;
 		}
 		
-		Entity attacker = event.source.getEntity();
+		Entity attacker = event.getSource().getEntity();
 		
-		if((event.source == DamageSource.fallingBlock || event.source == DamageSource.anvil || event.source == EnviroDamageSource.landslide || event.source == EnviroDamageSource.avalanche) && event.entityLiving.getEquipmentInSlot(4) != null && event.entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.hardHat)
+		if((event.getSource() == DamageSource.FALLING_BLOCK || event.getSource() == DamageSource.ANVIL || event.getSource() == EnviroDamageSource.landslide || event.getSource() == EnviroDamageSource.avalanche) && event.getEntityLiving().getEquipmentInSlot(4) != null && event.getEntityLiving().getEquipmentInSlot(4).getItem() == ObjectHandler.hardHat)
 		{
-			ItemStack hardHat = event.entityLiving.getEquipmentInSlot(4);
+			ItemStack hardHat = event.getEntityLiving().getEquipmentInSlot(4);
 			int dur = (hardHat.getMaxDamage() + 1) - hardHat.getItemDamage();
 			int dam = MathHelper.ceiling_float_int(event.ammount);
 			event.setCanceled(true);
-			hardHat.damageItem(dam, event.entityLiving);
+			hardHat.damageItem(dam, event.getEntityLiving());
 			
 			if(dur >= dam)
 			{
-				event.entityLiving.worldObj.playSoundAtEntity(event.entityLiving, "dig.stone", 1.0F, 1.0F);
+				event.getEntityLiving().world.playSoundAtEntity(event.getEntityLiving(), "dig.stone", 1.0F, 1.0F);
 				return;
 			} else
 			{
-				event.entityLiving.attackEntityFrom(event.source, dam - dur);
+				event.getEntityLiving().attackEntityFrom(event.getSource(), dam - dur);
 				return;
 			}
 		}
 		
-		if(event.source == DamageSource.fallingBlock && event.entityLiving instanceof EntityPlayer)
+		if(event.getSource() == DamageSource.FALLING_BLOCK && event.getEntityLiving() instanceof EntityPlayer)
 		{
-			event.entityLiving.getEntityData().setLong("EM_SAFETY", event.entityLiving.worldObj.getTotalWorldTime());
+			event.getEntityLiving().getEntityData().setLong("EM_SAFETY", event.getEntityLiving().world.getTotalWorldTime());
 		}
 		
-		if(event.source == EnviroDamageSource.gasfire && event.entityLiving instanceof EntityPlayer)
+		if(event.getSource() == EnviroDamageSource.gasfire && event.getEntityLiving() instanceof EntityPlayer)
 		{
-			event.entityLiving.getEntityData().setLong("EM_THAT", event.entityLiving.worldObj.getTotalWorldTime());
+			event.getEntityLiving().getEntityData().setLong("EM_THAT", event.getEntityLiving().world.getTotalWorldTime());
 		}
 		
-		if(event.entityLiving instanceof EntityPlayer && event.entityLiving.getEntityData().hasKey("EM_MIND_MAT"))
+		if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().getEntityData().hasKey("EM_MIND_MAT"))
 		{
-			event.entityLiving.getEntityData().removeTag("EM_MIND_MAT");
+			event.getEntityLiving().getEntityData().removeTag("EM_MIND_MAT");
 		}
 		
 		if(attacker != null)
 		{
-			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.entityLiving);
+			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(event.getEntityLiving());
 			
-			if(event.entityLiving instanceof EntityPlayer)
+			if(event.getEntityLiving() instanceof EntityPlayer)
 			{
-				EntityPlayer player = (EntityPlayer)event.entityLiving;
+				EntityPlayer player = (EntityPlayer)event.getEntityLiving();
 				
 				if(player.capabilities.disableDamage || player.capabilities.isCreativeMode)
 				{
@@ -428,15 +428,15 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onPlayerInteract(PlayerInteractEvent event)
 	{
-		ItemStack item = event.entityPlayer.getCurrentEquippedItem();
+		ItemStack item = event.getEntityPlayer().getCurrentEquippedItem();
 		
 		if(event.action == Action.RIGHT_CLICK_BLOCK && EM_Settings.foodSpoiling)
 		{
-			TileEntity tile = event.entityPlayer.worldObj.getTileEntity(event.x, event.y, event.z);
+			TileEntity tile = event.getEntityPlayer().world.getTileEntity(event.getPos());
 			
 			if(tile != null & tile instanceof IInventory)
 			{
-				RotHandler.rotInvo(event.entityPlayer.worldObj, (IInventory)tile);
+				RotHandler.rotInvo(event.getEntityPlayer().world, (IInventory)tile);
 			}
 		}
 		
@@ -631,12 +631,12 @@ public class EM_EventManager
 				
 				if(isWater || isValidCauldron)
 				{
-					Item newItem = Items.potionitem;
+					Item newItem = Items.POTIONITEM;
 					switch(getWaterType(world, i, j, k))
 					{
 						case 0:
 						{
-							newItem = Items.potionitem;
+							newItem = Items.POTIONITEM;
 							break;
 						}
 						case 1:
@@ -658,7 +658,7 @@ public class EM_EventManager
 					
 					if(isValidCauldron && (world.getBlock(i, j - 1, k) == Blocks.FIRE || world.getBlock(i, j - 1, k) == Blocks.FLOWING_LAVA || world.getBlock(i, j - 1, k) == Blocks.LAVA))
 					{
-						newItem = Items.potionitem;
+						newItem = Items.POTIONITEM;
 					}
 					
 					if(isValidCauldron)
@@ -880,12 +880,12 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onBreakBlock(HarvestDropsEvent event)
 	{
-		if(event.world.isRemote)
+		if(event.getWorld().isRemote)
 		{
 			return;
 		}
 		
-		if(event.harvester != null)
+		if(event.getHarvester() != null)
 		{
 			if(event.getResult() != Result.DENY && !event.harvester.capabilities.isCreativeMode)
 			{
@@ -1006,33 +1006,33 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onLivingUpdate(LivingUpdateEvent event)
 	{
-		if(event.entityLiving.isDead)
+		if(event.getEntityLiving().isDead)
 		{
-			if(!event.entityLiving.isEntityAlive())
+			if(!event.getEntityLiving().isEntityAlive())
 			{
-				doDeath(event.entityLiving);
+				doDeath(event.getEntityLiving());
 			}
 			return;
 		}
 		
-		if(event.entityLiving.worldObj.isRemote)
+		if(event.getEntityLiving().world.isRemote)
 		{
-			if(event.entityLiving.getRNG().nextInt(5) == 0)
+			if(event.getEntityLiving().getRNG().nextInt(5) == 0)
 			{
-				EM_StatusManager.createFX(event.entityLiving);
+				EM_StatusManager.createFX(event.getEntityLiving());
 			}
 			
-			if(event.entityLiving instanceof EntityPlayer && event.entityLiving.worldObj.isRemote)
+			if(event.getEntityLiving() instanceof EntityPlayer && event.getEntityLiving().world.isRemote)
 			{
-				if(Minecraft.getMinecraft().thePlayer.isPotionActive(EnviroPotion.insanity))
+				if(Minecraft.getMinecraft().player.isPotionActive(EnviroPotion.insanity))
 				{
-					int chance = 100 / (Minecraft.getMinecraft().thePlayer.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() + 1);
+					int chance = 100 / (Minecraft.getMinecraft().player.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() + 1);
 					
 					chance = chance > 0? chance : 1;
 					
-					if(event.entityLiving.getRNG().nextInt(chance) == 0)
+					if(event.getEntityLiving().getRNG().nextInt(chance) == 0)
 					{
-						new Hallucination(event.entityLiving);
+						new Hallucination(event.getEntityLiving());
 					}
 				}
 				
@@ -1041,10 +1041,10 @@ public class EM_EventManager
 			return;
 		}
 		
-		if(event.entityLiving instanceof EntityPlayer)
+		if(event.getEntityLiving() instanceof EntityPlayer)
 		{
-			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.entityLiving).inventory;
-			AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(event.entityLiving.posX - 0.5D, event.entityLiving.posY - 0.5D, event.entityLiving.posZ - 0.5D, event.entityLiving.posX + 0.5D, event.entityLiving.posY + 0.5D, event.entityLiving.posZ + 0.5D).expand(2D, 2D, 2D);
+			InventoryPlayer invo = (InventoryPlayer)((EntityPlayer)event.getEntityLiving()).inventory;
+			AxisAlignedBB boundingBox = AxisAlignedBB.getBoundingBox(event.getEntityLiving().posX - 0.5D, event.getEntityLiving().posY - 0.5D, event.getEntityLiving().posZ - 0.5D, event.getEntityLiving().posX + 0.5D, event.getEntityLiving().posY + 0.5D, event.getEntityLiving().posZ + 0.5D).expand(2D, 2D, 2D);
 			if(event.entityLiving.worldObj.getEntitiesWithinAABB(TileEntityGas.class, boundingBox).size() <= 0)
 			{
 				ReplaceInvoItems(invo, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 2, Item.getItemFromBlock(ObjectHandler.davyLampBlock), 1);
@@ -1362,11 +1362,11 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onJump(LivingJumpEvent event)
 	{
-		if(event.entityLiving.isPotionActive(EnviroPotion.frostbite))
+		if(event.getEntityLiving().isPotionActive(EnviroPotion.frostbite))
 		{
-			if(event.entityLiving.getActivePotionEffect(EnviroPotion.frostbite).getAmplifier() > 0)
+			if(event.getEntityLiving().getActivePotionEffect(EnviroPotion.frostbite).getAmplifier() > 0)
 			{
-				event.entityLiving.motionY = 0;
+				event.getEntityLiving().motionY = 0;
 			}
 		}
 	}
@@ -1374,9 +1374,9 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onLand(LivingFallEvent event)
 	{
-		if(event.entityLiving.getRNG().nextInt(5) == 0)
+		if(event.getEntityLiving().getRNG().nextInt(5) == 0)
 		{
-			EM_PhysManager.schedulePhysUpdate(event.entityLiving.worldObj, MathHelper.floor_double(event.entityLiving.posX), MathHelper.floor_double(event.entityLiving.posY - 1), MathHelper.floor_double(event.entityLiving.posZ), true, "Jump");
+			EM_PhysManager.schedulePhysUpdate(event.getEntityLiving().world, MathHelper.floor(event.getEntityLiving().posX), MathHelper.floor(event.getEntityLiving().posY - 1), MathHelper.floor(event.getEntityLiving().posZ), true, "Jump");
 		}
 	}
 	
@@ -1385,7 +1385,7 @@ public class EM_EventManager
 	public void onWorldLoad(Load event)
 	{
 		
-		if(event.world.isRemote)
+		if(event.getWorld().isRemote)
 		{
 			return;
 		}
@@ -1402,7 +1402,7 @@ public class EM_EventManager
 		
 		if(EM_PhysManager.worldStartTime < 0)
 		{
-			EM_PhysManager.worldStartTime = event.world.getTotalWorldTime();
+			EM_PhysManager.worldStartTime = event.getWorld().getTotalWorldTime();
 		}
 		
 		MinecraftServer server = MinecraftServer.getServer();
@@ -1425,9 +1425,9 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onWorldUnload(Unload event)
 	{
-		EM_StatusManager.saveAndDeleteWorldTrackers(event.world);
+		EM_StatusManager.saveAndDeleteWorldTrackers(event.getWorld());
 		
-		if(!event.world.isRemote)
+		if(!event.getWorld().isRemote)
 		{
 			if(!MinecraftServer.getServer().isServerRunning())
 			{
@@ -1454,22 +1454,22 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onChunkLoad(ChunkEvent.Load event)
 	{
-		if(event.world.isRemote)
+		if(event.getWorld().isRemote)
 		{
 			return;
 		}
 		
-		if(!EM_PhysManager.chunkDelay.containsKey(event.world.provider.dimensionId + "" + event.getChunk().xPosition + "," + event.getChunk().zPosition))
+		if(!EM_PhysManager.chunkDelay.containsKey(event.getWorld().provider.getDimension() + "" + event.getChunk().x + "," + event.getChunk().z))
 		{
-			EM_PhysManager.chunkDelay.put(event.world.provider.dimensionId + "" + event.getChunk().xPosition + "," + event.getChunk().zPosition, event.world.getTotalWorldTime() + EM_Settings.chunkDelay);
+			EM_PhysManager.chunkDelay.put(event.getWorld().provider.getDimension() + "" + event.getChunk().x + "," + event.getChunk().z, event.getWorld().getTotalWorldTime() + EM_Settings.chunkDelay);
 		}
 	}
 	
 	@SubscribeEvent
 	public void onWorldSave(Save event)
 	{		
-		EM_StatusManager.saveAllWorldTrackers(event.world);
-		if(EM_Settings.worldDir != null && event.world.provider.dimensionId == 0)
+		EM_StatusManager.saveAllWorldTrackers(event.getWorld());
+		if(EM_Settings.worldDir != null && event.getWorld().provider.getDimension() == 0)
 		{
 			MineshaftBuilder.saveBuilders(new File(EM_Settings.worldDir.getAbsolutePath(), "data/EnviroMineshafts"));
 		}
@@ -1504,7 +1504,7 @@ public class EM_EventManager
 	@SideOnly(Side.CLIENT)
 	public void onEntitySoundPlay(PlaySoundAtEntityEvent event)
 	{
-		if(event.entity.getEntityData().getBoolean("EM_Hallucination"))
+		if(event.getEntity().getEntityData().getBoolean("EM_Hallucination"))
 		{
 			ResourceLocation resLoc = new ResourceLocation(event.name);
 			if(new File(resLoc.getResourcePath()).exists())
@@ -1533,12 +1533,12 @@ public class EM_EventManager
 	@SideOnly(Side.CLIENT)
 	public void onRender(RenderPlayerEvent.Pre event)
 	{
-		if(Minecraft.getMinecraft().thePlayer.isPotionActive(EnviroPotion.insanity) && Minecraft.getMinecraft().thePlayer.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() >= 2)
+		if(Minecraft.getMinecraft().player.isPotionActive(EnviroPotion.insanity) && Minecraft.getMinecraft().player.getActivePotionEffect(EnviroPotion.insanity).getAmplifier() >= 2)
 		{
 			event.setCanceled(true);
 			
-			EntityLivingBase entity = playerMob.get(event.entityPlayer.getCommandSenderName());
-			if(entity == null || entity.worldObj != event.entityPlayer.worldObj)
+			EntityLivingBase entity = playerMob.get(event.getEntityPlayer().getCommandSenderName());
+			if(entity == null || entity.world != event.getEntityPlayer().world)
 			{
 				BiomeGenBase biome = event.entityPlayer.worldObj.getBiomeGenForCoords(MathHelper.floor_double(event.entityPlayer.posX), MathHelper.floor_double(event.entityPlayer.posZ));
 				ArrayList<SpawnListEntry> spawnList = (ArrayList<SpawnListEntry>)biome.getSpawnableList(EnumCreatureType.monster);
@@ -1664,18 +1664,18 @@ public class EM_EventManager
 	@SideOnly(Side.CLIENT)
 	public void onItemTooltip(ItemTooltipEvent event)
 	{
-		if(event.itemStack != null && event.itemStack.hasTagCompound())
+		if(event.getItemStack() != null && event.getItemStack().hasTagCompound())
 		{
-			if (event.itemStack.getTagCompound().hasKey("camelPackFill")) {
-				int fill = event.itemStack.getTagCompound().getInteger("camelPackFill");
-				int max = event.itemStack.getTagCompound().getInteger("camelPackMax");
+			if (event.getItemStack().getTagCompound().hasKey("camelPackFill")) {
+				int fill = event.getItemStack().getTagCompound().getInteger("camelPackFill");
+				int max = event.getItemStack().getTagCompound().getInteger("camelPackMax");
 				if (fill > max) {
 					fill = max;
-					event.itemStack.getTagCompound().setInteger("camelPackFill", fill);
+					event.getItemStack().getTagCompound().setInteger("camelPackFill", fill);
 				}
 				
 				int disp = (fill <= 0 ? 0 : fill > max ? 100 : (int)(((float)fill/(float)max)*100));
-				event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.water", disp + "%",  fill, max).getUnformattedText());
+				event.getToolTip().add(new ChatComponentTranslation("misc.enviromine.tooltip.water", disp + "%",  fill, max).getUnformattedText());
 				//event.toolTip.add("Water: " + disp + "% ("+fill+"/"+max+")");
 			}
 			
@@ -1710,7 +1710,7 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onConfigChanged(ConfigChangedEvent.OnConfigChangedEvent event)
 	{
-		if(event.modID.equals(EM_Settings.ModID))
+		if(event.getModID().equals(EM_Settings.ModID))
 		{
 			for(Configuration config : EM_ConfigMenu.tempConfigs)
 			{
@@ -1724,7 +1724,7 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onCrafted(ItemCraftedEvent event) // Prevents exploit of making foods with almost rotten food to prolong total life of food supplies
 	{
-		if(event.player.worldObj.isRemote || event.crafting == null || event.crafting.getItem() == null)
+		if(event.player.world.isRemote || event.crafting == null || event.crafting.getItem() == null)
 		{
 			return;
 		}
@@ -1732,13 +1732,13 @@ public class EM_EventManager
 		RotProperties rotProps = null;
 		long rotTime = (long)(EM_Settings.foodRotTime * 24000L);
 		
-		if(EM_Settings.rotProperties.containsKey("" + Item.itemRegistry.getNameForObject(event.crafting.getItem())))
+		if(EM_Settings.rotProperties.containsKey("" + Item.REGISTRY.getNameForObject(event.crafting.getItem())))
 		{
-			rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(event.crafting.getItem()));
+			rotProps = EM_Settings.rotProperties.get("" + Item.REGISTRY.getNameForObject(event.crafting.getItem()));
 			rotTime = (long)(rotProps.days * 24000L);
-		} else if(EM_Settings.rotProperties.containsKey("" + Item.itemRegistry.getNameForObject(event.crafting.getItem()) + "," + event.crafting.getItemDamage()))
+		} else if(EM_Settings.rotProperties.containsKey("" + Item.REGISTRY.getNameForObject(event.crafting.getItem()) + "," + event.crafting.getItemDamage()))
 		{
-			rotProps = EM_Settings.rotProperties.get("" + Item.itemRegistry.getNameForObject(event.crafting.getItem()) + "," + event.crafting.getItemDamage());
+			rotProps = EM_Settings.rotProperties.get("" + Item.REGISTRY.getNameForObject(event.crafting.getItem()) + "," + event.crafting.getItemDamage());
 			rotTime = (long)(rotProps.days * 24000L);
 		}
 		

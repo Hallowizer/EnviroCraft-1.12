@@ -8,8 +8,8 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.crafting.IRecipe;
 import net.minecraft.world.World;
-import cpw.mods.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import enviromine.core.EM_Settings;
 import enviromine.trackers.properties.ItemProperties;
 
@@ -144,7 +144,7 @@ public class CamelPackRefillHandler implements IRecipe
 			return;
 		}
 		
-		if (this.matches((InventoryCrafting)craftMatrix, event.player.worldObj))
+		if (this.matches((InventoryCrafting)craftMatrix, event.player.world))
 		{
 			if (!craftMatrix.getInventoryName().equals("container.crafting"))
 			{

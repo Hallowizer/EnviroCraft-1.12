@@ -18,7 +18,7 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.Level;
-import cpw.mods.fml.common.network.NetworkRegistry.TargetPoint;
+import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.EM_PhysManager;

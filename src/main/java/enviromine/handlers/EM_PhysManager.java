@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
-import net.minecraft.block.BlockLeavesBase;
+import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
@@ -16,6 +16,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
@@ -96,7 +97,7 @@ public class EM_PhysManager
 			return;
 		}
 		
-		if(world.isAirBlock(x, y, z))
+		if(world.isAirBlock(new BlockPos(x, y, z)))
 		{
 			return;
 		}
@@ -162,7 +163,7 @@ public class EM_PhysManager
 			return;
 		}
 		
-		callPhysUpdate(world, x, y, z, world.getBlock(x, y, z), world.getBlockMetadata(x, y, z), type);
+		callPhysUpdate(world, x, y, z, world.getBlockState(new BlockPos(x, y, z)).getBlock(), world.getBlockMetadata(x, y, z), type);
 	}
 	
 	public static void callPhysUpdate(World world, int x, int y, int z, Block block, int meta, String type)
@@ -276,7 +277,7 @@ public class EM_PhysManager
 			int[] npos = slideDirection(world, pos, true);
 			int[] ppos = slideDirection(world, pos, false);
 			
-			TileEntity tile = world.getTileEntity(x, y, z);
+			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 			NBTTagCompound nbtTC = new NBTTagCompound();
 			
 			if(tile != null)
@@ -294,7 +295,7 @@ public class EM_PhysManager
 					{
 						physBlock.field_145810_d = nbtTC;
 					}
-					world.setBlock(x, y, z, Blocks.AIR);
+					world.setBlockToAir(new BlockPos(x, y, z));
 					physBlock.isLandSlide = true;
 					world.spawnEntity(physBlock);
 					EM_PhysManager.schedulePhysUpdate(world, x, y, z, true, "Collapse");
@@ -310,7 +311,7 @@ public class EM_PhysManager
 				{
 					physBlock.field_145810_d = nbtTC;
 				}
-				world.setBlock(x, y, z, Blocks.AIR);
+				world.setBlockToAir(new BlockPos(x, y, z));
 				physBlock.isLandSlide = true;
 				world.spawnEntity(physBlock);
 				EM_PhysManager.schedulePhysUpdate(world, x, y, z, true, "Collapse");
@@ -379,7 +380,7 @@ public class EM_PhysManager
 			} else if(dropBlock == null || dropBlock == Blocks.AIR || block.getMaterial() == Material.GLASS || block.getMaterial() == Material.ICE)
 			{
 				dropType = 0;
-			} else if(block instanceof BlockLeavesBase)
+			} else if(block instanceof BlockLeaves)
 			{
 				dropType = -1;
 			} else if(dropBlock instanceof Block)
@@ -454,7 +455,7 @@ public class EM_PhysManager
 					{
 						world.playAuxSFX(2001, x, y, z, Block.getIdFromBlock(block) + (world.getBlockMetadata(x, y, z) << 12));
 						block.dropBlockAsItem(world, x, y, z, meta, 0);
-						world.setBlock(x, y, z, Blocks.AIR);
+						world.setBlockToAir(new BlockPos(x, y, z));
 						return;
 					} else if(dropType == 2)
 					{
@@ -484,7 +485,7 @@ public class EM_PhysManager
 						{
 							block.dropBlockAsItem(world, x, y, z, meta, 0);
 						}
-						world.setBlock(x, y, z, Blocks.AIR);
+						world.setBlockToAir(new BlockPos(x, y, z));
 						schedulePhysUpdate(world, x, y, z, true, "Normal");
 						return;
 					} else if(dropType == 0)
@@ -495,16 +496,16 @@ public class EM_PhysManager
 						{
 							Material mat = world.getBlock(x, y - 1, z).getMaterial();
 							
-							if((mat.blocksMovement() || mat.isLiquid()) && !world.provider.isHellWorld)
+							if((mat.blocksMovement() || mat.isLiquid()) && !world.provider.isNether())
 							{
 								world.setBlock(x, y, z, Blocks.FLOWING_WATER);
 							} else
 							{
-								world.setBlock(x, y, z, Blocks.AIR);
+								world.setBlockToAir(new BlockPos(x, y, z));
 							}
 						} else
 						{
-							world.setBlock(x, y, z, Blocks.AIR);
+							world.setBlockToAir(new BlockPos(x, y, z));
 						}
 						
 						if(block.getMaterial() != Material.ICE || EM_Settings.spreadIce)
@@ -534,7 +535,7 @@ public class EM_PhysManager
 						}
 					}
 					
-					TileEntity tile = world.getTileEntity(x, y, z);
+					TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
 					NBTTagCompound nbtTC = new NBTTagCompound();
 					
 					if(tile != null)
@@ -655,7 +656,7 @@ public class EM_PhysManager
 						}
 						
 						data[0] += 1;
-					} else if((blockNotSolid(world, i, j, k, false) || (world.getBlock(x, y, z).getMaterial() != Material.LEAVES && material == Material.LEAVES)) && !(i == x && j < y + 1 && k == z))
+					} else if((blockNotSolid(world, i, j, k, false) || (world.getBlockState(new BlockPos(x, y, z)).getMaterial() != Material.LEAVES && material == Material.LEAVES)) && !(i == x && j < y + 1 && k == z))
 					{
 						if(j < y + 1)
 						{
@@ -917,7 +918,7 @@ public class EM_PhysManager
 	
 	public static boolean blockNotSolid(World world, int x, int y, int z, boolean isSliding)
 	{
-		if(world.isAirBlock(x, y, z))
+		if(world.isAirBlock(new BlockPos(x, y, z)))
 		{
 			return true;
 		}
@@ -1032,7 +1033,7 @@ public class EM_PhysManager
 				
 				if(((World)entry[0]).getChunkProvider().chunkExists((Integer)entry[1] >> 4, (Integer)entry[3] >> 4))
 				{
-					locLoaded = ((World)entry[0]).getChunkFromChunkCoords((Integer)entry[1] >> 4, (Integer)entry[3] >> 4).isChunkLoaded;
+					locLoaded = ((World)entry[0]).getChunkFromChunkCoords((Integer)entry[1] >> 4, (Integer)entry[3] >> 4).isLoaded();
 				} else
 				{
 					locLoaded = false;
