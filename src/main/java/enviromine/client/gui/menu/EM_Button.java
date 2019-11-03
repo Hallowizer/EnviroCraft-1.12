@@ -1,8 +1,8 @@
 package enviromine.client.gui.menu;
 
 import net.minecraft.client.Minecraft;
-import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.client.config.GuiUtils;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.GuiUtils;
 import enviromine.utils.RenderAssist;
 
 public class EM_Button extends GuiButtonExt

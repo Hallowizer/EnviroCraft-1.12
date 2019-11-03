@@ -45,7 +45,8 @@ public class TileEntityBurningCoal extends TileEntity
     {
     	NBTTagCompound tags = new NBTTagCompound();
     	this.writeToNBT(tags);
-        return new SPacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tags);
+    	//was SPacketUpdateTileEntity(xCoord, yCoord, zCoord, 0, tags);
+        return new SPacketUpdateTileEntity(this.getPos(), 0, tags);
     }
 	
 	@Override

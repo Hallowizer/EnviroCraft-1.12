@@ -1,7 +1,9 @@
 package enviromine.client.gui.menu;
 
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.util.StatCollector;
+
+import java.io.IOException;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.input.Mouse;
 import net.minecraftforge.fml.relauncher.Side;
@@ -9,6 +11,8 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.SaveController;
 import enviromine.client.gui.hud.HudItem;
 import enviromine.utils.Alignment;
+
+//TODO: this translates server side not locally, change later to translate client side
 
 @SideOnly(Side.CLIENT)
 public class GuiScreenReposition extends GuiScreen {
@@ -43,7 +47,13 @@ public class GuiScreenReposition extends GuiScreen {
 			}
 		}
 		hudItem.fixBounds();
-		super.handleMouseInput();
+		try
+		{
+			super.handleMouseInput();
+		} catch (IOException exc)
+		{
+			System.err.println("handleMouseInput IOException Caught.");
+		}
 	}
 
 	@Override
@@ -52,11 +62,11 @@ public class GuiScreenReposition extends GuiScreen {
 		if (help) {
 			drawCenteredString(
 					mc.fontRenderer,
-					StatCollector.translateToLocal("options.enviromine.hud.reposition"),
+					net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.hud.reposition"),
 					width / 2, 16, 16777215);
 			drawCenteredString(
 					mc.fontRenderer,
-					StatCollector.translateToLocal("options.enviromine.hud.alignment") +" "
+					net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.hud.alignment") +" "
 							+ Alignment.calculateAlignment(mouseX, mouseY),
 					width / 2, 26, 16777215);
 		}
@@ -74,7 +84,13 @@ public class GuiScreenReposition extends GuiScreen {
 
 	@Override
 	public void handleKeyboardInput() {
-		super.handleKeyboardInput();
+		try
+		{
+			super.handleKeyboardInput();
+		} catch (IOException exc)
+		{
+			System.err.println("handleKeyboardInput IOException Caught.");
+		}
 		if (Keyboard.getEventKey() == Keyboard.KEY_LCONTROL || Keyboard.getEventKey() == Keyboard.KEY_RCONTROL) {
 			axisAlign = Keyboard.getEventKeyState();
 		}

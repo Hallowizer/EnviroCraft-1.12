@@ -14,6 +14,7 @@ public class EM_GuiFakeDeath extends GuiGameOver
     /**
      * Fired when a key is typed. This is the equivalent of KeyListener.keyTyped(KeyEvent e).
      */
+	@Override
     protected void keyTyped(char keyChar, int p_73869_2_)
     {
     	if(p_73869_2_ == Keyboard.KEY_ESCAPE)

@@ -1,6 +1,7 @@
 package enviromine.client.gui.menu.config;
 
 import java.io.File;
+import java.io.IOException;
 
 import org.apache.logging.log4j.Level;
 import org.lwjgl.input.Keyboard;
@@ -9,9 +10,9 @@ import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.StatCollector;
+//import net.minecraft.util.StatCollector;
 import net.minecraft.world.storage.ISaveFormat;
-import cpw.mods.fml.client.config.GuiCheckBox;
+import net.minecraftforge.fml.client.config.GuiCheckBox;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EM_ConfigHandler;
@@ -149,7 +150,11 @@ public class NameProfile extends GuiScreen
 
             this.textFieldList.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
             
+            try {
             super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+            } catch (IOException exc) {
+            	System.err.println("mouseClicked IOException was caught.");
+            }
 
     }
     

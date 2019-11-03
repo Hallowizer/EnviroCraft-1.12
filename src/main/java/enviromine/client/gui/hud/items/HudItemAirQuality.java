@@ -3,7 +3,7 @@ package enviromine.client.gui.hud.items;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import org.lwjgl.opengl.GL11;
 import enviromine.client.gui.Gui_EventManager;
 import enviromine.client.gui.UI_Settings;
@@ -23,9 +23,11 @@ public class HudItemAirQuality extends HudItem
 		return "Air Quality";
 	}
 	
+	@Override
 	public String getNameLoc()
 	{
-		return StatCollector.translateToLocal("options.enviromine.hud.air");
+		//TODO: this translates server side not locally, change later to translate client side
+		return I18n.translateToLocal("options.enviromine.hud.air");
 	}
 	
 	@Override

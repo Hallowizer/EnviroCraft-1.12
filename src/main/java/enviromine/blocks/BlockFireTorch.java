@@ -12,11 +12,14 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EM_Settings;
 import enviromine.handlers.ObjectHandler;
 import net.minecraft.block.BlockTorch;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
@@ -33,7 +36,7 @@ public class BlockFireTorch extends BlockTorch
 	}
 	
 	@Override
-    public Item getItemDropped(int p_149650_1_, Random p_149650_2_, int p_149650_3_)
+    public Item getItemDropped(IBlockState state, Random rand, int fortune)
     {
 		return this.isLit? Item.getItemFromBlock(Blocks.TORCH) : Items.STICK;
     }
@@ -42,21 +45,21 @@ public class BlockFireTorch extends BlockTorch
      * Called whenever the block is added into the world. Args: world, x, y, z
      */
 	@Override
-    public void onBlockAdded(World p_149726_1_, int p_149726_2_, int p_149726_3_, int p_149726_4_)
+    public void onBlockAdded(World world, BlockPos pos, IBlockState state)
     {
-        p_149726_1_.scheduleBlockUpdate(p_149726_2_, p_149726_3_, p_149726_4_, this, this.tickRate(p_149726_1_) + p_149726_1_.rand.nextInt(10));
-        super.onBlockAdded(p_149726_1_, p_149726_2_, p_149726_3_, p_149726_4_);
+        world.scheduleBlockUpdate(pos, this, this.tickRate(world) + world.rand.nextInt(10), 0);
+        super.onBlockAdded(world, pos, state);
     }
 	
 	@Override
-	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int par6, float par7, float par8, float par9)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		ItemStack stack = player.getEquipmentInSlot(0);
 		
 		if (stack != null && stack.getItem() == Items.FLINT_AND_STEEL)
 		{
 			stack.damageItem(1, player);
-			world.setBlock(i, j, k, ObjectHandler.fireTorch, world.getBlockMetadata(i, j, k), 3);
+			world.setBlock(pos, ObjectHandler.fireTorch, state, 3);
 		}
 		
 		return true;

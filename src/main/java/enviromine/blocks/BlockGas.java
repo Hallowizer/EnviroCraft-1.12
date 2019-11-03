@@ -587,11 +587,11 @@ public class BlockGas extends Block implements ITileEntityProvider
     }
     
     @Override
-    public void onBlockDestroyedByExplosion(World world, int x, int y, int z, Explosion explosion)
+    public void onBlockDestroyedByExplosion(World world, BlockPos pos, Explosion explosion)
     {
-    	if(world.isBlockNormalCubeDefault(x, y - 1, z, false) && this == ObjectHandler.fireGasBlock)
+    	if(world.isBlockNormalCubeDefault(pos.down(), false) && this == ObjectHandler.fireGasBlock)
     	{
-    		world.setBlock(x, y, z, Blocks.FIRE);
+    		world.setBlockState(pos, Blocks.FIRE.getDefaultState());
     	}
     	
 
@@ -606,9 +606,9 @@ public class BlockGas extends Block implements ITileEntityProvider
 		
 		for(int i = 0; i < dir.size(); i++)
 		{
-			int[] pos = dir.get(i);
+			int[] ipos = dir.get(i);
 			
-			TileEntity tile = world.getTileEntity(new BlockPos(x + pos[0], y + pos[1], z + pos[2]));
+			TileEntity tile = world.getTileEntity(new BlockPos(pos.getX() + ipos[0], pos.getY() + ipos[1], pos.getZ() + ipos[2]));
 			
 			if(tile != null && tile instanceof TileEntityGas)
 			{
@@ -618,8 +618,8 @@ public class BlockGas extends Block implements ITileEntityProvider
 				{
 					if(gasTile.getBlockType() == ObjectHandler.fireGasBlock)
 					{
-						((BlockGas)gasTile.getBlockType()).swtichIgnitionState(world, new BlockPos(x + pos[0], y + pos[1], z + pos[2]));
-			            world.playSoundEffect(x, y, z, "enviromine:gas_ignite", 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
+						((BlockGas)gasTile.getBlockType()).swtichIgnitionState(world, new BlockPos(pos.getX() + ipos[0], pos.getY() + ipos[1], pos.getZ() + ipos[2]));
+			            world.playSoundEffect(pos, "enviromine:gas_ignite", 1.0F, (world.rand.nextFloat() - world.rand.nextFloat()) * 0.2F + 1.0F);
 					}
 				}
 			}

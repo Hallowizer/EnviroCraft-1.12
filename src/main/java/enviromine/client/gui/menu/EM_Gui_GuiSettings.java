@@ -4,12 +4,13 @@ import java.math.BigDecimal;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.StatCollector;
-import cpw.mods.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.SaveController;
 import enviromine.client.gui.UI_Settings;
+
+//TODO: this translates server side not locally, change later to translate client side
 
 @SideOnly(Side.CLIENT)
 public class EM_Gui_GuiSettings extends GuiScreen
@@ -27,26 +28,26 @@ public class EM_Gui_GuiSettings extends GuiScreen
 	@Override
 	public void initGui()
 	{
-	GuiSlider ScaleSlider = new GuiSlider(149, this.width / 2 + 2, this.height / 6 + 74 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.guiScaling") + ": ", "x", .5F, 2F, UI_Settings.guiScale, true, true);
+	GuiSlider ScaleSlider = new GuiSlider(149, this.width / 2 + 2, this.height / 6 + 74 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.guiScaling") + ": ", "x", .5F, 2F, UI_Settings.guiScale, true, true);
 		
 		ScaleSlider.precision = 2;
 		ScaleSlider.updateSlider();
 		
-		GuiButton tempScalebutton = new GuiButton(151, this.width / 2 - 152, this.height / 6 + 30 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.tempScale") + ": " + StatCollector.translateToLocal("empotions.tempScale.f"));
+		GuiButton tempScalebutton = new GuiButton(151, this.width / 2 - 152, this.height / 6 + 30 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.tempScale") + ": " + net.minecraft.util.text.translation.I18n.translateToLocal("empotions.tempScale.f"));
 		
-		GuiButton showstatusbutton = new GuiButton(156, this.width / 2 - 152, this.height / 6 + 96 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.status"));
+		GuiButton showstatusbutton = new GuiButton(156, this.width / 2 - 152, this.height / 6 + 96 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.status"));
 		
-		GuiButton showdebugbutton = new GuiButton(150, this.width / 2 - 152, this.height / 6 + 52 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.debug"));
+		GuiButton showdebugbutton = new GuiButton(150, this.width / 2 - 152, this.height / 6 + 52 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.debug"));
 		
-		GuiButton showiconsbutton = new GuiButton(154, this.width / 2 - 152, this.height / 6 + 74 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.showIcons"));
+		GuiButton showiconsbutton = new GuiButton(154, this.width / 2 - 152, this.height / 6 + 74 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.showIcons"));
 		
-		GuiButton minbarsbutton = new GuiButton(158, this.width / 2 + 2, this.height / 6 + 52 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.minBars"));
+		GuiButton minbarsbutton = new GuiButton(158, this.width / 2 + 2, this.height / 6 + 52 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.minBars"));
 		
-		GuiButton sweatbutton = new GuiButton(159, this.width / 2 + 2, this.height / 6 + 96 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.sweatParticles"));
+		GuiButton sweatbutton = new GuiButton(159, this.width / 2 + 2, this.height / 6 + 96 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.sweatParticles"));
 		
-		GuiButton insanebutton = new GuiButton(152, this.width / 2 + 2, this.height / 6 + 96 + 22 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.insaneParticles"));
+		GuiButton insanebutton = new GuiButton(152, this.width / 2 + 2, this.height / 6 + 96 + 22 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.insaneParticles"));
 		
-		GuiButton tintingbutton = new GuiButton(160, this.width / 2 - 152, this.height / 6 + 96 + 22 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.tinting"));
+		GuiButton tintingbutton = new GuiButton(160, this.width / 2 - 152, this.height / 6 + 96 + 22 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.tinting"));
 		
 		if(UI_Settings.minimalHud)
 		{
@@ -77,7 +78,7 @@ public class EM_Gui_GuiSettings extends GuiScreen
 		tintingbutton.displayString = I18n.format("options.enviromine.tinting", new Object[0]) + ": " + I18n.format("options.enviromine." + (UI_Settings.overlay? "on" : "off"), new Object[0]);
 		this.buttonList.add(tintingbutton);
 		
-		this.buttonList.add(new GuiButton(157, this.width / 2 + 2, this.height / 6 + 30 - 6, 150, 20, StatCollector.translateToLocal("options.enviromine.barPos") + "..."));
+		this.buttonList.add(new GuiButton(157, this.width / 2 + 2, this.height / 6 + 30 - 6, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.barPos") + "..."));
 		
 		this.buttonList.add(new GuiButton(200, this.width / 2 - 100, this.height / 6 + 168, I18n.format("gui.back", new Object[0])));
 		
@@ -188,7 +189,7 @@ public class EM_Gui_GuiSettings extends GuiScreen
 	public void drawScreen(int par1, int par2, float par3)
 	{
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.guiSetting.title"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(this.fontRenderer, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.guiSetting.title"), this.width / 2, 15, 16777215);
 		super.drawScreen(par1, par2, par3);
 	}
 	

@@ -13,8 +13,8 @@ import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.client.config.GuiButtonExt;
-import cpw.mods.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.IConfigElement;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EnviroMine;
 import enviromine.trackers.properties.ArmorProperties;

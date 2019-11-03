@@ -3,12 +3,13 @@ package enviromine.client.gui.menu;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.StatCollector;
-import cpw.mods.fml.client.config.GuiSlider;
+import net.minecraftforge.fml.client.config.GuiSlider;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.SaveController;
 import enviromine.client.gui.UI_Settings;
+
+//TODO: this translates server side not locally, change later to translate client side
 
 @SideOnly(Side.CLIENT)
 public class EM_Gui_SoundSettings extends GuiScreen
@@ -27,7 +28,7 @@ public class EM_Gui_SoundSettings extends GuiScreen
 	{
 		float volume = UI_Settings.breathVolume * 100;
 		
-		GuiSlider maskSlider = new GuiSlider(149, this.width / 2 - 152, this.height / 6 + 24, 150, 20, StatCollector.translateToLocal("options.enviromine.breathVol") + ": ", "%", 0F, 100F, volume, false, true);
+		GuiSlider maskSlider = new GuiSlider(149, this.width / 2 - 152, this.height / 6 + 24, 150, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.breathVol") + ": ", "%", 0F, 100F, volume, false, true);
 		maskSlider.updateSlider();
 		this.buttonList.add(maskSlider);
 		
@@ -87,7 +88,7 @@ public class EM_Gui_SoundSettings extends GuiScreen
 	public void drawScreen(int par1, int par2, float par3)
 	{
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.guiSetting.title"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(this.fontRenderer, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.guiSetting.title"), this.width / 2, 15, 16777215);
 		super.drawScreen(par1, par2, par3);
 	}
 }

@@ -1,6 +1,6 @@
 package enviromine.client.gui.menu.config;
 
-import cpw.mods.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.menu.EM_Gui_Menu;
@@ -15,7 +15,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.StatCollector;
+//import net.minecraft.util.StatCollector;
 
 @SideOnly(Side.CLIENT)
 public class ProfileMenu extends GuiScreen

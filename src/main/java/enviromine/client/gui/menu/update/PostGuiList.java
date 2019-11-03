@@ -10,7 +10,7 @@ import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 
 import org.lwjgl.input.Mouse;
 
@@ -22,6 +22,8 @@ import enviromine.client.gui.UpdateNotification;
 import enviromine.core.EM_Settings;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.RenderAssist;
+
+//TODO: this can translate server side not locally, change later to translate client side
 
 @SideOnly(Side.CLIENT)
 public class PostGuiList extends GuiListExtended
@@ -75,26 +77,26 @@ public class PostGuiList extends GuiListExtended
 		
 		if(verStat == -1)
 		{
-			addLine(StatCollector.translateToLocalFormatted("news.enviromine.version.current", EM_Settings.Version));
+			addLine(I18n.translateToLocalFormatted("news.enviromine.version.current", EM_Settings.Version));
 			addBlankLines(1);
-			addLine(StatCollector.translateToLocalFormatted("updatemsg.enviromine.available", UpdateNotification.version));
+			addLine(I18n.translateToLocalFormatted("updatemsg.enviromine.available", UpdateNotification.version));
 			addBlankLines(1);
-			addLine(StatCollector.translateToLocalFormatted("news.enviromine.news.changelog"));
+			addLine(I18n.translateToLocalFormatted("news.enviromine.news.changelog"));
 			addBlankLines(1);
-			addLine(StatCollector.translateToLocalFormatted("news.enviromine.news.wiki"));
+			addLine(I18n.translateToLocalFormatted("news.enviromine.news.wiki"));
 			addBlankLines(1);
 			addLine("https://github.com/Funwayguy/EnviroMine/wiki/Downloads");
 			addBlankLines(1);
 			addLine("https://enviromine.wordpress.com/");
 		} else if(verStat == 0)
 		{
-			addLine(StatCollector.translateToLocalFormatted("updatemsg.enviromine.uptodate", EM_Settings.Version));
+			addLine(I18n.translateToLocalFormatted("updatemsg.enviromine.uptodate", EM_Settings.Version));
 		} else if(verStat == 1)
 		{
-			addLine(StatCollector.translateToLocalFormatted("updatemsg.enviromine.debug", EM_Settings.Version));
+			addLine(I18n.translateToLocalFormatted("updatemsg.enviromine.debug", EM_Settings.Version));
 		} else if(verStat == -2)
 		{
-			addLine(StatCollector.translateToLocalFormatted("updatemsg.enviromine.error"));
+			addLine(I18n.translateToLocalFormatted("updatemsg.enviromine.error"));
 		}
 		
 	}

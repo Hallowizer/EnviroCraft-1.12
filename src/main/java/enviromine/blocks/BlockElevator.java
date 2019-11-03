@@ -7,6 +7,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
@@ -23,6 +24,7 @@ import enviromine.core.EM_Settings;
 import enviromine.handlers.EnviroAchievements;
 import enviromine.handlers.ObjectHandler;
 import enviromine.handlers.TeleportHandler;
+import net.minecraft.block.SoundType;
 
 public class BlockElevator extends Block implements ITileEntityProvider
 {
@@ -30,7 +32,7 @@ public class BlockElevator extends Block implements ITileEntityProvider
 	{
 		super(par2Material);
 		this.setHardness(3.0F);
-		this.setStepSound(Block.soundTypeMetal);
+		this.setSoundType(SoundType.METAL);
 		this.setLightLevel(1F);
 	}
     
@@ -228,7 +230,7 @@ public class BlockElevator extends Block implements ITileEntityProvider
 	
 	//It's not an opaque cube, so you need this.
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}

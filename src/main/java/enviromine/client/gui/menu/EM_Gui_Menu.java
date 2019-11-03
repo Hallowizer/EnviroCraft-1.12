@@ -10,11 +10,10 @@ import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.StatCollector;
 
 import org.apache.logging.log4j.Level;
 
-import cpw.mods.fml.client.config.GuiButtonExt;
+import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.client.gui.UpdateNotification;
@@ -24,7 +23,9 @@ import enviromine.client.gui.menu.update.NewsPage;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
+//TODO: this can translate server side not locally, change later to translate client side
 
 @SideOnly(Side.CLIENT)
 public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
@@ -47,8 +48,8 @@ public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
 	public void initGui()
 	{
 		GuiButtonExt changeProfile =  new GuiButtonExt(205, this.width / 2 - 90, this.height / 6 + 98, 180, 20, I18n.format("editor.enviromine.changeprofile"));
-		GuiButtonExt serverSettings = new GuiButtonExt(103, this.width / 2 - 90, this.height / 6 + 122 - 6, 180, 20, "(Coming Soon)"+ StatCollector.translateToLocal("options.enviromine.configSettings"));
-		GuiButtonExt customEditor =  new GuiButtonExt(104, this.width / 2 - 90, this.height / 6 + 142 - 6, 180, 20, StatCollector.translateToLocal("options.enviromine.customEditor"));
+		GuiButtonExt serverSettings = new GuiButtonExt(103, this.width / 2 - 90, this.height / 6 + 122 - 6, 180, 20, "(Coming Soon)"+ net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.configSettings"));
+		GuiButtonExt customEditor =  new GuiButtonExt(104, this.width / 2 - 90, this.height / 6 + 142 - 6, 180, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.customEditor"));
 		
 		
 		serverSettings.enabled = false;
@@ -57,20 +58,20 @@ public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
 		
 		serverSettings.visible = true;
 		
-		String newPost = UpdateNotification.isNewPost() ? " " + StatCollector.translateToLocal("news.enviromine.newpost") : "";
+		String newPost = UpdateNotification.isNewPost() ? " " + net.minecraft.util.text.translation.I18n.translateToLocal("news.enviromine.newpost") : "";
 	
     	this.buttonList.add(changeProfile);
-    	if(!EM_Settings.voxelMenuExists) this.buttonList.add(new EM_Button(105, this.width / 2 - 90, this.height / 6 + 4, 180, 20, StatCollector.translateToLocal("options.enviromine.newsPage"), newPost));
-    	else this.buttonList.add(new GuiButtonExt(105, this.width / 2 - 90, this.height / 6 + 4, 180, 20, StatCollector.translateToLocal("options.enviromine.newsPage")+" " +newPost));
+    	if(!EM_Settings.voxelMenuExists) this.buttonList.add(new EM_Button(105, this.width / 2 - 90, this.height / 6 + 4, 180, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.newsPage"), newPost));
+    	else this.buttonList.add(new GuiButtonExt(105, this.width / 2 - 90, this.height / 6 + 4, 180, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.newsPage")+" " +newPost));
 
-    	this.buttonList.add(new GuiButtonExt(101, this.width / 2 - 90, this.height / 6 + 44, 180, 20, StatCollector.translateToLocal("options.enviromine.guiOptions")+"..."));
-		this.buttonList.add(new GuiButtonExt(102, this.width / 2 - 90, this.height / 6 + 24, 180, 20, StatCollector.translateToLocal("options.enviromine.guiSounds")+"..."));
+    	this.buttonList.add(new GuiButtonExt(101, this.width / 2 - 90, this.height / 6 + 44, 180, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.guiOptions")+"..."));
+		this.buttonList.add(new GuiButtonExt(102, this.width / 2 - 90, this.height / 6 + 24, 180, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.guiSounds")+"..."));
 		this.buttonList.add(serverSettings);
 		this.buttonList.add(customEditor);
-		this.buttonList.add(new GuiButtonExt(200, this.width / 2 - 100, this.height / 6 + 188, StatCollector.translateToLocal("gui.done")));
+		this.buttonList.add(new GuiButtonExt(200, this.width / 2 - 100, this.height / 6 + 188, net.minecraft.util.text.translation.I18n.translateToLocal("gui.done")));
 		
-		this.buttonList.add(new GuiButtonExt(300, 30 , this.height -55 , 75, 20, StatCollector.translateToLocal("options.enviromine.supportUs")));
-		this.buttonList.add(new GuiButtonExt(301, 30, this.height -30 , 75,20, StatCollector.translateToLocal("options.enviromine.website")));
+		this.buttonList.add(new GuiButtonExt(300, 30 , this.height -55 , 75, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.supportUs")));
+		this.buttonList.add(new GuiButtonExt(301, 30, this.height -30 , 75,20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.website")));
 		
 		
 	}
@@ -162,11 +163,11 @@ public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
 		}
 		else if(par1GuiButton.id == 301)
 		{
-			this.mc.displayGuiScreen(new GuiYesNo(this, StatCollector.translateToLocal("options.enviromine.website"), StatCollector.translateToLocal("options.enviromine.website.YesNo"), 1));
+			this.mc.displayGuiScreen(new GuiYesNo(this, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.website"), net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.website.YesNo"), 1));
 		}
 		else if(par1GuiButton.id == 300)
 		{
-			this.mc.displayGuiScreen(new GuiYesNo(this, StatCollector.translateToLocal("options.enviromine.supportUs"), StatCollector.translateToLocal("options.enviromine.website.YesNo"), 2));
+			this.mc.displayGuiScreen(new GuiYesNo(this, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.supportUs"), net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.website.YesNo"), 2));
 		}
 		else if (par1GuiButton.id == 200)
 		{
@@ -180,11 +181,11 @@ public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
 	{
 		this.drawDefaultBackground();
 		
-		if(!EnviroMine.proxy.isClient() && MinecraftServer.getServer().getConfigurationManager().func_152607_e(mc.player.getGameProfile()) || EnviroMine.proxy.isClient() )
+		if(!EnviroMine.proxy.isClient() && FMLCommonHandler.getMinecraftServerInstance().getConfigurationManager().func_152607_e(mc.player.getGameProfile()) || EnviroMine.proxy.isClient() )
 		{
-			this.drawString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.adminOptions.title") +" ", this.width / 2 -30, this.height / 6 + 74, 16777215);
+			this.drawString(this.fontRenderer, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.adminOptions.title") +" ", this.width / 2 -30, this.height / 6 + 74, 16777215);
 		}
-		this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.guiMainmenu.title"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(this.fontRenderer, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.guiMainmenu.title"), this.width / 2, 15, 16777215);
         this.drawCenteredString(this.fontRenderer, I18n.format("editor.enviromine.currentProfile") +": "+ EM_ConfigHandler.getProfileName(), this.width / 2, 30, 16777215);
 		super.drawScreen(par1, par2, par3);
 	}

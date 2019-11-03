@@ -4,8 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import org.lwjgl.opengl.GL11;
 import enviromine.client.gui.Gui_EventManager;
 import enviromine.client.gui.UI_Settings;
@@ -26,7 +26,8 @@ public class HudItemTemperature extends HudItem
 	
 	public String getNameLoc()
 	{
-		return StatCollector.translateToLocal("options.enviromine.hud.temperature");
+		//TODO: this translates server side not locally, change later to translate client side
+		return I18n.translateToLocal("options.enviromine.hud.temperature");
 	}
 	
 	@Override

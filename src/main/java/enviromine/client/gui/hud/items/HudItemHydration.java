@@ -2,8 +2,8 @@ package enviromine.client.gui.hud.items;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 
 import org.lwjgl.opengl.GL11;
 
@@ -25,7 +25,8 @@ public class HudItemHydration extends HudItem	{
 	
 	 public String getNameLoc()
 	 {
-		 return StatCollector.translateToLocal("options.enviromine.hud.hydration");
+		//TODO: this translates server side not locally, change later to translate client side
+		 return I18n.translateToLocal("options.enviromine.hud.hydration");
 	 }
 	@Override
 	public String getButtonLabel() {

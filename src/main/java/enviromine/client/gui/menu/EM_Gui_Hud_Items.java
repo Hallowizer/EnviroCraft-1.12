@@ -7,10 +7,11 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.StatCollector;
 import enviromine.client.gui.SaveController;
 import enviromine.client.gui.hud.HUDRegistry;
 import enviromine.client.gui.hud.HudItem;
+
+//TODO: this translates server side not locally, change later to translate client side
 
 @SideOnly(Side.CLIENT)
 public class EM_Gui_Hud_Items extends GuiScreen implements GuiYesNoCallback
@@ -50,7 +51,7 @@ public class EM_Gui_Hud_Items extends GuiScreen implements GuiYesNoCallback
 		
 		
 		buttonCnt++;
-		this.buttonList.add(new GuiButton(801, this.width / 2 - 75, this.height / 6 + 24 +(buttonCnt * 24) - 6, 150, 20,  StatCollector.translateToLocal("options.enviromine.hud.resetDefault")));
+		this.buttonList.add(new GuiButton(801, this.width / 2 - 75, this.height / 6 + 24 +(buttonCnt * 24) - 6, 150, 20,  net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.hud.resetDefault")));
 		
 		buttonCnt++;
 		this.buttonList.add(new GuiButton(800, this.width / 2 - 75, this.height / 6 + 24 +(buttonCnt * 24) - 6, 150, 20, I18n.format( "gui.back", new Object[0])));
@@ -97,7 +98,7 @@ public class EM_Gui_Hud_Items extends GuiScreen implements GuiYesNoCallback
 					this.mc.displayGuiScreen(parentGuiScreen);
 					return;
 				case 801:
-					this.mc.displayGuiScreen(new GuiYesNo(this, StatCollector.translateToLocal("options.enviromine.hud.resetDefault"), StatCollector.translateToLocal("options.enviromine.hud.resetDefault.desc"), 1));
+					this.mc.displayGuiScreen(new GuiYesNo(this, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.hud.resetDefault"), net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.hud.resetDefault.desc"), 1));
 					return;					
 				default:
 					for(HudItem hudItem : HUDRegistry.getHudItemList())
@@ -160,7 +161,7 @@ public class EM_Gui_Hud_Items extends GuiScreen implements GuiYesNoCallback
 	public void drawScreen(int par1, int par2, float par3)
 	{
 		this.drawDefaultBackground();
-		this.drawCenteredString(this.fontRenderer, StatCollector.translateToLocal("options.enviromine.guiBarPos.title"), this.width / 2, 15, 16777215);
+		this.drawCenteredString(this.fontRenderer, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.guiBarPos.title"), this.width / 2, 15, 16777215);
 		
 		
 		int hudCnt = 0;

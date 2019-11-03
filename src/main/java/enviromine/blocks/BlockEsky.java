@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -12,6 +13,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,7 +41,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 	 * Called upon block activation (right click on the block.)
 	 */
 	@Override
-	public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+	public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
 	{
 		if (world.isRemote)
 		{
@@ -46,7 +49,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 		}
 		else
 		{
-			IInventory iinventory = (TileEntityEsky)world.getTileEntity(new BlockPos(x, y, z));
+			IInventory iinventory = (TileEntityEsky)world.getTileEntity(pos);
 			
 			if (iinventory != null)
 			{
@@ -62,7 +65,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 	 * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
 	 */
 	@Override
-	public boolean isOpaqueCube()
+	public boolean isOpaqueCube(IBlockState state)
 	{
 		return false;
 	}
@@ -89,12 +92,12 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 	 * Called when the block is placed in the world.
 	 */
 	@Override
-	public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack)
+	public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack)
 	{
-		Block block = world.getBlockState(new BlockPos(x, y, z - 1)).getBlock();
-		Block block1 = world.getBlockState(new BlockPos(x, y, z + 1)).getBlock();
-		Block block2 = world.getBlockState(new BlockPos(x - 1, y, z)).getBlock();
-		Block block3 = world.getBlockState(new BlockPos(x + 1, y, z)).getBlock();
+		Block block = world.getBlockState(pos.north()).getBlock();
+		Block block1 = world.getBlockState(pos.south()).getBlock();
+		Block block2 = world.getBlockState(pos.west()).getBlock();
+		Block block3 = world.getBlockState(pos.east()).getBlock();
 		byte b0 = 0;
 		int l = MathHelper.floor((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 		
@@ -120,7 +123,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 		
 		if (block != this && block1 != this && block2 != this && block3 != this)
 		{
-			world.setBlockMetadataWithNotify(x, y, z, b0, 3);
+			world.setBlockMetadataWithNotify(pos, b0, 3);
 		}
 		else
 		{
@@ -128,36 +131,36 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 			{
 				if (block == this)
 				{
-					world.setBlockMetadataWithNotify(x, y, z - 1, b0, 3);
+					world.setBlockMetadataWithNotify(pos.north(), b0, 3);
 				}
 				else
 				{
-					world.setBlockMetadataWithNotify(x, y, z + 1, b0, 3);
+					world.setBlockMetadataWithNotify(pos.south(), b0, 3);
 				}
 				
-				world.setBlockMetadataWithNotify(x, y, z, b0, 3);
+				world.setBlockMetadataWithNotify(pos, b0, 3);
 			}
 			
 			if ((block2 == this || block3 == this) && (b0 == 2 || b0 == 3))
 			{
 				if (block2 == this)
 				{
-					world.setBlockMetadataWithNotify(x - 1, y, z, b0, 3);
+					world.setBlockMetadataWithNotify(pos.west(), b0, 3);
 				}
 				else
 				{
-					world.setBlockMetadataWithNotify(x + 1, y, z, b0, 3);
+					world.setBlockMetadataWithNotify(pos.east(), b0, 3);
 				}
 				
-				world.setBlockMetadataWithNotify(x, y, z, b0, 3);
+				world.setBlockMetadataWithNotify(pos, b0, 3);
 			}
 		}
 	}
 	
 	@Override
-	public void breakBlock(World p_149749_1_, int p_149749_2_, int p_149749_3_, int p_149749_4_, Block p_149749_5_, int p_149749_6_)
+	public void breakBlock(World world, BlockPos pos, IBlockState iblock)
 	{
-		TileEntityEsky tileentitychest = (TileEntityEsky)p_149749_1_.getTileEntity(new BlockPos(p_149749_2_, p_149749_3_, p_149749_4_));
+		TileEntityEsky tileentitychest = (TileEntityEsky)world.getTileEntity(pos);
 		
 		if (tileentitychest != null)
 		{
@@ -171,7 +174,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 					float f1 = this.field_149955_b.nextFloat() * 0.8F + 0.1F;
 					EntityItem entityitem;
 					
-					for (float f2 = this.field_149955_b.nextFloat() * 0.8F + 0.1F; itemstack.getCount() > 0; p_149749_1_.spawnEntity(entityitem))
+					for (float f2 = this.field_149955_b.nextFloat() * 0.8F + 0.1F; itemstack.getCount() > 0; world.spawnEntity(entityitem))
 					{
 						int j1 = this.field_149955_b.nextInt(21) + 10;
 						
@@ -181,7 +184,7 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 						}
 						
 						itemstack.shrink(j1);
-						entityitem = new EntityItem(p_149749_1_, (double)((float)p_149749_2_ + f), (double)((float)p_149749_3_ + f1), (double)((float)p_149749_4_ + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
+						entityitem = new EntityItem(world, (double)((float)pos.getX() + f), (double)((float)pos.getY() + f1), (double)((float)pos.getZ() + f2), new ItemStack(itemstack.getItem(), j1, itemstack.getItemDamage()));
 						float f3 = 0.05F;
 						entityitem.motionX = (double)((float)this.field_149955_b.nextGaussian() * f3);
 						entityitem.motionY = (double)((float)this.field_149955_b.nextGaussian() * f3 + 0.2F);
@@ -195,10 +198,11 @@ public class BlockEsky extends BlockContainer implements ITileEntityProvider
 				}
 			}
 			
-			p_149749_1_.func_147453_f(p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_);
+			//func_147453_f used (int x, int y, int z, Block block), unsure what was original function
+			world.func_147453_f(pos, iblock);
 		}
 		
-		super.breakBlock(p_149749_1_, p_149749_2_, p_149749_3_, p_149749_4_, p_149749_5_, p_149749_6_);
+		super.breakBlock(world, pos, iblock);
 	}
 	
 	@Override

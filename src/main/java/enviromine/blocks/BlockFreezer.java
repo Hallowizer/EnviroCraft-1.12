@@ -12,6 +12,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
@@ -20,6 +21,8 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.EnumHand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
@@ -38,7 +41,7 @@ public class BlockFreezer extends BlockContainer implements ITileEntityProvider
      * Called upon block activation (right click on the block.)
      */
 	@Override
-    public boolean onBlockActivated(World world, int x, int y, int z, EntityPlayer player, int p_149727_6_, float p_149727_7_, float p_149727_8_, float p_149727_9_)
+    public boolean onBlockActivated(World world, BlockPos pos, IBlockState state, EntityPlayer player, EnumHand hand, EnumFacing facing, float hitX, float hitY, float hitZ)
     {
         if (world.isRemote)
         {
@@ -46,7 +49,7 @@ public class BlockFreezer extends BlockContainer implements ITileEntityProvider
         }
         else
         {
-            IInventory iinventory = (TileEntityFreezer)world.getTileEntity(new BlockPos(x, y, z));
+            IInventory iinventory = (TileEntityFreezer)world.getTileEntity(pos);
 
             if (iinventory != null)
             {
@@ -62,7 +65,7 @@ public class BlockFreezer extends BlockContainer implements ITileEntityProvider
      * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
      */
 	@Override
-    public boolean isOpaqueCube()
+    public boolean isOpaqueCube(IBlockState state)
     {
         return false;
     }
@@ -89,12 +92,12 @@ public class BlockFreezer extends BlockContainer implements ITileEntityProvider
      * Called when the block is placed in the world.
      */
 	@Override
-    public void onBlockPlacedBy(World world, int x, int y, int z, EntityLivingBase entity, ItemStack stack)
+    public void onBlockPlacedBy(World world, BlockPos pos, IBlockState state, EntityLivingBase entity, ItemStack stack)
     {
-        Block block = world.getBlockState(new BlockPos(x, y, z - 1)).getBlock();
-        Block block1 = world.getBlockState(new BlockPos(x, y, z + 1)).getBlock();
-        Block block2 = world.getBlockState(new BlockPos(x - 1, y, z)).getBlock();
-        Block block3 = world.getBlockState(new BlockPos(x + 1, y, z)).getBlock();
+        Block block = world.getBlockState(pos.north()).getBlock();
+        Block block1 = world.getBlockState(pos.south()).getBlock();
+        Block block2 = world.getBlockState(pos.west()).getBlock();
+        Block block3 = world.getBlockState(pos.east()).getBlock();
         byte b0 = 0;
         int l = MathHelper.floor((double)(entity.rotationYaw * 4.0F / 360.0F) + 0.5D) & 3;
 
@@ -120,7 +123,7 @@ public class BlockFreezer extends BlockContainer implements ITileEntityProvider
 
         if (block != this && block1 != this && block2 != this && block3 != this)
         {
-            world.setBlockMetadataWithNotify(x, y, z, b0, 3);
+            world.setBlockMetadataWithNotify(pos, b0, 3);
         }
         else
         {
@@ -128,28 +131,28 @@ public class BlockFreezer extends BlockContainer implements ITileEntityProvider
             {
                 if (block == this)
                 {
-                    world.setBlockMetadataWithNotify(x, y, z - 1, b0, 3);
+                    world.setBlockMetadataWithNotify(pos.north(), b0, 3);
                 }
                 else
                 {
-                    world.setBlockMetadataWithNotify(x, y, z + 1, b0, 3);
+                    world.setBlockMetadataWithNotify(pos.south(), b0, 3);
                 }
 
-                world.setBlockMetadataWithNotify(x, y, z, b0, 3);
+                world.setBlockMetadataWithNotify(pos, b0, 3);
             }
 
             if ((block2 == this || block3 == this) && (b0 == 2 || b0 == 3))
             {
                 if (block2 == this)
                 {
-                    world.setBlockMetadataWithNotify(x - 1, y, z, b0, 3);
+                    world.setBlockMetadataWithNotify(pos.west(), b0, 3);
                 }
                 else
                 {
-                    world.setBlockMetadataWithNotify(x + 1, y, z, b0, 3);
+                    world.setBlockMetadataWithNotify(pos.east(), b0, 3);
                 }
 
-                world.setBlockMetadataWithNotify(x, y, z, b0, 3);
+                world.setBlockMetadataWithNotify(pos, b0, 3);
             }
         }
     }
