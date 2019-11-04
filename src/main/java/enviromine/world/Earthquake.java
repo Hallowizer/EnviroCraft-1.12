@@ -18,6 +18,8 @@ import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import org.apache.logging.log4j.Level;
+
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
@@ -198,7 +200,7 @@ public class Earthquake
 				
 				for(int yy = y; yy >= 1; yy--)
 				{
-					if((world.getBlockState(x, yy, z).getMaterial() == Material.LAVA && yy > 10) || world.getBlock(x, yy, z).getMaterial() == Material.WATER || world.getBlock(x, yy, z).getMaterial() == Material.ROCK || world.getBlock(x, yy, z).getMaterial() == Material.CLAY || world.getBlock(x, yy, z).getMaterial() == Material.SAND || world.getBlock(x, yy, z).getMaterial() == Material.GROUND || world.getBlock(x, yy, z).getMaterial() == Material.GRASS || (yy <= 10 && world.getBlock(x, yy, z).getMaterial() == Material.AIR))
+					if((world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.LAVA && yy > 10) || world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.WATER || world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.ROCK || world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.CLAY || world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.SAND || world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.GROUND || world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.GRASS || (yy <= 10 && world.getBlockState(new BlockPos(x, yy, z)).getMaterial() == Material.AIR))
 					{
 						if(world.getBlock(x, yy, z).getBlockHardness(world, x, yy, z) < 0)
 						{
@@ -230,7 +232,7 @@ public class Earthquake
 							{
 								//world.playSoundEffect(x, yy, z, "enviromine:cave_in", 1.0F, world.rand.nextFloat() * 0.5F + 0.75F);
 							}
-							world.setBlockToAir(x, yy, z);
+							world.setBlockToAir(new BlockPos(x, yy, z));
 							//System.out.println("Placed air at (" + x + "," + yy + "," + z + ")");
 							
 							if(yy == y)
@@ -440,7 +442,7 @@ public class Earthquake
 					float[] qData = loadedQuakes.get(i);
 					
 					int d = (int)qData[0];
-					World world = MinecraftServer.getServer().worldServerForDimension(d);
+					World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(d);
 					int x = (int)qData[1];
 					int y = (int)qData[2];
 					int l = (int)qData[3];

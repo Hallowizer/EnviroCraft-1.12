@@ -32,6 +32,7 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -84,7 +85,8 @@ import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
-import cpw.mods.fml.common.eventhandler.Event.Result;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent.ItemCraftedEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
@@ -267,9 +269,9 @@ public class EM_EventManager
 	{
 		doDeath(event.getEntityLiving());
 		
-		if(event.getEntityLiving() instanceof EntityMob && event.getSource().getEntity() != null && event.getSource().getEntity() instanceof EntityPlayer)
+		if(event.getEntityLiving() instanceof EntityMob && event.getSource().getTrueSource() != null && event.getSource().getTrueSource() instanceof EntityPlayer)
 		{
-			EntityPlayer player = (EntityPlayer)event.getSource().getEntity();
+			EntityPlayer player = (EntityPlayer)event.getSource().getTrueSource();
 			EnviroDataTracker tracker = EM_StatusManager.lookupTracker(player);
 
 			
@@ -348,7 +350,7 @@ public class EM_EventManager
 			return;
 		}
 		
-		Entity attacker = event.getSource().getEntity();
+		Entity attacker = event.getSource().getTrueSource();
 		
 		if((event.getSource() == DamageSource.FALLING_BLOCK || event.getSource() == DamageSource.ANVIL || event.getSource() == EnviroDamageSource.landslide || event.getSource() == EnviroDamageSource.avalanche) && event.getEntityLiving().getEquipmentInSlot(4) != null && event.getEntityLiving().getEquipmentInSlot(4).getItem() == ObjectHandler.hardHat)
 		{
@@ -443,16 +445,16 @@ public class EM_EventManager
 		if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item != null)
 		{
 			
-			if(item.getItem() instanceof ItemBlock && !event.entityPlayer.worldObj.isRemote)
+			if(item.getItem() instanceof ItemBlock && !event.getEntityPlayer().world.isRemote)
 			{
 				int adjCoords[] = EnviroUtils.getAdjacentBlockCoordsFromSide(event.x, event.y, event.z, event.face);
 				
-				if(item.getItem() == Item.getItemFromBlock(Blocks.torch) && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) // Redirect torch placement to our own
+				if(item.getItem() == Item.getItemFromBlock(Blocks.TORCH) && (EM_Settings.torchesBurn || EM_Settings.torchesGoOut)) // Redirect torch placement to our own
 				{
-					Vec3 lookVec = event.entityPlayer.getLookVec();
+					Vec3 lookVec = event.getEntityPlayer().getLookVec();
 					
-		            Block block = event.world.getBlock(event.x, event.y, event.z);
-					if(block.onBlockActivated(event.world, event.x, event.y, event.y, event.entityPlayer, event.face, 0F, 0F, 0F))
+		            Block block = event.getWorld().getBlock(event.x, event.y, event.z);
+					if(block.onBlockActivated(event.getWorld(), event.x, event.y, event.y, event.getEntityPlayer(), event.face, 0F, 0F, 0F))
 					{
 						event.useItem = Result.DENY;
 						event.useBlock = Result.ALLOW;
@@ -460,17 +462,17 @@ public class EM_EventManager
 					{
 //						event.useItem = Result.DENY;
 						ItemBlock torchItem = (ItemBlock)Item.getItemFromBlock(ObjectHandler.fireTorch);
-						torchItem.onItemUse(item, event.entityPlayer, event.world, event.x, event.y, event.z, event.face, (float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
+						torchItem.onItemUse(item, event.getEntityPlayer(), event.getWorld(), event.x, event.y, event.z, event.face, (float)lookVec.xCoord, (float)lookVec.yCoord, (float)lookVec.zCoord);
 						event.setCanceled(true);
 					}
 					return;
 
 				}
 				
-				EM_PhysManager.schedulePhysUpdate(event.entityPlayer.worldObj, adjCoords[0], adjCoords[1], adjCoords[2], true, "Normal");
-			} else if(item.getItem() == Items.glass_bottle && !event.entityPlayer.worldObj.isRemote)
+				EM_PhysManager.schedulePhysUpdate(event.getEntityPlayer().world, adjCoords[0], adjCoords[1], adjCoords[2], true, "Normal");
+			} else if(item.getItem() == Items.GLASS_BOTTLE && !event.getEntityPlayer().world.isRemote)
 			{
-				if(event.entityPlayer.worldObj.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0)
+				if(event.getEntityPlayer().world.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0)
 				{
 					fillBottle(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
 				}
@@ -746,7 +748,7 @@ public class EM_EventManager
 					{
 						int type = 0;
 						
-						if(isValidCauldron && (entityPlayer.world.getBlock(i, j - 1, k) == Blocks.fire || entityPlayer.world.getBlock(i, j - 1, k) == Blocks.FLOWING_LAVA || entityPlayer.world.getBlock(i, j - 1, k) == Blocks.LAVA))
+						if(isValidCauldron && (entityPlayer.world.getBlock(i, j - 1, k) == Blocks.FIRE || entityPlayer.world.getBlock(i, j - 1, k) == Blocks.FLOWING_LAVA || entityPlayer.world.getBlock(i, j - 1, k) == Blocks.LAVA))
 						{
 							type = 0;
 						} else
@@ -765,11 +767,11 @@ public class EM_EventManager
 						{
 							if(entityPlayer.getRNG().nextInt(2) == 0)
 							{
-								entityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 200));
+								entityPlayer.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 200));
 							}
 							if(entityPlayer.getRNG().nextInt(4) == 0)
 							{
-								entityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+								entityPlayer.addPotionEffect(new PotionEffect(MobEffects.POISON, 200));
 							}
 							if(tracker.bodyTemp >= 37.05)
 							{
@@ -783,10 +785,10 @@ public class EM_EventManager
 								if(entityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && entityPlayer.getRNG().nextInt(5) == 0)
 								{
 									int amp = entityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
-									entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));
+									entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration, 600, amp + 1));
 								} else
 								{
-									entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600));
+									entityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration, 600));
 								}
 							}
 							if(tracker.bodyTemp >= 37.05)
@@ -887,15 +889,15 @@ public class EM_EventManager
 		
 		if(event.getHarvester() != null)
 		{
-			if(event.getResult() != Result.DENY && !event.harvester.capabilities.isCreativeMode)
+			if(event.getResult() != Result.DENY && !event.getHarvester().capabilities.isCreativeMode)
 			{
-				EM_PhysManager.schedulePhysUpdate(event.world, event.x, event.y, event.z, true, "Normal");
+				EM_PhysManager.schedulePhysUpdate(event.getWorld(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), true, "Normal");
 			}
 		} else
 		{
 			if(event.getResult() != Result.DENY)
 			{
-				EM_PhysManager.schedulePhysUpdate(event.world, event.x, event.y, event.z, true, "Normal");
+				EM_PhysManager.schedulePhysUpdate(event.getWorld(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ(), true, "Normal");
 			}
 		}
 	}
@@ -1405,13 +1407,13 @@ public class EM_EventManager
 			EM_PhysManager.worldStartTime = event.getWorld().getTotalWorldTime();
 		}
 		
-		MinecraftServer server = MinecraftServer.getServer();
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		
 		if(EM_Settings.worldDir == null && server.isServerRunning())
 		{
 			if(EnviroMine.proxy.isClient())
 			{
-				EM_Settings.worldDir = MinecraftServer.getServer().getFile("saves/" + server.getFolderName());
+				EM_Settings.worldDir = FMLCommonHandler.instance().getMinecraftServerInstance().getFile("saves/" + server.getFolderName());
 			} else
 			{
 				EM_Settings.worldDir = server.getFile(server.getFolderName());
@@ -1429,7 +1431,7 @@ public class EM_EventManager
 		
 		if(!event.getWorld().isRemote)
 		{
-			if(!MinecraftServer.getServer().isServerRunning())
+			if(!FMLCommonHandler.instance().getMinecraftServerInstance().isServerRunning())
 			{
 				EM_PhysManager.physSchedule.clear();
 				EM_PhysManager.excluded.clear();

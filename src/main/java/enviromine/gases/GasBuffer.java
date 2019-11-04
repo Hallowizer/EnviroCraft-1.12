@@ -9,6 +9,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.apache.logging.log4j.Level;
 
@@ -215,7 +216,7 @@ public class GasBuffer
 				
 				int[] entry = gasBuffer.get(i);
 				
-				World world = MinecraftServer.getServer().worldServerForDimension(entry[0]);
+				World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(entry[0]);
 				
 				if(world == null || world.getTotalWorldTime() < EM_PhysManager.worldStartTime + EM_Settings.worldDelay)
 				{

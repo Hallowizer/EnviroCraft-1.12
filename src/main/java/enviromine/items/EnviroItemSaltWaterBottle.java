@@ -51,10 +51,10 @@ public class EnviroItemSaltWaterBottle extends Item
 				if(par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration) != null && par3EntityPlayer.getRNG().nextInt(5) == 0)
 				{
 					int amp = par3EntityPlayer.getActivePotionEffect(EnviroPotion.dehydration).getAmplifier();
-					par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600, amp + 1));
+					par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration, 600, amp + 1));
 				} else
 				{
-					par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration.id, 600));
+					par3EntityPlayer.addPotionEffect(new PotionEffect(EnviroPotion.dehydration, 600));
 				}
 			}
 			

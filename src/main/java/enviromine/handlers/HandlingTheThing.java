@@ -2,6 +2,7 @@ package enviromine.handlers;
 
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
+import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
@@ -80,9 +81,9 @@ public class HandlingTheThing
 				player.getEntityData().setBoolean("EM_THING_TARGET", false);
 			}
 			
-			if(player.isPotionActive(Potion.blindness) && darkness < 2000)
+			if(player.isPotionActive(MobEffects.BLINDNESS) && darkness < 2000)
 			{
-				player.removePotionEffect(Potion.blindness.id);
+				player.removePotionEffect(MobEffects.BLINDNESS);
 			}
 		}
 		
@@ -116,7 +117,7 @@ public class HandlingTheThing
 		
 		if(darkness >= 2000)
 		{
-			player.addPotionEffect(new PotionEffect(Potion.blindness.id, 100));
+			player.addPotionEffect(new PotionEffect(MobEffects.BLINDNESS, 100));
 		}
 		
 		if(darkness >= 3000)

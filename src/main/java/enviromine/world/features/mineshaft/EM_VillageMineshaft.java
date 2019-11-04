@@ -78,7 +78,7 @@ public class EM_VillageMineshaft extends StructureVillagePieces.Village
 		
 		// --- Generate Shaft --- //
 		
-		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 0, 4, shaftTop, 4, Blocks.fence, Blocks.fence, false);
+		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, 0, 0, 4, shaftTop, 4, Blocks.OAK_FENCE, Blocks.OAK_FENCE, false);
 		this.customFillWithBlocks(par1World, par3StructureBoundingBox, 0, shaftTop + 1, 0, 4, shaftTop + 2, 4, Blocks.AIR, Blocks.AIR, false);
 		
 		for(int depth = 3; depth < shaftTop; depth += 4)

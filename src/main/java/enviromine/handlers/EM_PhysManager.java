@@ -20,6 +20,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import org.apache.logging.log4j.Level;
 import com.google.common.base.Stopwatch;
 import enviromine.EntityPhysicsBlock;
@@ -943,7 +945,7 @@ public class EM_PhysManager
 	
 	public static void updateSchedule()
 	{
-		if(MinecraftServer.getServer() == null)
+		if(FMLCommonHandler.instance().getMinecraftServerInstance() == null)
 		{
 			return;
 		}
@@ -985,7 +987,7 @@ public class EM_PhysManager
 			
 			for(int i = updateNum - 1; i >= 0; i -= 1)
 			{
-				if(!MinecraftServer.getServer().isServerRunning())
+				if(!FMLCommonHandler.instance().getMinecraftServerInstance().isServerRunning())
 				{
 					physSchedule.clear();
 					physSchedule = new ArrayList<Object[]>();

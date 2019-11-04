@@ -11,6 +11,8 @@ import net.minecraft.util.Vec3;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.chunk.IChunkProvider;
 import org.apache.logging.log4j.Level;
+
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.core.EM_Settings;
@@ -98,13 +100,13 @@ public class WorldProviderCaves extends WorldProvider
 		 * This is here for when a user is starting before technical world load events are fired.
 		 * This usually happens when a user loads up Minecraft from within the dimension
 		 */
-		MinecraftServer server = MinecraftServer.getServer();
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance().getServer();
 		
 		if(EM_Settings.worldDir == null && server.isServerRunning())
 		{
 			if(EnviroMine.proxy.isClient())
 			{
-				EM_Settings.worldDir = MinecraftServer.getServer().getFile("saves/" + server.getFolderName());
+				EM_Settings.worldDir = FMLCommonHandler.instance().getMinecraftServerInstance().getServer().getFile("saves/" + server.getFolderName());
 			} else
 			{
 				EM_Settings.worldDir = server.getFile(server.getFolderName());

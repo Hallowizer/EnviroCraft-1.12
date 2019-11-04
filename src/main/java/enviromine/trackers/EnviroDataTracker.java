@@ -12,6 +12,7 @@ import net.minecraft.entity.passive.EntityChicken;
 import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
@@ -132,7 +133,7 @@ public class EnviroDataTracker
 		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F) && enviroData[7] > (float)(-1F * EM_Settings.sanityMult))
 		{
 			enviroData[7] = (float)(-1F * EM_Settings.sanityMult);
-		} else if(trackedEntity.getHealth() >= trackedEntity.getMaxHealth() && enviroData[7] < (0.1F * EM_Settings.sanityMult) && trackedEntity.world.isDaytime() && !trackedEntity.world.provider.hasNoSky && trackedEntity.world.canBlockSeeTheSky(MathHelper.floor(trackedEntity.posX), MathHelper.floor(trackedEntity.posY), MathHelper.floor(trackedEntity.posZ)))
+		} else if(trackedEntity.getHealth() >= trackedEntity.getMaxHealth() && enviroData[7] < (0.1F * EM_Settings.sanityMult) && trackedEntity.world.isDaytime() && trackedEntity.world.provider.hasSkyLight() && trackedEntity.world.canBlockSeeTheSky(MathHelper.floor(trackedEntity.posX), MathHelper.floor(trackedEntity.posY), MathHelper.floor(trackedEntity.posZ)))
 		{
 			enviroData[7] = (float)(0.1F * EM_Settings.sanityMult);
 		}
@@ -371,33 +372,33 @@ public class EnviroDataTracker
 			
 			if(airQuality <= 10F)
 			{
-				trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 200, 1));
-				trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 1));
+				trackedEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 1));
+				trackedEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 1));
 			} else if(airQuality <= 25F)
 			{
-				trackedEntity.addPotionEffect(new PotionEffect(Potion.digSlowdown.id, 200, 0));
-				trackedEntity.addPotionEffect(new PotionEffect(Potion.moveSlowdown.id, 200, 0));
+				trackedEntity.addPotionEffect(new PotionEffect(MobEffects.MINING_FATIGUE, 200, 0));
+				trackedEntity.addPotionEffect(new PotionEffect(MobEffects.SLOWNESS, 200, 0));
 			}
 
 			// Heat Temp Checks
-			if(!trackedEntity.isPotionActive(Potion.fireResistance))
+			if(!trackedEntity.isPotionActive(MobEffects.FIRE_RESISTANCE))
 			{
 				if(bodyTemp >= 39F && enableHeat && EM_Settings.enableHeatstrokeGlobal && (enviroData[6] == 1 || !(trackedEntity instanceof EntityAnimal)))
 				{
 					if(bodyTemp >= 43F)
 					{
-						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 2));
+						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke, 200, 2));
 					} else if(bodyTemp >= 41F)
 					{
-						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 1));
+						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke, 200, 1));
 					} else
 					{
-						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke.id, 200, 0));
+						trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.heatstroke, 200, 0));
 					}
 				}
 			} else if(trackedEntity.isPotionActive(EnviroPotion.heatstroke))
 			{
-				trackedEntity.removePotionEffect(EnviroPotion.heatstroke.id);
+				trackedEntity.removePotionEffect(EnviroPotion.heatstroke);
 			}
 			
 			//Cold Temp Checks
@@ -405,15 +406,15 @@ public class EnviroDataTracker
 			{
 				if(bodyTemp <= 30F)
 				{
-					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, 200, 2));
+					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia, 200, 2));
 					
 				} else if(bodyTemp <= 32F)
 				{
-					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, 200, 1));
+					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia, 200, 1));
 					
 				} else
 				{
-					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia.id, 200, 0));
+					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.hypothermia, 200, 0));
 				}
 				
 				if (this.side.isClient()) 
@@ -427,7 +428,7 @@ public class EnviroDataTracker
 			{
 				if(timeBelow10 >= 240 || frostbiteLevel >= 2)
 				{
-					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.frostbite.id, 200, 1));
+					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.frostbite, 200, 1));
 					
 					if(frostbiteLevel <= 2)
 					{
@@ -435,7 +436,7 @@ public class EnviroDataTracker
 					}
 				} else
 				{
-					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.frostbite.id, 200, 0));
+					trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.frostbite, 200, 0));
 					
 					if(frostbiteLevel <= 1)
 					{
@@ -476,13 +477,13 @@ public class EnviroDataTracker
 			
 			if(sanity <= 10F)
 			{
-				trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, 600, 2));
+				trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity, 600, 2));
 			} else if(sanity <= 25F)
 			{
-				trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, 600, 1));
+				trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity, 600, 1));
 			} else if(sanity <= 50F)
 			{
-				trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity.id, 600, 0));
+				trackedEntity.addPotionEffect(new PotionEffect(EnviroPotion.insanity, 600, 0));
 			}
 			
 			curAttackTime = 0;

@@ -7,7 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
@@ -15,20 +15,22 @@ import enviromine.core.EnviroMine;
 import enviromine.network.packet.PacketEnviroMine;
 import enviromine.world.Earthquake;
 
+//TODO: I18n can cause server side translation, change uses of this to client side variants before release
+
 public class QuakeCommand extends CommandBase
 {
 	
-	private String lengthName = StatCollector.translateToLocal("commands.enviromine.enviroquake.length");
-	private String widthName = StatCollector.translateToLocal("commands.enviromine.enviroquake.width");
-	private String rotationName = StatCollector.translateToLocal("commands.enviromine.enviroquake.rotation");
-	private String modeName = StatCollector.translateToLocal("commands.enviromine.enviroquake.mode");
-	private String stopName = StatCollector.translateToLocal("commands.enviromine.enviroquake.stop");
-	private String stoppedAll = StatCollector.translateToLocal("commands.enviromine.enviroquake.stoppedAll");
-	private String errorMany = StatCollector.translateToLocal("commands.enviromine.enviroquake.error.tooMany");
-	private String errorBig = StatCollector.translateToLocal("commands.enviromine.enviroquake.error.tooBig");
+	private String lengthName = I18n.translateToLocal("commands.enviromine.enviroquake.length");
+	private String widthName = I18n.translateToLocal("commands.enviromine.enviroquake.width");
+	private String rotationName = I18n.translateToLocal("commands.enviromine.enviroquake.rotation");
+	private String modeName = I18n.translateToLocal("commands.enviromine.enviroquake.mode");
+	private String stopName = I18n.translateToLocal("commands.enviromine.enviroquake.stop");
+	private String stoppedAll = I18n.translateToLocal("commands.enviromine.enviroquake.stoppedAll");
+	private String errorMany = I18n.translateToLocal("commands.enviromine.enviroquake.error.tooMany");
+	private String errorBig = I18n.translateToLocal("commands.enviromine.enviroquake.error.tooBig");
 
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "enviroquake";
 	}

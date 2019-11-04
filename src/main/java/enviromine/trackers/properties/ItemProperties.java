@@ -392,7 +392,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 				config.get(category, IPName[11], 0).getInt(0);
 				config.get(category, IPName[12], "").getString();
 				config.get(category, IPName[13], 0).getInt(0);
-			} else if((block == Blocks.FLOWER_POT || block == Blocks.GRASS || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.GRASS || block.getMaterial() == Material.LEAVES || block.getMaterial() == Material.PLANTS || block.getMaterial() == Material.VINE) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if((block == Blocks.FLOWER_POT || block == Blocks.GRASS || block instanceof BlockLeaves || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.GRASS || block.getMaterial() == Material.LEAVES || block.getMaterial() == Material.PLANTS || block.getMaterial() == Material.VINE) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
 				config.get(category, IPName[0], Item.REGISTRY.getNameForObject(item)).getString();
 				config.get(category, IPName[1], -1).getInt(-1);

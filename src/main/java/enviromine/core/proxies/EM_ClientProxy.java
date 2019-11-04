@@ -11,7 +11,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.client.IItemRenderer;
 import net.minecraftforge.client.IItemRenderer.ItemRenderType;
 import net.minecraftforge.client.MinecraftForgeClient;
@@ -52,6 +52,8 @@ import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
 import enviromine.handlers.ObjectHandler;
 import enviromine.handlers.keybinds.EnviroKeybinds;
+
+//TODO: I18n can cause server side translation, change uses of this to client side variants before release
 
 public class EM_ClientProxy extends EM_CommonProxy
 {
@@ -208,7 +210,7 @@ public class EM_ClientProxy extends EM_CommonProxy
 			Class<? extends GuiMainMenu> ingameGuiClass = (Class<? extends GuiMainMenu>) Class.forName("com.thevoxelbox.voxelmenu.ingame.GuiIngameMenu");
 			Method mRegisterCustomScreen = ingameGuiClass.getDeclaredMethod("registerCustomScreen", String.class, Class.class, String.class);
 			
-			mRegisterCustomScreen.invoke(null, "", EM_Gui_Menu.class, StatCollector.translateToLocal("options.enviromine.menu.title"));
+			mRegisterCustomScreen.invoke(null, "", EM_Gui_Menu.class, I18n.translateToLocal("options.enviromine.menu.title"));
 		
 			EM_Settings.voxelMenuExists = true;
 		} catch (ClassNotFoundException ex) { // This means VoxelMenu does not

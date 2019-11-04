@@ -11,6 +11,7 @@ import net.minecraftforge.common.DimensionManager;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.Logger;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -42,6 +43,8 @@ import enviromine.world.WorldProviderCaves;
 import enviromine.world.biomes.BiomeGenCaves;
 import enviromine.world.features.WorldFeatureGenerator;
 import enviromine.world.features.mineshaft.EM_VillageMineshaft;
+
+//TODO change some of the block variables to block state to preserve information and remove the metadata variables
 
 @Mod(modid = EM_Settings.ModID, name = EM_Settings.Name, version = EM_Settings.Version, guiFactory = "enviromine.client.gui.menu.config.EnviroMineGuiFactory")
 public class EnviroMine
@@ -140,7 +143,7 @@ public class EnviroMine
 	@EventHandler
 	public void serverStart(FMLServerStartingEvent event)
 	{
-		MinecraftServer server = MinecraftServer.getServer();
+		MinecraftServer server = FMLCommonHandler.instance().getMinecraftServerInstance();
 		ICommandManager command = server.getCommandManager();
 		ServerCommandManager manager = (ServerCommandManager) command;
 		

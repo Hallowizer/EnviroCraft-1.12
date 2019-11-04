@@ -4,19 +4,21 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import enviromine.core.EM_Settings;
+
+//TODO: I18n can cause server side translation, change uses of this to client side variants before release
 
 public class CommandPhysics extends CommandBase
 {
 
-	private String on = StatCollector.translateToLocal("options.enviromine.on");
-	private String off = StatCollector.translateToLocal("options.enviromine.off");
-	private String toggle = StatCollector.translateToLocal("commands.enviromine.envirophysic.toggle");
-	private String status = StatCollector.translateToLocal("commands.enviromine.envirophysic.status");
+	private String on = I18n.translateToLocal("options.enviromine.on");
+	private String off = I18n.translateToLocal("options.enviromine.off");
+	private String toggle = I18n.translateToLocal("commands.enviromine.envirophysic.toggle");
+	private String status = I18n.translateToLocal("commands.enviromine.envirophysic.status");
 
 	@Override
-	public String getCommandName() 
+	public String getName() 
 	{
 		return "envirophysic";
 	}

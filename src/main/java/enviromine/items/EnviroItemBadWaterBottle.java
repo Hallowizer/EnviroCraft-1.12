@@ -9,6 +9,7 @@ import enviromine.trackers.EnviroDataTracker;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemPotion;
@@ -48,11 +49,11 @@ public class EnviroItemBadWaterBottle extends Item
 			
 			if(par3EntityPlayer.getRNG().nextInt(4) == 0)
 			{
-				par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.hunger.id, 600));
+				par3EntityPlayer.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 600));
 			}
 			if(par3EntityPlayer.getRNG().nextInt(4) == 0)
 			{
-				par3EntityPlayer.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+				par3EntityPlayer.addPotionEffect(new PotionEffect(MobEffects.POISON, 200));
 			}
 			
 			if(tracker != null)

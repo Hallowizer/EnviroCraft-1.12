@@ -9,22 +9,24 @@ import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.translation.I18n;
 import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
+
+//TODO: I18n can cause server side translation, change uses of this to client side variants before release
 
 public class EnviroCommand extends CommandBase
 {
 	
-	private String add = StatCollector.translateToLocal("commands.enviromine.envirostat.add");
-	private String set = StatCollector.translateToLocal("commands.enviromine.envirostat.set");
-	private String temp = StatCollector.translateToLocal("commands.enviromine.envirostat.temp");
-	private String sanity = StatCollector.translateToLocal("commands.enviromine.envirostat.sanity");
-	private String water = StatCollector.translateToLocal("commands.enviromine.envirostat.water");
-	private String air = StatCollector.translateToLocal("commands.enviromine.envirostat.air");
+	private String add = I18n.translateToLocal("commands.enviromine.envirostat.add");
+	private String set = I18n.translateToLocal("commands.enviromine.envirostat.set");
+	private String temp = I18n.translateToLocal("commands.enviromine.envirostat.temp");
+	private String sanity = I18n.translateToLocal("commands.enviromine.envirostat.sanity");
+	private String water = I18n.translateToLocal("commands.enviromine.envirostat.water");
+	private String air = I18n.translateToLocal("commands.enviromine.envirostat.air");
 	
 	@Override
-	public String getCommandName()
+	public String getName()
 	{
 		return "envirostat";
 	}
@@ -51,7 +53,7 @@ public class EnviroCommand extends CommandBase
 			return;
 		}
 		
-		EntityPlayerMP player = getPlayer(sender, astring[0]);
+		EntityPlayerMP player = getPlayer(sender.getServer(), sender, astring[0]);
 		
 		String target = player.getCommandSenderName();
 		

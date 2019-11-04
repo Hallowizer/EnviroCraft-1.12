@@ -10,7 +10,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
-import cpw.mods.fml.common.gameevent.PlayerEvent;
+import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 
 import enviromine.core.EM_Settings;
 
@@ -145,7 +145,7 @@ public class CamelPackIntegrationHandler implements IRecipe
 			return;
 		}
 		
-		if (this.matches((InventoryCrafting)craftMatrix, event.player.worldObj)) {
+		if (this.matches((InventoryCrafting)craftMatrix, event.player.world)) {
 			if (isRemove) {
 				for (int i = craftMatrix.getSizeInventory() - 1; i >= 0; i--)
 				{

@@ -5,6 +5,7 @@ import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
 import enviromine.handlers.ObjectHandler;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -38,7 +39,7 @@ public class GasCarbonMonoxide extends EnviroGas
 		
 		if(amplifier >= 5 && entityLiving.getRNG().nextInt(10) == 0)
 		{
-			entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+			entityLiving.addPotionEffect(new PotionEffect(MobEffects.POISON, 200));
 		}
 	}
 }

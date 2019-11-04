@@ -77,7 +77,7 @@ public class MineshaftBuilder
 		this.rand = world.rand;
 		this.origX = originX;
 		this.origZ = originZ;
-		this.origY = world.getTopSolidOrLiquidBlock(originX, originZ);
+		this.origY = world.getTopSolidOrLiquidBlock(new BlockPos(originX, 0, originZ)).getY();
 		this.rot = dir%4;
 	}
 	
@@ -282,7 +282,7 @@ public class MineshaftBuilder
 		
 		if(shaft)
 		{
-			if(this.world.getBlockState(new BlockPos(origX, origY - 1, origX)).getBlock().getMaterial() == Material.WATER || this.world.getBlockState(new BlockPos(origX, origY - 1, origX)).getBlock().getMaterial() == Material.LAVA || origY < (float)seaLvl * 0.75F || seaLvl < 24)
+			if(this.world.getBlockState(new BlockPos(origX, origY - 1, origX)).getMaterial() == Material.WATER || this.world.getBlockState(new BlockPos(origX, origY - 1, origX)).getMaterial() == Material.LAVA || origY < (float)seaLvl * 0.75F || seaLvl < 24)
 			{
 				return false;
 			}

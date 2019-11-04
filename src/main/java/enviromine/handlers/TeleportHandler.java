@@ -8,10 +8,13 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ChunkCoordinates;
 import net.minecraft.util.LongHashMap;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -231,7 +234,7 @@ public class TeleportHandler extends Teleporter
 		{
 			for(int checkH = 120; checkH >= 32; checkH--)
 			{
-				if(this.worldServerInstance.isAirBlock(i, checkH, k) && this.worldServerInstance.isAirBlock(i, checkH + 1, k) && this.worldServerInstance.getBlock(i, checkH - 1, k).isNormalCube())
+				if(this.worldServerInstance.isAirBlock(new BlockPos(i, checkH, k)) && this.worldServerInstance.isAirBlock(new BlockPos(i, checkH + 1, k)) && this.worldServerInstance.getBlock(i, checkH - 1, k).isNormalCube())
 				{
 					j = checkH;
 					break;
@@ -248,7 +251,7 @@ public class TeleportHandler extends Teleporter
 		{
 			for(int checkH = 9; checkH >= 5; checkH--)
 			{
-				if(this.worldServerInstance.isAirBlock(i, checkH, k) && this.worldServerInstance.isAirBlock(i, checkH + 1, k) && this.worldServerInstance.getBlock(i, checkH - 1, k).isNormalCube())
+				if(this.worldServerInstance.isAirBlock(new BlockPos(i, checkH, k)) && this.worldServerInstance.isAirBlock(new BlockPos(i, checkH + 1, k)) && this.worldServerInstance.getBlock(i, checkH - 1, k).isNormalCube())
 				{
 					j = checkH;
 					break;
@@ -290,7 +293,7 @@ public class TeleportHandler extends Teleporter
 							}
 						} else
 						{
-							this.worldServerInstance.setBlockToAir(x, y, z);
+							this.worldServerInstance.setBlockToAir(new BlockPos(x, y, z));
 						}
 					}
 				}
@@ -331,8 +334,8 @@ public class TeleportHandler extends Teleporter
 	
 	public static boolean RecallElevator(int x, int y, int z, boolean invert)
 	{
-		WorldServer caveWorld = MinecraftServer.getServer().worldServerForDimension(EM_Settings.caveDimID);
-		WorldServer overWorld = MinecraftServer.getServer().worldServerForDimension(0);
+		WorldServer caveWorld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(EM_Settings.caveDimID);
+		WorldServer overWorld = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(0);
 		
 		int i = 0;
 		int j = 0;

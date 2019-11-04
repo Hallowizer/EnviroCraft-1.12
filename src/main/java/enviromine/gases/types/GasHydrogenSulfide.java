@@ -2,6 +2,7 @@ package enviromine.gases.types;
 
 import java.awt.Color;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.init.MobEffects;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import enviromine.gases.EnviroGas;
@@ -31,10 +32,10 @@ public class GasHydrogenSulfide extends EnviroGas
 		{
 			if(amplifier >= 10)
 			{
-				entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, 600));
+				entityLiving.addPotionEffect(new PotionEffect(MobEffects.POISON, 600));
 			} else
 			{
-				entityLiving.addPotionEffect(new PotionEffect(Potion.poison.id, 200));
+				entityLiving.addPotionEffect(new PotionEffect(MobEffects.POISON, 200));
 			}
 		}
 	}

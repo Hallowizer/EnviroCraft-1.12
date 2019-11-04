@@ -66,7 +66,7 @@ public class RotHandler
 					return new ItemStack(ObjectHandler.rottenFood, item.getCount());
 				} else
 				{
-					return Item.REGISTRY.getObject(rotProps.rotID) == null? null : new ItemStack((Item)Item.REGISTRY.getObject(rotProps.rotID), item.stackSize, rotProps.rotMeta < 0? item.getItemDamage() : rotProps.rotMeta);
+					return Item.REGISTRY.getObject(rotProps.rotID) == null? null : new ItemStack((Item)Item.REGISTRY.getObject(rotProps.rotID), item.getCount(), rotProps.rotMeta < 0? item.getItemDamage() : rotProps.rotMeta);
 				}
 			} else
 			{

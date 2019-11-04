@@ -24,6 +24,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -428,7 +429,7 @@ public class EM_StatusManager
 		{
 			quality = 2F;
 			sanityRate = 0.5F;
-		} else if(sanityRate <= sanityStartRate && sanityRate > -0.1F && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null)
+		} else if(sanityRate <= sanityStartRate && sanityRate > -0.1F && blockLightLev <= 1 && entityLiving.getActivePotionEffect(MobEffects.NIGHT_VISION) == null)
 		{
 			sanityRate = -0.1F;
 		}
@@ -959,7 +960,7 @@ public class EM_StatusManager
 			tempFin = bTemp;
 		}
 		
-		if(entityLiving.getActivePotionEffect(Potion.hunger) != null)
+		if(entityLiving.getActivePotionEffect(MobEffects.HUNGER) != null)
 		{
 			dehydrateBonus += 0.1F;
 		}
@@ -1057,7 +1058,7 @@ public class EM_StatusManager
 
 		
 		data[0] = quality * (float)EM_Settings.airMult;
-		data[1] = entityLiving.isPotionActive(Potion.fireResistance) && tempFin > 37F? 37F : (tempFin > 37F? 37F + ((tempFin-37F) * fireProt): tempFin);
+		data[1] = entityLiving.isPotionActive(MobEffects.FIRE_RESISTANCE) && tempFin > 37F? 37F : (tempFin > 37F? 37F + ((tempFin-37F) * fireProt): tempFin);
 		data[2] = nearLava? 1 : 0;
 		data[3] = dehydrateBonus * (float)EM_Settings.hydrationMult;
 		data[4] = dropSpeed * (float)EM_Settings.tempMult;

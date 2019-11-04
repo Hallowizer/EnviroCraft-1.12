@@ -358,7 +358,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], false).getBoolean(false);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if((block == Blocks.FLOWER_POT || block == Blocks.GRASS || block instanceof BlockLeavesBase || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.GRASS || block.getMaterial() == Material.LEAVES || block.getMaterial() == Material.VINE || block.getMaterial() == Material.PLANTS) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
+			} else if((block == Blocks.FLOWER_POT || block == Blocks.GRASS || block instanceof BlockLeaves || block instanceof BlockFlower || block instanceof BlockBush || block.getMaterial() == Material.GRASS || block.getMaterial() == Material.LEAVES || block.getMaterial() == Material.VINE || block.getMaterial() == Material.PLANTS) && (regName[0].equals("minecraft") || EM_Settings.genConfigs))
 			{
 				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);
@@ -442,7 +442,7 @@ public class BlockProperties implements SerialisableProperty, PropertyBase
 				config.get(category, BPName[9], defStability.name).getString();
 				config.get(category, BPName[10], true).getBoolean(true);
 				config.get(category, BPName[11], false).getBoolean(false);
-			} else if(block == Blocks.dirt)
+			} else if(block == Blocks.DIRT)
 			{
 				config.get(category, BPName[0], Block.REGISTRY.getNameForObject(block)).getString();
 				config.get(category, BPName[1], -1).getInt(-1);

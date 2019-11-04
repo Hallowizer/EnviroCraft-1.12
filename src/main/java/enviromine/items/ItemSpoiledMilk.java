@@ -4,6 +4,7 @@ import enviromine.core.EnviroMine;
 import enviromine.handlers.EnviroAchievements;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumAction;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -30,7 +31,7 @@ public class ItemSpoiledMilk extends Item
 
         if (!world.isRemote)
         {
-        	player.addPotionEffect(new PotionEffect(Potion.hunger.id, 600, 1));
+        	player.addPotionEffect(new PotionEffect(MobEffects.HUNGER, 600, 1));
         }
         
         player.addStat(EnviroAchievements.tenSecondRule, 1);
