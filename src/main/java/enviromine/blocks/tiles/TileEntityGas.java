@@ -17,6 +17,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 
 import org.apache.logging.log4j.Level;
 
@@ -376,7 +377,7 @@ public class TileEntityGas extends TileEntity
 			{
 				Packet packet = this.getDescriptionPacket();
 				
-				MinecraftServer.getServer().getConfigurationManager().sendToAllNear(this.getPos(), 128, this.world.provider.getDimension(), packet);
+				FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().sendToAllNear(this.getPos(), 128, this.world.provider.getDimension(), packet);
 			}
 		} else
 		{
@@ -409,7 +410,7 @@ public class TileEntityGas extends TileEntity
 		{
 			//EnviroMine.logger.log(Level.WARN, "Sent data packet for TileEntityGas with 0 gases!", new Exception());
 		}
-		return new S35PacketUpdateTileEntity(this.getPos(), 0, tags);
+		return new SPacketUpdateTileEntity(this.getPos(), 0, tags);
 	}
 	
 	public void addGas(int id, int addNum)

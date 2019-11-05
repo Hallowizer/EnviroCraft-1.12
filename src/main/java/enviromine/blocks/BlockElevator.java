@@ -17,7 +17,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import enviromine.blocks.tiles.TileEntityElevator;
 import enviromine.core.EM_Settings;
@@ -65,7 +65,7 @@ public class BlockElevator extends Block implements ITileEntityProvider
 		
 		if(EM_Settings.disableCaves)
 		{
-			player.addChatMessage(new ChatComponentText("The cave dimension has been disabled by the server owner!"));
+			player.sendMessage(new TextComponentString("The cave dimension has been disabled by the server owner!"));
 			return true;
 		}
 		
@@ -110,19 +110,19 @@ public class BlockElevator extends Block implements ITileEntityProvider
 		
 		if(!(meta == 0 && world.getBlockState(new BlockPos(i, j - 1, k)).getBlock() == ObjectHandler.elevator && world.getBlockMetadata(i, j - 1, k)%2 == 1) && !(meta == 1 && world.getBlockState(new BlockPos(i, j + 1, k)).getBlock() == ObjectHandler.elevator && world.getBlockMetadata(i, j + 1, k)%2 == 0))
 		{
-			player.addChatMessage(new ChatComponentText("Elevator is incomplete!"));
+			player.sendMessage(new TextComponentString("Elevator is incomplete!"));
 			return true;
 		}
 		
 		if(j > EM_Settings.limitElevatorY - meta && player.dimension == 0)
 		{
-			player.addChatMessage(new ChatComponentText("Elevator must be built near bedrock."));
+			player.sendMessage(new TextComponentString("Elevator must be built near bedrock."));
 			return true;
 		}
 		
 		if(player.timeUntilPortal > 0)
 		{
-			player.addChatMessage(new ChatComponentText("Please wait before attempting to teleport again."));
+			player.sendMessage(new TextComponentString("Please wait before attempting to teleport again."));
 			return true;
 		} else
 		{

@@ -305,7 +305,7 @@ public class EnviroPotion extends Potion
 					//sound should only play to the player with insanity
 					if(!EnviroMine.proxy.isClient() && player instanceof EntityPlayerMP)
 					{
-						((EntityPlayerMP)player).playerNetServerHandler.sendPacket(packet);
+						((EntityPlayerMP)player).connection.sendPacket(packet);
 					} else if(EnviroMine.proxy.isClient() && !player.world.isRemote)
 					{
 						player.world.playSound(new BlockPos(entityLiving.posX + rndX, entityLiving.posY + rndY, entityLiving.posZ + rndZ), soundEve, soundCat, 1.0F, (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);

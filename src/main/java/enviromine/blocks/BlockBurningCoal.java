@@ -104,7 +104,7 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
         		{
         			world.setBlock(xOff, yOff, zOff, ObjectHandler.gasBlock);
         		}
-        		TileEntity tile = world.getTileEntity(xOff, yOff, zOff);
+        		TileEntity tile = world.getTileEntity(new BlockPos(xOff, yOff, zOff));
         		
         		if(tile != null && tile instanceof TileEntityGas)
         		{

@@ -1,10 +1,10 @@
 package enviromine;
 
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.IChatComponent;
+import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 public class EnviroDamageSource extends DamageSource
 {
@@ -25,12 +25,12 @@ public class EnviroDamageSource extends DamageSource
 	}
 	
 	@Override
-	public IChatComponent func_151519_b(EntityLivingBase par1EntityLivingBase)
+	public ITextComponent getDeathMessage(EntityLivingBase par1EntityLivingBase)
 	{
 		if (!this.damageType.equals("thething"))
 		{
-			return new ChatComponentTranslation("deathmessage.enviromine."+this.damageType, par1EntityLivingBase.getCommandSenderName());
+			return new TextComponentTranslation("deathmessage.enviromine."+this.damageType, par1EntityLivingBase.getCommandSenderName());
 		}
-		return new ChatComponentText("");
+		return new TextComponentString("");
 	}
 }

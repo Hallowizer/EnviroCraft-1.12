@@ -8,8 +8,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiListExtended;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 
 import org.lwjgl.input.Mouse;
@@ -69,7 +69,7 @@ public class PostGuiList extends GuiListExtended
 	{
 		if(EM_Settings.Version == "FWG_" + "EM" + "_VER")
 		{
-			addLine(EnumChatFormatting.RED + "THIS COPY OF ENIVROMINE IS NOT FOR PUBLIC USE!");
+			addLine(TextFormatting.RED + "THIS COPY OF ENIVROMINE IS NOT FOR PUBLIC USE!");
 			return;
 		}
 		
@@ -128,10 +128,10 @@ public class PostGuiList extends GuiListExtended
 	{
 		for(WordPressPost post : WordPressPost.Posts)
 		{
-			addLine(EnumChatFormatting.BOLD + "" + EnumChatFormatting.UNDERLINE + post.getTitle(), textType.TITLE);
+			addLine(TextFormatting.BOLD + "" + TextFormatting.UNDERLINE + post.getTitle(), textType.TITLE);
 			addBlankLines(1);
 			
-			addLine("Posted: " + EnumChatFormatting.ITALIC + post.getPubDate(), textType.DATE);
+			addLine("Posted: " + TextFormatting.ITALIC + post.getPubDate(), textType.DATE);
 			addBlankLines(1);
 			
 			@SuppressWarnings("unchecked")
@@ -141,7 +141,7 @@ public class PostGuiList extends GuiListExtended
 			
 			addBlankLines(1);
 			
-			addLine(EnumChatFormatting.ITALIC + "Posted by: " + post.getCreator(), textType.CREATOR);
+			addLine(TextFormatting.ITALIC + "Posted by: " + post.getCreator(), textType.CREATOR);
 			addBlankLines(2);
 			addLine("", textType.HR);
 			addBlankLines(2);

@@ -7,7 +7,8 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import enviromine.handlers.EM_StatusManager;
@@ -129,7 +130,7 @@ public class EnviroCommand extends CommandBase
 	
 	public void ShowNoTracker(ICommandSender sender)
 	{
-		sender.addChatMessage(new ChatComponentTranslation("commands.enviromine.envirostat.noTracker"));
+		sender.sendMessage(new TextComponentTranslation("commands.enviromine.envirostat.noTracker"));
 	}
 
     /**

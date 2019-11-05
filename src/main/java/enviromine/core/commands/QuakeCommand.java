@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -96,7 +97,7 @@ public class QuakeCommand extends CommandBase
 		
 		if(Earthquake.pendingQuakes.size() > 0)
 		{
-			sender.sendMessage(new TextComponentString(EnumChatFormatting.RED + errorMany));
+			sender.sendMessage(new TextComponentString(TextFormatting.RED + errorMany));
 			return;
 		}
 		
@@ -129,7 +130,7 @@ public class QuakeCommand extends CommandBase
 		
 		if(l * w > 4096)
 		{
-			sender.sendMessage(new TextComponentString(EnumChatFormatting.RED + errorBig));
+			sender.sendMessage(new TextComponentString(TextFormatting.RED + errorBig));
 			return;
 		}
 		

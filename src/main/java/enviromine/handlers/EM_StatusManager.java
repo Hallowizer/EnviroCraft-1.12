@@ -47,6 +47,7 @@ import java.util.List;
 
 import com.google.common.base.Stopwatch;
 
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.network.NetworkRegistry.TargetPoint;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.common.EnumPlantType;
@@ -485,7 +486,7 @@ public class EM_StatusManager
 				bTemp -= 10F;
 				animalHostility = -1;
 				
-				if(entityLiving.world.canBlockSeeTheSky(i, j, k))
+				if(entityLiving.world.canBlockSeeSky(new BlockPos(i, j, k)))
 				{
 					dropSpeed = 0.01F;
 				}
@@ -494,7 +495,7 @@ public class EM_StatusManager
 		} // Dimension Overrides End
 	
 		// 	Shade		
-		if(!entityLiving.world.canBlockSeeTheSky(i, j, k) && isDay && !entityLiving.world.isRaining())
+		if(!entityLiving.world.canBlockSeeSky(new BlockPos(i, j, k)) && isDay && !entityLiving.world.isRaining())
 		{
 			bTemp -= 2.5F;
 		}
@@ -1009,7 +1010,7 @@ public class EM_StatusManager
 			}
 		}
 		
-		if(!entityLiving.isPotionActive(Potion.fireResistance))
+		if(!entityLiving.isPotionActive(MobEffects.FIRE_RESISTANCE))
 		{
 			if(entityLiving.world.getBlock(i, j, k) == Blocks.LAVA || entityLiving.world.getBlock(i, j, k) == Blocks.FLOWING_LAVA)
 			{
@@ -1210,14 +1211,14 @@ public class EM_StatusManager
 		{
 			if(Minecraft.getMinecraft().isIntegratedServerRunning())
 			{
-				worlds = MinecraftServer.getServer().worldServers;
+				worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 			} else
 			{
 				worlds[0] = Minecraft.getMinecraft().player.world;
 			}
 		} else
 		{
-			worlds = MinecraftServer.getServer().worldServers;
+			worlds = FMLCommonHandler.instance().getMinecraftServerInstance().worldServers;
 		}
 		
 		for(int i = worlds.length - 1; i >= 0; i -= 1)

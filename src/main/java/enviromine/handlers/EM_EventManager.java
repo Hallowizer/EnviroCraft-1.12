@@ -11,7 +11,7 @@ import net.minecraft.block.BlockJukebox.TileEntityJukebox;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.audio.SoundCategory;
+import net.minecraft.util.SoundCategory;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
@@ -49,6 +49,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.Vec3;
@@ -472,7 +473,7 @@ public class EM_EventManager
 				EM_PhysManager.schedulePhysUpdate(event.getEntityPlayer().world, adjCoords[0], adjCoords[1], adjCoords[2], true, "Normal");
 			} else if(item.getItem() == Items.GLASS_BOTTLE && !event.getEntityPlayer().world.isRemote)
 			{
-				if(event.getEntityPlayer().world.getBlock(event.x, event.y, event.z) == Blocks.cauldron && event.entityPlayer.worldObj.getBlockMetadata(event.x, event.y, event.z) > 0)
+				if(event.getEntityPlayer().world.getBlock(event.x, event.y, event.z) == Blocks.CAULDRON && event.getEntityPlayer().world.getBlockMetadata(event.x, event.y, event.z) > 0)
 				{
 					fillBottle(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
 				}
@@ -1508,10 +1509,10 @@ public class EM_EventManager
 	{
 		if(event.getEntity().getEntityData().getBoolean("EM_Hallucination"))
 		{
-			ResourceLocation resLoc = new ResourceLocation(event.name);
+			ResourceLocation resLoc = event.getSound().getSoundName();
 			if(new File(resLoc.getResourcePath()).exists())
 			{
-				Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(new ResourceLocation(event.name), 1.0F, (event.entity.worldObj.rand.nextFloat() - event.entity.worldObj.rand.nextFloat()) * 0.2F + 1.0F, (float)event.entity.posX, (float)event.entity.posY, (float)event.entity.posZ));
+				Minecraft.getMinecraft().getSoundHandler().playSound(new PositionedSoundRecord(event.getSound(), SoundCategory.NEUTRAL, 1.0F, (event.getEntity().world.rand.nextFloat() - event.getEntity().world.rand.nextFloat()) * 0.2F + 1.0F, (float)event.getEntity().posX, (float)event.getEntity().posY, (float)event.getEntity().posZ));
 			}
 			event.setCanceled(true);
 		}
@@ -1677,34 +1678,34 @@ public class EM_EventManager
 				}
 				
 				int disp = (fill <= 0 ? 0 : fill > max ? 100 : (int)(((float)fill/(float)max)*100));
-				event.getToolTip().add(new ChatComponentTranslation("misc.enviromine.tooltip.water", disp + "%",  fill, max).getUnformattedText());
+				event.getToolTip().add(new TextComponentTranslation("misc.enviromine.tooltip.water", disp + "%",  fill, max).getUnformattedText());
 				//event.toolTip.add("Water: " + disp + "% ("+fill+"/"+max+")");
 			}
 			
-			if(event.itemStack.getTagCompound().getLong("EM_ROT_DATE") > 0 && EM_Settings.foodSpoiling)
+			if(event.getItemStack().getTagCompound().getLong("EM_ROT_DATE") > 0 && EM_Settings.foodSpoiling)
 			{
-				double rotDate = event.itemStack.getTagCompound().getLong("EM_ROT_DATE");
-				double rotTime = event.itemStack.getTagCompound().getLong("EM_ROT_TIME");
-				double curTime = event.entity.worldObj.getTotalWorldTime();
+				double rotDate = event.getItemStack().getTagCompound().getLong("EM_ROT_DATE");
+				double rotTime = event.getItemStack().getTagCompound().getLong("EM_ROT_TIME");
+				double curTime = event.getEntity().world.getTotalWorldTime();
 				
 				if(curTime - rotDate <= 0)
 				{
-					event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", "0%" , MathHelper.floor_double((curTime - rotDate)/24000L) , MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
+					event.toolTip.add(new TextComponentTranslation("misc.enviromine.tooltip.rot", "0%" , MathHelper.floor((curTime - rotDate)/24000L) , MathHelper.floor(rotTime/24000L)).getUnformattedText());
 					//event.toolTip.add("Rotten: 0% (Day " + MathHelper.floor_double((curTime - rotDate)/24000L) + "/" + MathHelper.floor_double(rotTime/24000L) + ")");
 					//event.toolTip.add("Use-By: Day " + MathHelper.floor_double((rotDate + rotTime)/24000L));
 				} else
 				{
-					event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.rot", MathHelper.floor_double((curTime - rotDate)/rotTime * 100D) + "%", MathHelper.floor_double((curTime - rotDate)/24000L), MathHelper.floor_double(rotTime/24000L)).getUnformattedText());
+					event.toolTip.add(new TextComponentTranslation("misc.enviromine.tooltip.rot", MathHelper.floor((curTime - rotDate)/rotTime * 100D) + "%", MathHelper.floor((curTime - rotDate)/24000L), MathHelper.floor(rotTime/24000L)).getUnformattedText());
 					//event.toolTip.add("Use-By: Day " + MathHelper.floor_double((rotDate + rotTime)/24000L));
 				}
 			}
 			
 			if(event.itemStack.getTagCompound().hasKey("gasMaskFill"))
 			{
-				int i = event.itemStack.getTagCompound().getInteger("gasMaskFill");
-				int max = event.itemStack.getTagCompound().getInteger("gasMaskMax");
+				int i = event.getItemStack().getTagCompound().getInteger("gasMaskFill");
+				int max = event.getItemStack().getTagCompound().getInteger("gasMaskMax");
 				int disp = (i <= 0 ? 0 : i > max ? 100 : (int)(i/(max/100F)));
-				event.toolTip.add(new ChatComponentTranslation("misc.enviromine.tooltip.filter", disp + "%", i, max).getUnformattedText());
+				event.toolTip.add(new TextComponentTranslation("misc.enviromine.tooltip.filter", disp + "%", i, max).getUnformattedText());
 			}
 		}
 	}

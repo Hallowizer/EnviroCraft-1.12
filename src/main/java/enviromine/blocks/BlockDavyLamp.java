@@ -9,6 +9,7 @@ import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
 import net.minecraft.block.Block;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.creativetab.CreativeTabs;
@@ -31,7 +32,7 @@ public class BlockDavyLamp extends Block implements ITileEntityProvider
 	{
 		super(material);
 		this.setHardness(0.0F);
-		this.setStepSound(Block.soundTypeMetal);
+		this.setSoundType(SoundType.METAL);
 	}
 	
 	@Override

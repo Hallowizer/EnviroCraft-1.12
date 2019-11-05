@@ -6,11 +6,11 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.StatCollector;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextComponentTranslation;
 
 import org.apache.logging.log4j.Level;
 
@@ -96,7 +96,7 @@ public class UpdateNotification
 		// DO NOT CHANGE THIS!
 		if(EM_Settings.Version == "FWG_" + "EM" + "_VER")
 		{
-			event.player.sendMessage(new ChatComponentText(EnumChatFormatting.RED + "THIS COPY OF ENIVROMINE IS NOT FOR PUBLIC USE!"));
+			event.player.sendMessage(new TextComponentString(EnumChatFormatting.RED + "THIS COPY OF ENIVROMINE IS NOT FOR PUBLIC USE!"));
 			return;
 		}
 		
@@ -125,29 +125,29 @@ public class UpdateNotification
 			
 			if(verStat == -1)
 			{
-				event.player.sendMessage(new ChatComponentTranslation("updatemsg.enviromine.available", version).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
-				event.player.sendMessage(new ChatComponentTranslation("updatemsg.enviromine.download"));
-				event.player.sendMessage(new ChatComponentText("https://github.com/Funwayguy/EnviroMine/wiki/Downloads").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.BLUE).setUnderlined(true)));
+				event.player.sendMessage(new TextComponentTranslation("updatemsg.enviromine.available", version).setChatStyle(new ChatStyle().setColor(EnumChatFormatting.RED)));
+				event.player.sendMessage(new TextComponentTranslation("updatemsg.enviromine.download"));
+				event.player.sendMessage(new TextComponentString("https://github.com/Funwayguy/EnviroMine/wiki/Downloads").setChatStyle(new ChatStyle().setColor(EnumChatFormatting.BLUE).setUnderlined(true)));
 				for(int i = 3; i < data.length; i++)
 				{
 					if(i > 6)
 					{
-						event.player.sendMessage(new ChatComponentText("" + (data.length - 7) + " more..."));
+						event.player.sendMessage(new TextComponentString("" + (data.length - 7) + " more..."));
 						break;
 					} else
 					{
-						event.player.sendMessage(new ChatComponentText(EnumChatFormatting.RESET + "" + data[i].trim()));
+						event.player.sendMessage(new TextComponentString(EnumChatFormatting.RESET + "" + data[i].trim()));
 					}
 				}
 			} else if(verStat == 0)
 			{
-				event.player.sendMessage(new ChatComponentText(EnumChatFormatting.YELLOW + StatCollector.translateToLocalFormatted("updatemsg.enviromine.uptodate", EM_Settings.Version)));
+				event.player.sendMessage(new TextComponentString(EnumChatFormatting.YELLOW + StatCollector.translateToLocalFormatted("updatemsg.enviromine.uptodate", EM_Settings.Version)));
 			} else if(verStat == 1)
 			{
-				event.player.sendMessage(new ChatComponentText(EnumChatFormatting.RED + StatCollector.translateToLocalFormatted("updatemsg.enviromine.debug", EM_Settings.Version)));
+				event.player.sendMessage(new TextComponentString(EnumChatFormatting.RED + StatCollector.translateToLocalFormatted("updatemsg.enviromine.debug", EM_Settings.Version)));
 			} else if(verStat == -2)
 			{
-				event.player.sendMessage(new ChatComponentText(EnumChatFormatting.RED + StatCollector.translateToLocalFormatted("updatemsg.enviromine.error")));
+				event.player.sendMessage(new TextComponentString(EnumChatFormatting.RED + StatCollector.translateToLocalFormatted("updatemsg.enviromine.error")));
 			}
 			
 		} catch(IOException e)

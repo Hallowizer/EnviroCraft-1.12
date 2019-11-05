@@ -54,7 +54,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 		if(EM_Settings.entityFailsafe > 0 && !world.isRemote)
 		{
 			@SuppressWarnings("unchecked")
-			List<EntityPhysicsBlock> entityList = this.world.getEntitiesWithinAABB(EntityPhysicsBlock.class, this.boundingBox.expand(8F, 8F, 8F));
+			List<EntityPhysicsBlock> entityList = this.world.getEntitiesWithinAABB(EntityPhysicsBlock.class, this.getEntityBoundingBox().expand(8F, 8F, 8F));
 			
 			if(entityList.size() >= 1024)
 			{
@@ -102,7 +102,7 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 		if(EM_Settings.entityFailsafe > 0 && !world.isRemote)
 		{
 			@SuppressWarnings("unchecked")
-			List<EntityPhysicsBlock> entityList = this.world.getEntitiesWithinAABB(EntityPhysicsBlock.class, this.boundingBox.expand(8F, 8F, 8F));
+			List<EntityPhysicsBlock> entityList = this.world.getEntitiesWithinAABB(EntityPhysicsBlock.class, this.getEntityBoundingBox().expand(8F, 8F, 8F));
 			
 			if(entityList.size() >= 512)
 			{
@@ -367,13 +367,13 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 			
 			if(i > 0)
 			{
-				ArrayList arraylist = new ArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.boundingBox));
+				ArrayList arraylist = new ArrayList(this.world.getEntitiesWithinAABBExcludingEntity(this, this.getEntityBoundingBox()));
 				
 				DamageSource damagesource;
 				
 				if(isLandSlide)
 				{
-					if(this.block.getMaterial() == Material.SNOW)
+					if(this.block.getDefaultState().getMaterial() == Material.SNOW)
 					{
 						damagesource = EnviroDamageSource.avalanche;
 					} else
