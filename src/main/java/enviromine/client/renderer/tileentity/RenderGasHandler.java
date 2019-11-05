@@ -4,6 +4,7 @@ import net.minecraft.block.Block;
 import net.minecraft.client.renderer.RenderBlocks;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.util.IIcon;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import cpw.mods.fml.client.registry.ISimpleBlockRenderingHandler;
 import net.minecraftforge.fml.relauncher.Side;
@@ -86,7 +87,7 @@ public class RenderGasHandler implements ISimpleBlockRenderingHandler
 		{
 			EnviroMine.logger.log(Level.ERROR, "Trying to render gas without block at position!");
 			return false;
-		} else if(blockAccess.getTileEntity(i, j, k) == null)
+		} else if(blockAccess.getTileEntity(new BlockPos(i, j, k)) == null)
 		{
 			EnviroMine.logger.log(Level.ERROR, "Trying to render gas without tile at position!");
 			return false;

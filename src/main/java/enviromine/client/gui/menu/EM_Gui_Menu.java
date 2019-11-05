@@ -181,7 +181,7 @@ public class EM_Gui_Menu extends GuiScreen implements GuiYesNoCallback
 	{
 		this.drawDefaultBackground();
 		
-		if(!EnviroMine.proxy.isClient() && FMLCommonHandler.getMinecraftServerInstance().getConfigurationManager().func_152607_e(mc.player.getGameProfile()) || EnviroMine.proxy.isClient() )
+		if(!EnviroMine.proxy.isClient() && FMLCommonHandler.instance().getMinecraftServerInstance().getConfigurationManager().func_152607_e(mc.player.getGameProfile()) || EnviroMine.proxy.isClient() )
 		{
 			this.drawString(this.fontRenderer, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.adminOptions.title") +" ", this.width / 2 -30, this.height / 6 + 74, 16777215);
 		}

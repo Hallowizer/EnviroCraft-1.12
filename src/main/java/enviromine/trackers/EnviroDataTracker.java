@@ -17,8 +17,9 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.relauncher.Side;
@@ -133,7 +134,7 @@ public class EnviroDataTracker
 		if((trackedEntity.getHealth() <= 2F || bodyTemp >= 41F) && enviroData[7] > (float)(-1F * EM_Settings.sanityMult))
 		{
 			enviroData[7] = (float)(-1F * EM_Settings.sanityMult);
-		} else if(trackedEntity.getHealth() >= trackedEntity.getMaxHealth() && enviroData[7] < (0.1F * EM_Settings.sanityMult) && trackedEntity.world.isDaytime() && trackedEntity.world.provider.hasSkyLight() && trackedEntity.world.canBlockSeeTheSky(MathHelper.floor(trackedEntity.posX), MathHelper.floor(trackedEntity.posY), MathHelper.floor(trackedEntity.posZ)))
+		} else if(trackedEntity.getHealth() >= trackedEntity.getMaxHealth() && enviroData[7] < (0.1F * EM_Settings.sanityMult) && trackedEntity.world.isDaytime() && trackedEntity.world.provider.hasSkyLight() && trackedEntity.world.canBlockSeeSky(new BlockPos(MathHelper.floor(trackedEntity.posX), MathHelper.floor(trackedEntity.posY), MathHelper.floor(trackedEntity.posZ))))
 		{
 			enviroData[7] = (float)(0.1F * EM_Settings.sanityMult);
 		}
@@ -451,8 +452,8 @@ public class EnviroDataTracker
 					
 					if(trackedEntity instanceof EntityPlayer)
 					{
-						((EntityPlayer)trackedEntity).addChatComponentMessage(new ChatComponentText("The flesh in your limbs have gone rock hard!"));
-						((EntityPlayer)trackedEntity).addChatComponentMessage(new ChatComponentText("Your condition is now permanent!"));
+						((EntityPlayer)trackedEntity).sendMessage(new TextComponentString("The flesh in your limbs have gone rock hard!"));
+						((EntityPlayer)trackedEntity).sendMessage(new TextComponentString("Your condition is now permanent!"));
 					}
 				}
 				

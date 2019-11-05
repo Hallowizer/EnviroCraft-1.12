@@ -74,7 +74,7 @@ public class BlockBurningCoal extends Block implements ITileEntityProvider
 			return;
 		}
         
-        TileEntityBurningCoal coalTile = (TileEntityBurningCoal)world.getTileEntity(x, y, z);
+        TileEntityBurningCoal coalTile = (TileEntityBurningCoal)world.getTileEntity(new BlockPos(x, y, z));
 
         int l = world.getBlockMetadata(x, y, z);
 		boolean flag1 = world.isBlockHighHumidity(x, y, z);

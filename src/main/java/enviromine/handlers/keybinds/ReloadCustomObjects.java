@@ -1,8 +1,7 @@
 package enviromine.handlers.keybinds;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.util.ChatComponentText;
-
+import net.minecraft.util.text.TextComponentString;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_Settings;
 import enviromine.core.EnviroMine;
@@ -18,7 +17,7 @@ public class ReloadCustomObjects
 		{
 			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			{
-				mc.player.addChatMessage(new ChatComponentText("Single player only function."));
+				mc.player.sendMessage(new TextComponentString("Single player only function."));
 			}
 			return;
 		}
@@ -30,20 +29,20 @@ public class ReloadCustomObjects
 			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			{
 				
-				mc.player.addChatMessage(new ChatComponentText("Reloading Configs..."));
+				mc.player.sendMessage(new TextComponentString("Reloading Configs..."));
 			
 				if(EM_ConfigHandler.ReloadConfig())
 				{
-					mc.player.addChatMessage(new ChatComponentText("Loaded objects and " + EM_Settings.stabilityTypes.size() + " stability types"));
+					mc.player.sendMessage(new TextComponentString("Loaded objects and " + EM_Settings.stabilityTypes.size() + " stability types"));
 				}else
 				{
-					mc.player.addChatMessage(new ChatComponentText("Failed to Load Custom Objects Files."));
+					mc.player.sendMessage(new TextComponentString("Failed to Load Custom Objects Files."));
 				}
 			}
 			else
 			{
 				
-				mc.player.addChatMessage(new ChatComponentText("Must hold left shift to reload Custom Objects"));
+				mc.player.sendMessage(new TextComponentString("Must hold left shift to reload Custom Objects"));
 			}
 		}
 	}

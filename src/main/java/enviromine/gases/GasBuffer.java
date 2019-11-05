@@ -174,7 +174,7 @@ public class GasBuffer
 				
 				int[] entry = fireBuffer.get(i);
 				
-				World world = MinecraftServer.getServer().worldServerForDimension(entry[0]);
+				World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(entry[0]);
 				
 				if(world == null || world.getTotalWorldTime() < EM_PhysManager.worldStartTime + EM_Settings.worldDelay)
 				{
@@ -216,7 +216,7 @@ public class GasBuffer
 				
 				int[] entry = gasBuffer.get(i);
 				
-				World world = FMLCommonHandler.instance().getMinecraftServerInstance().worldServerForDimension(entry[0]);
+				World world = FMLCommonHandler.instance().getMinecraftServerInstance().getWorld(entry[0]);
 				
 				if(world == null || world.getTotalWorldTime() < EM_PhysManager.worldStartTime + EM_Settings.worldDelay)
 				{

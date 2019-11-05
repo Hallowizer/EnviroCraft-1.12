@@ -9,8 +9,8 @@ import net.minecraft.entity.EntityList;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.MovingObjectPosition.MovingObjectType;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.Level;
@@ -48,7 +48,7 @@ public class AddRemoveCustom
 		{
 			if(Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			{
-				mc.player.addChatMessage(new ChatComponentText("Single player only function."));
+				mc.player.sendMessage(new TextComponentString("Single player only function."));
 			}
 			return;
 		}
@@ -81,7 +81,7 @@ public class AddRemoveCustom
 							else 
 							{
 								returnValue = EM_ConfigHandler.SaveMyCustom(item);
-								mc.player.addChatMessage(new ChatComponentText(name + " " + returnValue));								
+								mc.player.sendMessage(new TextComponentString(name + " " + returnValue));								
 							}
 						}
 						
@@ -102,7 +102,7 @@ public class AddRemoveCustom
 							id = EntityRegistry.instance().lookupModSpawn(lookingAt.getClass(), false).getModEntityId() + 128;
 						} else
 						{
-							mc.player.addChatMessage(new ChatComponentText("Failed to add config entry. " + lookingAt.getCommandSenderName() + " has no ID!"));
+							mc.player.sendMessage(new TextComponentString("Failed to add config entry. " + lookingAt.getCommandSenderName() + " has no ID!"));
 							EnviroMine.logger.log(Level.WARN, "Failed to add config entry. " + lookingAt.getCommandSenderName() + " has no ID!");
 						}
 						
@@ -118,7 +118,7 @@ public class AddRemoveCustom
 						else
 						{
 							returnValue = EM_ConfigHandler.SaveMyCustom(lookingAt);
-							mc.player.addChatMessage(new ChatComponentText(lookingAt.getCommandSenderName() + " (" + id + ") " + returnValue));
+							mc.player.sendMessage(new TextComponentString(lookingAt.getCommandSenderName() + " (" + id + ") " + returnValue));
 						}
 					} else if(type.name() == "BLOCK")
 					{
@@ -135,7 +135,7 @@ public class AddRemoveCustom
 						blockName = EnviroUtils.replaceULN(blockName);
 											
 						returnValue = EM_ConfigHandler.SaveMyCustom(block);
-						mc.player.addChatMessage(new ChatComponentText(blockName + "(" + Block.REGISTRY.getNameForObject(block) + ":" + blockMeta + ") " + returnValue));
+						mc.player.sendMessage(new TextComponentString(blockName + "(" + Block.REGISTRY.getNameForObject(block) + ":" + blockMeta + ") " + returnValue));
 					}
 				}
 				catch(NullPointerException e)
@@ -146,7 +146,7 @@ public class AddRemoveCustom
 			else
 			{
 				
-				mc.player.addChatMessage(new ChatComponentText("Must hold left shift to add objects"));
+				mc.player.sendMessage(new TextComponentString("Must hold left shift to add objects"));
 			}
 		}
 	}

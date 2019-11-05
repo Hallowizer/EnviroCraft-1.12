@@ -9,7 +9,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.StatCollector;
 import net.minecraftforge.client.event.GuiOpenEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.ActionPerformedEvent;
 import net.minecraftforge.client.event.GuiScreenEvent.InitGuiEvent;
@@ -19,8 +18,8 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
 import org.apache.logging.log4j.Level;
 import org.lwjgl.opengl.GL11;
 
-import cpw.mods.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -36,6 +35,8 @@ import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
 import enviromine.utils.RenderAssist;
 import enviromine.world.ClientQuake;
+
+//I18n can translate on server side instead of client side, before finalization it's uses need to be changed with client side variants
 
 @SideOnly(Side.CLIENT)
 public class Gui_EventManager
@@ -59,18 +60,18 @@ public class Gui_EventManager
 		
 		if(event.getGui() instanceof GuiIngameMenu && !EM_Settings.voxelMenuExists)
 		{
-			String newPost = UpdateNotification.isNewPost() ? " " + StatCollector.translateToLocal("news.enviromine.newpost") : "";
+			String newPost = UpdateNotification.isNewPost() ? " " + net.minecraft.util.text.translation.I18n.translateToLocal("news.enviromine.newpost") : "";
 
 			try
 			{
 				byte b0 = -16;
 				//enviromine = new GuiButton(1348, width / 2 - 100, height / 4 + 24 + b0, StatCollector.translateToLocal("options.enviromine.menu.title") + newPost);
-				enviromine = new EM_Button(1348, width / 2 - 100, height / 4 + 24 + b0, StatCollector.translateToLocal("options.enviromine.menu.title") , newPost);
+				enviromine = new EM_Button(1348, width / 2 - 100, height / 4 + 24 + b0, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.menu.title") , newPost);
 				event.getButtonList().set(1, new GuiButton(4, width / 2 - 100, height / 4 + 0 + b0, I18n.format("menu.returnToGame", new Object[0])));
 				event.getButtonList().add(enviromine);
 			} catch(Exception e)
 			{
-				enviromine = new GuiButton(1348, width - 175, height - 30, 160, 20, StatCollector.translateToLocal("options.enviromine.menu.title") + newPost);
+				enviromine = new GuiButton(1348, width - 175, height - 30, 160, 20, net.minecraft.util.text.translation.I18n.translateToLocal("options.enviromine.menu.title") + newPost);
 				EnviroMine.logger.log(Level.ERROR, "Error shifting Minecrafts Menu to add in new button: " + e);
 				event.getButtonList().add(enviromine);
 			}

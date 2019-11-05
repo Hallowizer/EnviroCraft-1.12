@@ -9,6 +9,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.Level;
@@ -198,24 +199,24 @@ public class GuiAddCustom extends GuiScreen
 			{
 				case 100:
 						returnValue = EM_ConfigHandler.SaveMyCustom(this.objBlock);
-						mc.player.addChatMessage(new ChatComponentText(this.objName + " " + returnValue));
+						mc.player.sendMessage(new TextComponentString(this.objName + " " + returnValue));
 			               this.mc.displayGuiScreen((GuiScreen)null);
 			                this.mc.setIngameFocus();
 					break;
 					
 				case 101: 
 					returnValue = EM_ConfigHandler.SaveMyCustom(this.objItem);
-					mc.player.addChatMessage(new ChatComponentText(this.objName + " " + returnValue));
+					mc.player.sendMessage(new TextComponentString(this.objName + " " + returnValue));
 		               this.mc.displayGuiScreen((GuiScreen)null);
 		                this.mc.setIngameFocus();
 					break;
 					
 				case 102:
 					returnValue = EM_ConfigHandler.SaveMyCustom(this.objItem);
-					mc.player.addChatMessage(new ChatComponentText(this.objName + " " + returnValue));
+					mc.player.sendMessage(new TextComponentString(this.objName + " " + returnValue));
 
 					returnValue = EM_ConfigHandler.SaveMyCustom(this.objBlock);
-					mc.player.addChatMessage(new ChatComponentText(this.objName + " " + returnValue));
+					mc.player.sendMessage(new TextComponentString(this.objName + " " + returnValue));
 
 		               this.mc.displayGuiScreen((GuiScreen)null);
 		                this.mc.setIngameFocus();
@@ -234,14 +235,14 @@ public class GuiAddCustom extends GuiScreen
 					break;
 				case 105:
 					returnValue = EM_ConfigHandler.SaveMyCustom(this.objItem);
-					mc.player.addChatMessage(new ChatComponentText(this.objName + " " + returnValue));
+					mc.player.sendMessage(new TextComponentString(this.objName + " " + returnValue));
 
 		               this.mc.displayGuiScreen((GuiScreen)null);
 		                this.mc.setIngameFocus();
 		            break;
 				case 106:
 					returnValue = EM_ConfigHandler.SaveMyCustom(this.objArmor,ArmorProperties.base);
-					mc.player.addChatMessage(new ChatComponentText(this.objName + " " + returnValue));
+					mc.player.sendMessage(new TextComponentString(this.objName + " " + returnValue));
 
 		               this.mc.displayGuiScreen((GuiScreen)null);
 		                this.mc.setIngameFocus();
@@ -260,7 +261,7 @@ public class GuiAddCustom extends GuiScreen
 					break;
 				case 200:
 					returnValue = EM_ConfigHandler.SaveMyCustom(this.objBlock);
-					mc.player.addChatMessage(new ChatComponentText(this.objName + " " + returnValue));
+					mc.player.sendMessage(new TextComponentString(this.objName + " " + returnValue));
 		               this.mc.displayGuiScreen((GuiScreen)null);
 		                this.mc.setIngameFocus();
 					break;

@@ -6,6 +6,10 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.network.play.server.SPacketSoundEffect;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundCategory;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumDifficulty;
 import net.minecraft.world.EnumSkyBlock;
@@ -104,14 +108,14 @@ public class HandlingTheThing
 			float rndY = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
 			float rndZ = (player.getRNG().nextInt(6) - 3) * player.getRNG().nextFloat();
 			
-			S29PacketSoundEffect packet = new S29PacketSoundEffect("enviromine:whispers", player.posX + rndX, player.posY + rndY, player.posZ + rndZ, 0.5F, player.getRNG().nextBoolean()? 0.2F : (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
+			SPacketSoundEffect packet = new SPacketSoundEffect(new SoundEvent(new ResourceLocation("enviromine:whispers")), SoundCategory.HOSTILE, player.posX + rndX, player.posY + rndY, player.posZ + rndZ, 0.5F, player.getRNG().nextBoolean()? 0.2F : (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
 			
 			if(!EnviroMine.proxy.isClient() && player instanceof EntityPlayerMP)
 			{
-				((EntityPlayerMP)player).playerNetServerHandler.sendPacket(packet);
+				((EntityPlayerMP)player).connection.sendPacket(packet);
 			} else if(EnviroMine.proxy.isClient() && !player.world.isRemote)
 			{
-				player.world.playSoundEffect(player.posX + rndX, player.posY + rndY, player.posZ + rndZ, "enviromine:whispers", 0.5F, (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
+				player.world.playSound(player, new BlockPos(player.posX + rndX, player.posY + rndY, player.posZ + rndZ), new SoundEvent(new ResourceLocation("enviromine:whispers")), SoundCategory.AMBIENT, 0.5F, (player.getRNG().nextFloat() - player.getRNG().nextFloat()) * 0.2F + 1.0F);
 			}
 		}
 		
@@ -129,7 +133,7 @@ public class HandlingTheThing
 	public static boolean hasWitnesses(EntityPlayer victim)
 	{
 		@SuppressWarnings("unchecked")
-		List<EntityPlayer> players = victim.world.getEntitiesWithinAABB(EntityPlayer.class, victim.boundingBox.expand(128, 128, 128));
+		List<EntityPlayer> players = victim.world.getEntitiesWithinAABB(EntityPlayer.class, victim.getEntityBoundingBox().expand(128, 128, 128));
 		
 		Iterator<EntityPlayer> iterator = players.iterator();
 		

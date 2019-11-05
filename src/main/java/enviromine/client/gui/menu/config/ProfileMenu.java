@@ -14,7 +14,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.settings.KeyBinding;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 //import net.minecraft.util.StatCollector;
 
 @SideOnly(Side.CLIENT)
@@ -74,7 +74,7 @@ public class ProfileMenu extends GuiScreen
             if (this.profileList.func_148179_a(p_73864_1_, p_73864_2_, p_73864_3_))
             {
                	EM_ConfigHandler.ReloadConfig();
-               	mc.player.addChatMessage(new ChatComponentText("Loading "+ EM_ConfigHandler.getProfileName() +" Profile."));
+               	mc.player.sendMessage(new TextComponentString("Loading "+ EM_ConfigHandler.getProfileName() +" Profile."));
                	this.mc.displayGuiScreen((GuiScreen)null);
             }
             

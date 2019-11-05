@@ -7,9 +7,9 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
+import net.minecraftforge.fml.common.FMLCommonHandler;
 import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
 
@@ -124,7 +124,7 @@ public class EnviroCommand extends CommandBase
 	
 	public void ShowUsage(ICommandSender sender)
 	{
-		sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
+		sender.sendMessage(new TextComponentString(getCommandUsage(sender)));
 	}
 	
 	public void ShowNoTracker(ICommandSender sender)
@@ -141,7 +141,7 @@ public class EnviroCommand extends CommandBase
     {
         if(strings.length == 1)
         {
-        	return getListOfStringsMatchingLastWord(strings, MinecraftServer.getServer().getAllUsernames());
+        	return getListOfStringsMatchingLastWord(strings, FMLCommonHandler.instance().getMinecraftServerInstance().getAllUsernames());
         } else if(strings.length == 2)
         {
         	return getListOfStringsMatchingLastWord(strings, new String[]{add, set});

@@ -6,6 +6,7 @@ import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
 import enviromine.core.EM_Settings;
@@ -66,7 +67,7 @@ public class RotHandler
 					return new ItemStack(ObjectHandler.rottenFood, item.getCount());
 				} else
 				{
-					return Item.REGISTRY.getObject(rotProps.rotID) == null? null : new ItemStack((Item)Item.REGISTRY.getObject(rotProps.rotID), item.getCount(), rotProps.rotMeta < 0? item.getItemDamage() : rotProps.rotMeta);
+					return Item.REGISTRY.getObject(new ResourceLocation(rotProps.rotID)) == null? null : new ItemStack((Item)Item.REGISTRY.getObject(new ResourceLocation(rotProps.rotID)), item.getCount(), rotProps.rotMeta < 0? item.getItemDamage() : rotProps.rotMeta);
 				}
 			} else
 			{

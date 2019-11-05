@@ -165,7 +165,7 @@ public class Hallucination
 	
 	public static boolean isAtValidSpawn(EntityLivingBase creature)
 	{
-		return creature.world.checkNoEntityCollision(creature.boundingBox) && creature.world.getCollidingBoundingBoxes(creature, creature.boundingBox).isEmpty() && !creature.world.isAnyLiquid(creature.boundingBox) && isValidLightLevel(creature);
+		return creature.world.checkNoEntityCollision(creature.getEntityBoundingBox()) && creature.world.getCollidingBoundingBoxes(creature, creature.boundingBox).isEmpty() && !creature.world.isAnyLiquid(creature.boundingBox) && isValidLightLevel(creature);
 	}
 	
 	/**
@@ -179,7 +179,7 @@ public class Hallucination
 		}
 		
 		int i = MathHelper.floor(creature.posX);
-		int j = MathHelper.floor(creature.boundingBox.minY);
+		int j = MathHelper.floor(creature.getEntityBoundingBox().minY);
 		int k = MathHelper.floor(creature.posZ);
 		
 		if(creature.world.getSavedLightValue(EnumSkyBlock.SKY, i, j, k) > creature.getRNG().nextInt(32) && creature.world.isDaytime() && !creature.world.isThundering())

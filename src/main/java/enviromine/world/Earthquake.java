@@ -256,7 +256,7 @@ public class Earthquake
 				
 				Chunk chunk = world.getChunkFromBlockCoords(x, z);
 				
-				if((chunk != null && chunk.getSavedLightValue(EnumSkyBlock.SKY, x & 0xf, y, z & 0xf) >= 15) || world.getTopSolidOrLiquidBlock(x, z) < 16 || world.canBlockSeeTheSky(x, y, z))
+				if((chunk != null && chunk.getSavedLightValue(EnumSkyBlock.SKY, x & 0xf, y, z & 0xf) >= 15) || world.getTopSolidOrLiquidBlock(new BlockPos(x, y, z)).getY() < 16 || world.canBlockSeeSky(new BlockPos(x, y, z)))
 				{
 					ravineMask.remove(i);
 				} else

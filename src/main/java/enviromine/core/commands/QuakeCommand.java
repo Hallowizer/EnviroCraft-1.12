@@ -4,9 +4,9 @@ import java.util.Iterator;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import net.minecraft.world.World;
 import org.apache.logging.log4j.Level;
@@ -43,7 +43,7 @@ public class QuakeCommand extends CommandBase
 	
 	public void ShowUsage(ICommandSender sender)
 	{
-		sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
+		sender.sendMessage(new TextComponentString(getCommandUsage(sender)));
 	}
 	
 	@Override
@@ -85,7 +85,7 @@ public class QuakeCommand extends CommandBase
 					iterator.remove();
 				}
 				Earthquake.pendingQuakes.clear();
-				sender.addChatMessage(new ChatComponentText(stoppedAll));
+				sender.sendMessage(new TextComponentString(stoppedAll));
 				return;
 			} else
 			{
@@ -96,7 +96,7 @@ public class QuakeCommand extends CommandBase
 		
 		if(Earthquake.pendingQuakes.size() > 0)
 		{
-			sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + errorMany));
+			sender.sendMessage(new TextComponentString(EnumChatFormatting.RED + errorMany));
 			return;
 		}
 		
@@ -129,7 +129,7 @@ public class QuakeCommand extends CommandBase
 		
 		if(l * w > 4096)
 		{
-			sender.addChatMessage(new ChatComponentText(EnumChatFormatting.RED + errorBig));
+			sender.sendMessage(new TextComponentString(EnumChatFormatting.RED + errorBig));
 			return;
 		}
 		

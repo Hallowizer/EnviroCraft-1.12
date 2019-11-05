@@ -16,7 +16,7 @@ public class CamelPackExpandHandler implements IRecipe
 	@Override
 	public boolean matches(InventoryCrafting inv, World world)
 	{
-		if (!inv.getInventoryName().equals("container.crafting"))
+		if (!inv.getName().equals("container.crafting"))
 		{
 			return false;
 		}
@@ -70,9 +70,16 @@ public class CamelPackExpandHandler implements IRecipe
 	}
 	
 	@Override
-	public int getRecipeSize()
+	public boolean canFit(int a, int b)
 	{
-		return 4;
+		if(a >= 2 && b >= 2)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 	
 	@Override

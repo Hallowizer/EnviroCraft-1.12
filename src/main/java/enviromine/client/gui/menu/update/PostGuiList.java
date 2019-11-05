@@ -23,7 +23,7 @@ import enviromine.core.EM_Settings;
 import enviromine.utils.EnviroUtils;
 import enviromine.utils.RenderAssist;
 
-//TODO: this can translate server side not locally, change later to translate client side
+//TODO: I18n this can translate server side not locally, change later to translate client side
 
 @SideOnly(Side.CLIENT)
 public class PostGuiList extends GuiListExtended

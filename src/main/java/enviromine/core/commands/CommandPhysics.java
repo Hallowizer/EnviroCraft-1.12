@@ -4,6 +4,7 @@ import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.translation.I18n;
 import enviromine.core.EM_Settings;
 
@@ -88,7 +89,7 @@ public class CommandPhysics extends CommandBase
 	
 	public void ShowUsage(ICommandSender sender)
 	{
-		sender.addChatMessage(new ChatComponentText(getCommandUsage(sender)));
+		sender.sendMessage(new TextComponentString(getCommandUsage(sender)));
 	}
 	
 	public void togglePhy( ICommandSender sender)

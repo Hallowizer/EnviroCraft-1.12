@@ -1,7 +1,7 @@
 package enviromine.client.gui;
 
 import net.minecraft.client.gui.GuiGameOver;
-
+import net.minecraft.util.text.ITextComponent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import org.lwjgl.input.Keyboard;
@@ -9,6 +9,11 @@ import org.lwjgl.input.Keyboard;
 @SideOnly(Side.CLIENT)
 public class EM_GuiFakeDeath extends GuiGameOver
 {
+	public EM_GuiFakeDeath(ITextComponent causeOfDeath) 
+	{
+		super(causeOfDeath);
+	}
+
 	private int ticksOpen = 0;
 
     /**

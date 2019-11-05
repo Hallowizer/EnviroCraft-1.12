@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import enviromine.client.gui.UI_Settings;
 import enviromine.client.gui.hud.OverlayHandler;
 import enviromine.handlers.ObjectHandler;
@@ -66,7 +67,7 @@ public class GasMaskHud
 			{
 				if(UI_Settings.breathSound == true)
 				{
-					mc.player.playSound("enviromine:gasmask",  UI_Settings.breathVolume, 1.0F);
+					mc.player.playSound(new SoundEvent(new ResourceLocation("enviromine:gasmask")),  UI_Settings.breathVolume, 1.0F);
 				}
 			}
 		}
