@@ -5,6 +5,7 @@ import java.util.List;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.NonNullList;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import enviromine.handlers.ObjectHandler;
@@ -19,8 +20,8 @@ public class EnviroTab extends CreativeTabs
 	
 	@Override
 	@SideOnly(Side.CLIENT)
-	public Item getTabIconItem() {
-		return ObjectHandler.camelPack;
+	public ItemStack getTabIconItem() {
+		return new ItemStack(ObjectHandler.camelPack);
 	}
 	
 	public void addRawStack(ItemStack stack)
@@ -33,9 +34,9 @@ public class EnviroTab extends CreativeTabs
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
 	@SideOnly(Side.CLIENT)
-    public void displayAllReleventItems(List list)
+    public void displayAllReleventItems(NonNullList<ItemStack> list)
     {
-        super.displayAllReleventItems(list);
+        super.displayAllRelevantItems(list);
         
         list.addAll(rawStacks);
     }

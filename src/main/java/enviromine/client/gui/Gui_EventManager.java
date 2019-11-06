@@ -114,7 +114,7 @@ public class Gui_EventManager
 			return;
 		}
 		
-		mc.player.yOffset = 1.62F;
+		mc.player.eyeHeight = mc.player.getDefaultEyeHeight();
 		if(ClientQuake.GetQuakeShake(mc.world, mc.player) > 0)
 		{
 			if(mc.player == null || mc.player.isPlayerSleeping() || !mc.player.onGround || (mc.currentScreen != null && mc.currentScreen.doesGuiPauseGame()))
@@ -128,7 +128,7 @@ public class Gui_EventManager
 				
 				double shake = (int)(mc.world.getTotalWorldTime() % 24000L) * shakeSpeed;
 				
-				mc.player.yOffset -= (Math.sin(shake) * (offsetY / 2F)) + (offsetY / 2F);
+				mc.player.eyeHeight -= (Math.sin(shake) * (offsetY / 2F)) + (offsetY / 2F);
 				mc.player.cameraPitch = (float)(Math.sin(shake) * offsetY / 4F);
 				mc.player.cameraYaw = (float)(Math.sin(shake) * offsetY / 4F);
 			}
@@ -141,7 +141,7 @@ public class Gui_EventManager
 			if(!(EM_Settings.enableAirQ == false && EM_Settings.enableBodyTemp == false && EM_Settings.enableHydrate == false && EM_Settings.enableSanity == false))
 			{
 				//Minecraft.getMinecraft().fontRenderer.drawStringWithShadow("NO ENVIRONMENT DATA", xPos, (height - yPos) - 8, 16777215);
-				tracker = EM_StatusManager.lookupTrackerFromUsername(this.mc.player.getCommandSenderName());
+				tracker = EM_StatusManager.lookupTrackerFromUsername(this.mc.player.getDisplayNameString());
 			} 
 		} else if(tracker.isDisabled || !EM_StatusManager.trackerList.containsValue(tracker))
 		{

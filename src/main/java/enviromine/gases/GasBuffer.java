@@ -192,10 +192,10 @@ public class GasBuffer
 					continue;
 				}
 				
-				if(world != null && world.getBlock(entry[1], entry[2], entry[3]) instanceof BlockGas)
+				if(world != null && world.getBlockState(new BlockPos(entry[1], entry[2], entry[3])) instanceof BlockGas)
 				{
-					Block block = world.getBlock(entry[1], entry[2], entry[3]);
-					world.scheduleBlockUpdateWithPriority(entry[1], entry[2], entry[3], block, 1, 0);
+					Block block = world.getBlockState(new BlockPos(entry[1], entry[2], entry[3])).getBlock();
+					world.scheduleBlockUpdate(new BlockPos(entry[1], entry[2], entry[3]), block, 1, 0);
 					incrementUpdates(entry[1] >> 4, entry[3] >> 4);
 				}
 				
@@ -234,10 +234,10 @@ public class GasBuffer
 					continue;
 				}
 				
-				if(world != null && world.getChunkProvider().chunkExists(entry[1] >> 4, entry[3] >> 4) && world.getChunkFromBlockCoords(entry[1], entry[3]).isChunkLoaded && world.getBlock(entry[1], entry[2], entry[3]) instanceof BlockGas)
+				if(world != null && world.getChunkProvider().isChunkGeneratedAt(entry[1] >> 4, entry[3] >> 4) && world.getChunkFromBlockCoords(new BlockPos(entry[1], entry[2], entry[3])).isLoaded() && world.getBlockState(new BlockPos(entry[1], entry[2], entry[3])) instanceof BlockGas)
 				{
-					Block block = world.getBlock(entry[1], entry[2], entry[3]);
-					world.scheduleBlockUpdateWithPriority(entry[1], entry[2], entry[3], block, 1, 0);
+					Block block = world.getBlockState(new BlockPos(entry[1], entry[2], entry[3])).getBlock();
+					world.scheduleBlockUpdate(new BlockPos(entry[1], entry[2], entry[3]), block, 1, 0);
 					incrementUpdates(entry[1] >> 4, entry[3] >> 4);
 				}
 				

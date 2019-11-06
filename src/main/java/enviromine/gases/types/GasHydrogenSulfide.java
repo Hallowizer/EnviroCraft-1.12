@@ -3,6 +3,7 @@ package enviromine.gases.types;
 import java.awt.Color;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import enviromine.gases.EnviroGas;
@@ -23,7 +24,7 @@ public class GasHydrogenSulfide extends EnviroGas
 	{
 		super.applyEffects(entityLiving, amplifier);
 		
-		if(entityLiving.world.isRemote || entityLiving.isEntityUndead() || (entityLiving.getEquipmentInSlot(4) != null && entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask))
+		if(entityLiving.world.isRemote || entityLiving.isEntityUndead() || (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ObjectHandler.gasMask))
 		{
 			return;
 		}

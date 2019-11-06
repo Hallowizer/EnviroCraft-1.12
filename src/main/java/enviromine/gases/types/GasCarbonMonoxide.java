@@ -6,6 +6,7 @@ import enviromine.gases.EnviroGasDictionary;
 import enviromine.handlers.ObjectHandler;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
@@ -32,7 +33,7 @@ public class GasCarbonMonoxide extends EnviroGas
 	{
 		super.applyEffects(entityLiving, amplifier);
 		
-		if(entityLiving.world.isRemote || entityLiving.isEntityUndead() || (entityLiving.getEquipmentInSlot(4) != null && entityLiving.getEquipmentInSlot(4).getItem() == ObjectHandler.gasMask))
+		if(entityLiving.world.isRemote || entityLiving.isEntityUndead() || (entityLiving.getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null && entityLiving.getItemStackFromSlot(EntityEquipmentSlot.HEAD).getItem() == ObjectHandler.gasMask))
 		{
 			return;
 		}

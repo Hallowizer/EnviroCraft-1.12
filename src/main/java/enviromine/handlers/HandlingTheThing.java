@@ -50,7 +50,7 @@ public class HandlingTheThing
 		player.getEntityData().setBoolean("EM_THING_TARGET", true);
 		player.addStat(EnviroAchievements.itsPitchBlack, 1);
 		
-		EnviroDataTracker tracker = EM_StatusManager.lookupTrackerFromUsername(player.getCommandSenderName());
+		EnviroDataTracker tracker = EM_StatusManager.lookupTrackerFromUsername(player.getName());
 		int i = MathHelper.floor(player.posX);
 		int j = MathHelper.floor(player.posY);
 		int k = MathHelper.floor(player.posZ);

@@ -1,6 +1,7 @@
 package enviromine.client.gui.menu.config;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,9 +19,9 @@ import net.minecraft.item.ItemArmor;
 import net.minecraftforge.common.config.ConfigCategory;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
-import cpw.mods.fml.client.config.DummyConfigElement.DummyCategoryElement;
+import net.minecraftforge.fml.client.config.DummyConfigElement.DummyCategoryElement;
 import net.minecraftforge.fml.client.config.GuiConfig;
-import cpw.mods.fml.client.config.IConfigElement;
+import net.minecraftforge.fml.client.config.IConfigElement;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_Settings;
@@ -61,7 +62,13 @@ public class EM_ConfigMenu extends GuiConfig
     
     protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
     {
-          super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+    	try
+    	{
+            super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+    	} catch (IOException exc)
+    	{
+    		System.err.println("IOException caught on mouseClicked.");
+    	}
 
     }
     

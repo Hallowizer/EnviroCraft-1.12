@@ -3,6 +3,9 @@ package enviromine.client.gui.menu.config;
 import net.minecraftforge.fml.client.config.GuiButtonExt;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import java.io.IOException;
+
 import enviromine.client.gui.menu.EM_Gui_Menu;
 import enviromine.client.gui.menu.update.PostGuiList;
 import enviromine.core.EM_ConfigHandler;
@@ -71,14 +74,21 @@ public class ProfileMenu extends GuiScreen
      */
     protected void mouseClicked(int p_73864_1_, int p_73864_2_, int p_73864_3_)
     {
-            if (this.profileList.func_148179_a(p_73864_1_, p_73864_2_, p_73864_3_))
+            if (this.profileList.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_))
             {
                	EM_ConfigHandler.ReloadConfig();
                	mc.player.sendMessage(new TextComponentString("Loading "+ EM_ConfigHandler.getProfileName() +" Profile."));
                	this.mc.displayGuiScreen((GuiScreen)null);
             }
             
-            super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+            try
+            {
+                super.mouseClicked(p_73864_1_, p_73864_2_, p_73864_3_);
+            } catch(IOException exc)
+            {
+            	System.err.println("IOException caught on mouseClicked.");
+            }
+            
     }
     
 	@Override

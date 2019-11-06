@@ -33,6 +33,7 @@ import net.minecraft.entity.player.InventoryPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.Items;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
@@ -189,7 +190,7 @@ public class EM_EventManager
 				{
 					NBTTagCompound pData = new NBTTagCompound();
 					pData.setInteger("id", 4);
-					pData.setString("player", event.getEntity().getCommandSenderName());
+					pData.setString("player", event.getEntity().getName());
 					pData.setBoolean("enableAirQ", EM_Settings.enableAirQ);
 					pData.setBoolean("enableBodyTemp", EM_Settings.enableBodyTemp);
 					pData.setBoolean("enableHydrate", EM_Settings.enableHydrate);
@@ -203,12 +204,12 @@ public class EM_EventManager
 		{
 			EntityFallingBlock oldSand = (EntityFallingBlock)event.getEntity();
 			
-			if(oldSand.func_145805_f() != Blocks.AIR)
+			if(oldSand.getBlock() != Blocks.AIR)
 			{
 				NBTTagCompound oldTags = new NBTTagCompound();
 				oldSand.writeToNBT(oldTags);
 				
-				EntityPhysicsBlock newSand = new EntityPhysicsBlock(oldSand.world, oldSand.prevPosX, oldSand.prevPosY, oldSand.prevPosZ, oldSand.func_145805_f(), oldSand.field_145814_a, true);
+				EntityPhysicsBlock newSand = new EntityPhysicsBlock(oldSand.world, oldSand.prevPosX, oldSand.prevPosY, oldSand.prevPosZ, oldSand.getBlock(), true);
 				newSand.readFromNBT(oldTags);
 				event.getWorld().spawnEntity(newSand);
 				event.setCanceled(true);
@@ -355,7 +356,7 @@ public class EM_EventManager
 		
 		if((event.getSource() == DamageSource.FALLING_BLOCK || event.getSource() == DamageSource.ANVIL || event.getSource() == EnviroDamageSource.landslide || event.getSource() == EnviroDamageSource.avalanche) && event.getEntityLiving().getEquipmentInSlot(4) != null && event.getEntityLiving().getEquipmentInSlot(4).getItem() == ObjectHandler.hardHat)
 		{
-			ItemStack hardHat = event.getEntityLiving().getEquipmentInSlot(4);
+			ItemStack hardHat = event.getEntityLiving().getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 			int dur = (hardHat.getMaxDamage() + 1) - hardHat.getItemDamage();
 			int dam = MathHelper.ceiling_float_int(event.ammount);
 			event.setCanceled(true);
@@ -511,7 +512,7 @@ public class EM_EventManager
 	@SubscribeEvent
 	public void onEntityInteract(EntityInteractEvent event)
 	{
-		if(event.isCanceled() || event.entityPlayer.worldObj.isRemote)
+		if(event.isCanceled() || event.entityPlayer.world.isRemote)
 		{
 			return;
 		}

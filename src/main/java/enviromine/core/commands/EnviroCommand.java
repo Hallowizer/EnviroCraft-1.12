@@ -3,10 +3,15 @@ package enviromine.core.commands;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.annotation.Nullable;
+
 import net.minecraft.command.CommandBase;
+import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.command.PlayerNotFoundException;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
@@ -33,7 +38,7 @@ public class EnviroCommand extends CommandBase
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender sender)
+	public String getUsage(ICommandSender sender)
 	{
 		return "/envirostat <playername> <"+add+", "+set+"> <"+temp+", "+sanity+", "+water+", "+air+"> <float>";
 	}
@@ -45,7 +50,7 @@ public class EnviroCommand extends CommandBase
     }
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] astring)
+	public void execute(MinecraftServer server, ICommandSender sender, String[] astring)
 	{
 
 		if(astring.length != 4)
@@ -54,78 +59,91 @@ public class EnviroCommand extends CommandBase
 			return;
 		}
 		
-		EntityPlayerMP player = getPlayer(sender.getServer(), sender, astring[0]);
-		
-		String target = player.getCommandSenderName();
-		
-		EnviroDataTracker tracker = EM_StatusManager.lookupTrackerFromUsername(target);
-		
-		if(tracker == null)
+		EntityPlayerMP player;
+		try 
 		{
-			this.ShowNoTracker(sender);
-			return;
-		}
-		
-		try
-		{
-			float value = Float.parseFloat(astring[3]);
+			player = getPlayer(sender.getServer(), sender, astring[0]);
 			
-			if(astring[1].equalsIgnoreCase(add))
+			String target = player.getName();
+			
+			EnviroDataTracker tracker = EM_StatusManager.lookupTrackerFromUsername(target);
+			
+			if(tracker == null)
 			{
-				if(astring[2].equalsIgnoreCase(temp))
+				this.ShowNoTracker(sender);
+				return;
+			}
+
+			
+			try
+			{
+				float value = Float.parseFloat(astring[3]);
+				
+				if(astring[1].equalsIgnoreCase(add))
 				{
-					tracker.bodyTemp += value;
-				} else if(astring[2].equalsIgnoreCase(sanity))
+					if(astring[2].equalsIgnoreCase(temp))
+					{
+						tracker.bodyTemp += value;
+					} else if(astring[2].equalsIgnoreCase(sanity))
+					{
+						tracker.sanity += value;
+					} else if(astring[2].equalsIgnoreCase(water))
+					{
+						tracker.hydration += value;
+					} else if(astring[2].equalsIgnoreCase(air))
+					{
+						tracker.airQuality += value;
+					} else
+					{
+						this.ShowUsage(sender);
+						return;
+					}
+				} else if(astring[1].equalsIgnoreCase(set))
 				{
-					tracker.sanity += value;
-				} else if(astring[2].equalsIgnoreCase(water))
-				{
-					tracker.hydration += value;
-				} else if(astring[2].equalsIgnoreCase(air))
-				{
-					tracker.airQuality += value;
+					if(astring[2].equalsIgnoreCase(temp))
+					{
+						tracker.bodyTemp = value;
+					} else if(astring[2].equalsIgnoreCase(sanity))
+					{
+						tracker.sanity = value;
+					} else if(astring[2].equalsIgnoreCase(water))
+					{
+						tracker.hydration = value;
+					} else if(astring[2].equalsIgnoreCase("air"))
+					{
+						tracker.airQuality = value;
+					} else
+					{
+						this.ShowUsage(sender);
+						return;
+					}
 				} else
 				{
 					this.ShowUsage(sender);
 					return;
 				}
-			} else if(astring[1].equalsIgnoreCase(set))
-			{
-				if(astring[2].equalsIgnoreCase(temp))
-				{
-					tracker.bodyTemp = value;
-				} else if(astring[2].equalsIgnoreCase(sanity))
-				{
-					tracker.sanity = value;
-				} else if(astring[2].equalsIgnoreCase(water))
-				{
-					tracker.hydration = value;
-				} else if(astring[2].equalsIgnoreCase("air"))
-				{
-					tracker.airQuality = value;
-				} else
-				{
-					this.ShowUsage(sender);
-					return;
-				}
-			} else
+				
+				tracker.fixFloatinfPointErrors();
+				return;
+			} catch(Exception e)
 			{
 				this.ShowUsage(sender);
 				return;
 			}
-			
-			tracker.fixFloatinfPointErrors();
-			return;
-		} catch(Exception e)
+		} catch(PlayerNotFoundException exc)
 		{
+			System.err.println("PlayerNotFoundException caught in EnviroCommand execute.");
 			this.ShowUsage(sender);
-			return;
+		} catch(CommandException exc)
+		{
+			System.err.println("CommandException caught in EnviroCommand execute.");
+			this.ShowUsage(sender);
 		}
 	}
 	
 	public void ShowUsage(ICommandSender sender)
 	{
-		sender.sendMessage(new TextComponentString(getCommandUsage(sender)));
+		sender.sendMessage(new TextComponentString(getUsage(sender)));
 	}
 	
 	public void ShowNoTracker(ICommandSender sender)
@@ -138,11 +156,11 @@ public class EnviroCommand extends CommandBase
      */
 	@SuppressWarnings("unchecked")
 	@Override
-    public List<String> addTabCompletionOptions(ICommandSender sender, String[] strings)
+    public List<String> getTabCompletions(MinecraftServer server, ICommandSender sender, String[] strings, @Nullable BlockPos targetPo)
     {
         if(strings.length == 1)
         {
-        	return getListOfStringsMatchingLastWord(strings, FMLCommonHandler.instance().getMinecraftServerInstance().getAllUsernames());
+        	return getListOfStringsMatchingLastWord(strings, FMLCommonHandler.instance().getMinecraftServerInstance().getOnlinePlayerNames());
         } else if(strings.length == 2)
         {
         	return getListOfStringsMatchingLastWord(strings, new String[]{add, set});

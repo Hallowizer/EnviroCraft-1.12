@@ -152,7 +152,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		
 		Object item = Item.REGISTRY.getObject(name);
 		boolean allowCamelPack = true;
-		if (item instanceof ItemArmor && ((ItemArmor)item).armorType == 1)
+		if (item instanceof ItemArmor && ((ItemArmor)item).armorType.getIndex() == 2)
 		{
 			allowCamelPack = config.get(category, APName[9], true).getBoolean(true);
 		}
@@ -234,7 +234,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
 				
-				if(armor.armorType == 1)
+				if(armor.armorType.getIndex() == 2)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}
@@ -250,7 +250,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
 				
-				if(armor.armorType == 1)
+				if(armor.armorType.getIndex() == 2)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}
@@ -266,11 +266,11 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
 				
-				if(armor.armorType == 1)
+				if(armor.armorType.getIndex() == 2)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}
-			} else if(armor == Items.LEATHER_HELMET || armor == Items.LEATHER_CHESTPLATE || armor == Items.LEATHER_LEGGINGS || armor == Items.LEATHER_BOOTS || (armor.getArmorMaterial() == ArmorMaterial.CLOTH && EM_Settings.genConfigs))
+			} else if(armor == Items.LEATHER_HELMET || armor == Items.LEATHER_CHESTPLATE || armor == Items.LEATHER_LEGGINGS || armor == Items.LEATHER_BOOTS || (armor.getArmorMaterial() == ArmorMaterial.LEATHER && EM_Settings.genConfigs))
 			{
 				config.get(catName, APName[0], Item.REGISTRY.getNameForObject(armor)).getString();
 				config.get(catName, APName[1], 1.0D).getDouble(1.0D);
@@ -282,7 +282,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 				config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 				config.get(catName, APName[8], 0.0D).getDouble(0.0D);
 				
-				if(armor.armorType == 1)
+				if(armor.armorType.getIndex() == 2)
 				{
 					config.get(catName, APName[9], true).getBoolean(true);
 				}
@@ -347,7 +347,7 @@ public class ArmorProperties implements SerialisableProperty, PropertyBase
 		config.get(catName, APName[7], 0.0D).getDouble(0.0D);
 		config.get(catName, APName[8], 0.0D).getDouble(0.0D);
 		
-		if(armor.armorType == 1)
+		if(armor.armorType.getIndex() == 2)
 		{
 			config.get(catName, APName[9], true).getBoolean(true);
 		}

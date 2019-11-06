@@ -8,7 +8,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
-import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.common.config.Configuration;
 

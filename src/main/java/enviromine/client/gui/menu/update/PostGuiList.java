@@ -1,5 +1,6 @@
 package enviromine.client.gui.menu.update;
 
+import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -332,19 +333,25 @@ public class PostGuiList extends GuiListExtended
 	@Override
 	public void drawScreen(int p_148128_1_, int p_148128_2_, float p_148128_3_)
 	{
-		if(p_148128_1_ > this.left && p_148128_1_ < this.right && p_148128_2_ > this.top && p_148128_2_ < this.bottom && !(Mouse.isButtonDown(0) && this.func_148125_i()))
+		if(p_148128_1_ > this.left && p_148128_1_ < this.right && p_148128_2_ > this.top && p_148128_2_ < this.bottom && !(Mouse.isButtonDown(0) && this.getEnabled()))
 		{
-            for (; !this.mc.gameSettings.touchscreen && Mouse.next(); this.mc.currentScreen.handleMouseInput())
-            {
-                float j1 = Mouse.getEventDWheel();
+			try
+			{
+	            for (; !this.mc.gameSettings.touchscreen && Mouse.next(); this.mc.currentScreen.handleMouseInput())
+	            {
+	                float j1 = Mouse.getEventDWheel();
 
-                if (j1 != 0)
-                {
-                	j1 *= -1F;
+	                if (j1 != 0)
+	                {
+	                	j1 *= -1F;
 
-                    this.scrollByMultiplied(j1 * (float)this.slotHeight / 2F);
-                }
-            }
+	                    this.scrollByMultiplied(j1 * (float)this.slotHeight / 2F);
+	                }
+	            }
+			} catch(IOException exc)
+			{
+				System.err.println("IOException caught on drawScreen.");
+			}
 		}
 		
 		super.drawScreen(p_148128_1_, p_148128_2_, p_148128_3_);
@@ -369,10 +376,16 @@ public class PostGuiList extends GuiListExtended
 		
 		int color;
 		
+		//TODO check if I actually need to have updatePosition do anything / does it freak out if I leave the method empty
 		@Override
-		public void drawEntry(int p_148279_1_, int p_148279_2_, int p_148279_3_, int p_148279_4_, int p_148279_5_, Tessellator p_148279_6_, int p_148279_7_, int p_148279_8_, boolean p_148279_9_)
+        public void updatePosition(int slotIndex, int x, int y, float partialTicks)
+        {
+        }
+		
+		@Override
+		public void drawEntry(int slotIndex, int x, int y, int listWidth, int slotHeight, int mouseX, int mouseY, boolean isSelected, float partialTicks)
 		{
-			mc.fontRenderer.drawString(textTypeText(type, line), 32, p_148279_3_, textTypeColor(type));
+			mc.fontRenderer.drawString(textTypeText(type, line), 32, y, textTypeColor(type));
 		}
 		
 		@Override

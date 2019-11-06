@@ -14,6 +14,7 @@ import net.minecraft.block.BlockFlower;
 import net.minecraft.block.material.Material;
 import net.minecraft.client.Minecraft;
 import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentOxygen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.EntityLivingBase;
@@ -25,6 +26,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Blocks;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -62,7 +64,7 @@ public class EM_StatusManager
 	{
 		if(tracker.trackedEntity instanceof EntityPlayer)
 		{
-			trackerList.put("" + tracker.trackedEntity.getCommandSenderName(), tracker);
+			trackerList.put("" + tracker.trackedEntity.getName(), tracker);
 		} else
 		{
 			trackerList.put("" + tracker.trackedEntity.getEntityId(), tracker);
@@ -107,7 +109,7 @@ public class EM_StatusManager
 		tracker.fixFloatinfPointErrors(); // Shortens data as much as possible before sending
 		NBTTagCompound pData = new NBTTagCompound();
 		pData.setInteger("id", 0);
-		pData.setString("player", tracker.trackedEntity.getCommandSenderName());
+		pData.setString("player", tracker.trackedEntity.getName());
 		pData.setFloat("airQuality", tracker.airQuality);
 		pData.setFloat("bodyTemp", tracker.bodyTemp);
 		pData.setFloat("hydration", tracker.hydration);
@@ -121,9 +123,9 @@ public class EM_StatusManager
 	{
 		if(entity instanceof EntityPlayer)
 		{
-			if(trackerList.containsKey("" + entity.getCommandSenderName()))
+			if(trackerList.containsKey("" + entity.getName()))
 			{
-				return trackerList.get("" + entity.getCommandSenderName());
+				return trackerList.get("" + entity.getName());
 			} else
 			{
 				return null;
@@ -155,7 +157,7 @@ public class EM_StatusManager
 	
 	public static float[] getSurroundingData(EntityLivingBase entityLiving, int range)
 	{
-		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().player.getCommandSenderName()) && !timer.isRunning())
+		if(EnviroMine.proxy.isClient() && entityLiving.getName().equals(Minecraft.getMinecraft().player.getName()) && !timer.isRunning())
 		{
 			timer.start();
 		}
@@ -189,7 +191,7 @@ public class EM_StatusManager
 			return data;
 		}
 		
-		Chunk chunk = entityLiving.world.getChunkFromBlockCoords(i, k);
+		Chunk chunk = entityLiving.world.getChunkFromBlockCoords(new BlockPos(i, j, k));
 		
 		if(chunk == null)
 		{
@@ -235,12 +237,12 @@ public class EM_StatusManager
 				blockLightLev = 15;
 			} else
 			{
-				lightLev = chunk.getSavedLightValue(EnumSkyBlock.SKY, i & 0xf, j, k & 0xf);
-				blockLightLev = chunk.getSavedLightValue(EnumSkyBlock.BLOCK, i & 0xf, j, k & 0xf);
+				lightLev = chunk.getLightFor(EnumSkyBlock.SKY, new BlockPos(i & 0xf, j, k & 0xf));
+				blockLightLev = chunk.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(i & 0xf, j, k & 0xf));
 			}
 		}
 		
-		if(!isDay && blockLightLev <= 1 && entityLiving.getActivePotionEffect(Potion.nightVision) == null)
+		if(!isDay && blockLightLev <= 1 && entityLiving.getActivePotionEffect(MobEffects.NIGHT_VISION) == null)
 		{
 			if(dimensionProp == null || !dimensionProp.override || dimensionProp.darkAffectSanity)
 			{
@@ -257,7 +259,7 @@ public class EM_StatusManager
 				{
 					if(y == 0)
 					{
-						Chunk testChunk = entityLiving.world.getChunkFromBlockCoords((i + x), (k + z));
+						Chunk testChunk = entityLiving.world.getChunkFromBlockCoords(new BlockPos((i + x), (j + y), (k + z)));
 						BiomeGenBase checkBiome = testChunk.getBiomeGenForWorldCoords((i + x) & 15, (k + z) & 15, entityLiving.world.getWorldChunkManager());
 						
 						if(checkBiome != null)
@@ -397,7 +399,7 @@ public class EM_StatusManager
 					{
 						if(stack.getItem() instanceof ItemBlock)
 						{
-							if(((ItemBlock)stack.getItem()).field_150939_a instanceof BlockFlower)
+							if(((ItemBlock)stack.getItem()).getBlock() instanceof BlockFlower)
 							{
 								if(isDay || !entityLiving.world.provider.hasSkyLight())
 								{
@@ -415,9 +417,9 @@ public class EM_StatusManager
 				} else if(stack.getItem() instanceof ItemBlock)
 				{
 					ItemBlock itemBlock = (ItemBlock)stack.getItem();
-					if(itemBlock.field_150939_a instanceof BlockFlower && (isDay || !entityLiving.world.provider.hasSkyLight()) && sBoost <= 0.1F)
+					if(itemBlock.getBlock() instanceof BlockFlower && (isDay || !entityLiving.world.provider.hasSkyLight()) && sBoost <= 0.1F)
 					{
-						if(((BlockFlower)itemBlock.field_150939_a).getPlantType(entityLiving.world, new BlockPos(i, j, k)) == EnumPlantType.Plains)
+						if(((BlockFlower)itemBlock.getBlock()).getPlantType(entityLiving.world, new BlockPos(i, j, k)) == EnumPlantType.Plains)
 						{
 							sBoost = 0.1F;
 						}
@@ -560,12 +562,12 @@ public class EM_StatusManager
 			if(mob instanceof EntityVillager && entityLiving instanceof EntityPlayer && entityLiving.canEntityBeSeen(mob) && EM_Settings.villageAssist)
 			{
 				EntityVillager villager = (EntityVillager)mob;
-				Village village = entityLiving.world.villageCollection.findNearestVillage(MathHelper.floor(villager.posX), MathHelper.floor(villager.posY), MathHelper.floor(villager.posZ), 32);
+				Village village = entityLiving.world.villageCollection.getNearestVillage(new BlockPos(MathHelper.floor(villager.posX), MathHelper.floor(villager.posY), MathHelper.floor(villager.posZ)), 32);
 				
 				long assistTime = villager.getEntityData().getLong("Enviro_Assist_Time");
 				long worldTime = entityLiving.world.provider.getWorldTime();
 				
-				if(village != null && village.getReputationForPlayer(entityLiving.getCommandSenderName()) >= 5 && !villager.isChild() && Math.abs(worldTime - assistTime) > 24000)
+				if(village != null && village.getReputationForPlayer(entityLiving.getName()) >= 5 && !villager.isChild() && Math.abs(worldTime - assistTime) > 24000)
 				{
 					if(villager.getProfession() == 2) // Priest
 					{
@@ -700,10 +702,10 @@ public class EM_StatusManager
 		float fireProt = 0;
 		
 		{
-			ItemStack helmet = entityLiving.getEquipmentInSlot(4);
-			ItemStack plate = entityLiving.getEquipmentInSlot(3);
-			ItemStack legs = entityLiving.getEquipmentInSlot(2);
-			ItemStack boots = entityLiving.getEquipmentInSlot(1);
+			ItemStack helmet = entityLiving.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
+			ItemStack plate = entityLiving.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+			ItemStack legs = entityLiving.getItemStackFromSlot(EntityEquipmentSlot.LEGS);
+			ItemStack boots = entityLiving.getItemStackFromSlot(EntityEquipmentSlot.FEET);
 			
 			float tempMultTotal = 0F;
 			float addTemp = 0F;
@@ -719,7 +721,7 @@ public class EM_StatusManager
 						int enID = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("id");
 						int enLV = ((NBTTagCompound)enchTags.getCompoundTagAt(index)).getShort("lvl");
 						
-						if(enID == Enchantment.respiration.effectId)
+						if(enID == EnchantmentOxygen.effectId)
 						{
 							leaves += 3F * enLV;
 						} else if(enID == Enchantment.fireProtection.effectId)
@@ -735,7 +737,7 @@ public class EM_StatusManager
 					
 					if(isDay)
 					{
-						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canSeeSky(new BlockPos(i, j, k)) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -791,7 +793,7 @@ public class EM_StatusManager
 					
 					if(isDay)
 					{
-						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canSeeSky(new BlockPos(i, j, k)) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -844,7 +846,7 @@ public class EM_StatusManager
 						
 					if(isDay)
 					{
-						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canSeeSky(new BlockPos(i, j, k)) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -897,7 +899,7 @@ public class EM_StatusManager
 					
 					if(isDay)
 					{
-						if(entityLiving.world.canBlockSeeTheSky(i, j, k) && bTemp > 0F)
+						if(entityLiving.world.canSeeSky(new BlockPos(i, j, k)) && bTemp > 0F)
 						{
 							tempMultTotal += (props.sunMult - 1.0F);
 							addTemp += props.sunTemp;
@@ -1067,7 +1069,7 @@ public class EM_StatusManager
 		data[6] = animalHostility;
 		data[7] = sanityRate * (float)EM_Settings.sanityMult;
 		
-		if(EnviroMine.proxy.isClient() && entityLiving.getCommandSenderName().equals(Minecraft.getMinecraft().player.getCommandSenderName()) && timer.isRunning())
+		if(EnviroMine.proxy.isClient() && entityLiving.getName().equals(Minecraft.getMinecraft().player.getName()) && timer.isRunning())
 		{
 			timer.stop();
 			Debug_Info.DB_timer = timer.toString();
@@ -1092,7 +1094,7 @@ public class EM_StatusManager
 			tracker.isDisabled = true;
 			if(tracker.trackedEntity instanceof EntityPlayer)
 			{
-				trackerList.remove(tracker.trackedEntity.getCommandSenderName());
+				trackerList.remove(tracker.trackedEntity.getName());
 			} else
 			{
 				trackerList.remove("" + tracker.trackedEntity.getEntityId());
@@ -1112,7 +1114,7 @@ public class EM_StatusManager
 			tags.setFloat("ENVIRO_SAN", tracker.sanity);
 			if(tracker.trackedEntity instanceof EntityPlayer)
 			{
-				trackerList.remove(tracker.trackedEntity.getCommandSenderName());
+				trackerList.remove(tracker.trackedEntity.getName());
 			} else
 			{
 				trackerList.remove("" + tracker.trackedEntity.getEntityId());
@@ -1175,7 +1177,7 @@ public class EM_StatusManager
 				tracker.isDisabled = true;
 				if(tracker.trackedEntity instanceof EntityPlayer)
 				{
-					trackerList.remove(tracker.trackedEntity.getCommandSenderName());
+					trackerList.remove(tracker.trackedEntity.getName());
 				} else
 				{
 					trackerList.remove("" + tracker.trackedEntity.getEntityId());

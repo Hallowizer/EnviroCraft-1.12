@@ -725,8 +725,8 @@ public class EM_ConfigHandler
 				id = EntityRegistry.instance().lookupModSpawn(en.getClass(), false).getModEntityId() + 128;
 			} else
 			{
-				returnValue = "Failed to add config entry. " + en.getCommandSenderName() + " has no ID!";
-				EnviroMine.logger.log(Level.WARN, "Failed to add config entry. " + en.getCommandSenderName() + " has no ID!");
+				returnValue = "Failed to add config entry. " + en.getName() + " has no ID!";
+				EnviroMine.logger.log(Level.WARN, "Failed to add config entry. " + en.getName() + " has no ID!");
 			}
 			EntityProperties.base.generateEmpty(config, id);
 			returnValue = "(Entity) Saved to "+ ModID + ".cfg on Profile "+ getProfileName();

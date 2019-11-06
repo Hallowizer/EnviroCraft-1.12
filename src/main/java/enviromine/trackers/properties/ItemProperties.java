@@ -16,6 +16,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 import enviromine.core.EM_ConfigHandler;
 import enviromine.core.EM_Settings;
@@ -234,10 +235,10 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 			
 			if(item instanceof ItemBlock)
 			{
-				block = ((ItemBlock)item).field_150939_a;
+				block = ((ItemBlock)item).getBlock();
 			}
 			
-			String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
+			String[] regName = ResourceLocation.splitObjectName(Item.REGISTRY.getNameForObject(item).toString());
 			
 			if(regName.length <= 0)
 			{
@@ -450,7 +451,7 @@ public class ItemProperties implements SerialisableProperty, PropertyBase
 		
 		Item item = (Item)obj;
 		
-		String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
+		String[] regName = ResourceLocation.splitObjectName(Item.REGISTRY.getNameForObject(item).toString());
 		
 		if(regName.length <= 0)
 		{

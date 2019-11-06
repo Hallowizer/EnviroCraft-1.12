@@ -4,7 +4,7 @@ import java.util.Iterator;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
@@ -37,14 +37,14 @@ public class QuakeCommand extends CommandBase
 	}
 
 	@Override
-	public String getCommandUsage(ICommandSender p_71518_1_)
+	public String getUsage(ICommandSender p_71518_1_)
 	{
 		return "/enviroquake ["+stopName+" | <x> <z> [<"+lengthName+"> <"+widthName+"> <"+rotationName+"> <"+modeName+"(0 ~ 4)>]]";
 	}
 	
 	public void ShowUsage(ICommandSender sender)
 	{
-		sender.sendMessage(new TextComponentString(getCommandUsage(sender)));
+		sender.sendMessage(new TextComponentString(getUsage(sender)));
 	}
 	
 	@Override
@@ -54,7 +54,7 @@ public class QuakeCommand extends CommandBase
     }
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] astring)
+	public void execute(MinecraftServer server, ICommandSender sender, String[] astring)
 	{
 		if(astring.length != 0 && astring.length != 1 && astring.length != 2 && astring.length != 6)
 		{
@@ -102,8 +102,8 @@ public class QuakeCommand extends CommandBase
 		}
 		
 		World world = sender.getEntityWorld();
-		int x = sender.getPlayerCoordinates().posX;
-		int z = sender.getPlayerCoordinates().posZ;
+		int x = sender.getPosition().getX();
+		int z = sender.getPosition().getZ();
 		int l = 32 + world.rand.nextInt(128-32);
 		int w = 4 + world.rand.nextInt(32-4);
 		float a = MathHelper.clamp(world.rand.nextFloat() * 4F - 2F, -2F, 2F);
@@ -135,6 +135,6 @@ public class QuakeCommand extends CommandBase
 		}
 		
 		new Earthquake(world, x, z, l, w, a, true);
-		EnviroMine.logger.log(Level.INFO, sender.getCommandSenderName() + " spawned earthquake at (" + x + "," + z + ")");
+		EnviroMine.logger.log(Level.INFO, sender.getName() + " spawned earthquake at (" + x + "," + z + ")");
 	}
 }

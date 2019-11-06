@@ -2,6 +2,7 @@ package enviromine.core.commands;
 
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.util.text.translation.I18n;
@@ -30,13 +31,13 @@ public class CommandPhysics extends CommandBase
 	}
 	
 	@Override
-	public String getCommandUsage(ICommandSender icommandsender) 
+	public String getUsage(ICommandSender icommandsender) 
 	{
 		return "/envirophysic <"+on+", "+off+", "+toggle+", "+status+">";
 	}
 	
 	@Override
-	public void processCommand(ICommandSender sender, String[] astring) 
+	public void execute(MinecraftServer server, ICommandSender sender, String[] astring) 
 	{
 		
 		if(astring.length != 1)
@@ -88,7 +89,7 @@ public class CommandPhysics extends CommandBase
 	
 	public void ShowUsage(ICommandSender sender)
 	{
-		sender.sendMessage(new TextComponentString(getCommandUsage(sender)));
+		sender.sendMessage(new TextComponentString(getUsage(sender)));
 	}
 	
 	public void togglePhy( ICommandSender sender)

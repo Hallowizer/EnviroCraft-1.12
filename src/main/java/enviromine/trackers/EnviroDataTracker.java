@@ -13,10 +13,13 @@ import net.minecraft.entity.passive.EntitySheep;
 import net.minecraft.entity.passive.EntityWolf;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
@@ -113,9 +116,10 @@ public class EnviroDataTracker
 		}
 		
 		int i = MathHelper.floor(trackedEntity.posX);
+		int j = MathHelper.floor(trackedEntity.posY);
 		int k = MathHelper.floor(trackedEntity.posZ);
 		
-		if(!trackedEntity.world.getChunkFromBlockCoords(i, k).isChunkLoaded)
+		if(!trackedEntity.world.getChunkFromBlockCoords(new BlockPos(i, j, k)).isLoaded())
 		{
 			return;
 		}
@@ -144,7 +148,7 @@ public class EnviroDataTracker
 		gasAirDiff = 0F;
 		airQuality += enviroData[0];
 		
-		ItemStack helmet = trackedEntity.getEquipmentInSlot(4);
+		ItemStack helmet = trackedEntity.getItemStackFromSlot(EntityEquipmentSlot.HEAD);
 		if(helmet != null && !isCreative)
 		{
 			if(helmet.hasTagCompound() && helmet.getTagCompound().hasKey("gasMaskFill"))
@@ -316,7 +320,7 @@ public class EnviroDataTracker
 		}
 		
 		// Camel Pack Stuff
-		ItemStack plate = trackedEntity.getEquipmentInSlot(3);
+		ItemStack plate = trackedEntity.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
 		
 		if(plate != null && !isCreative)
 		{
@@ -531,7 +535,7 @@ public class EnviroDataTracker
 	{
 		if ((Minecraft.getSystemTime() - chillPrevTime) > 17000)
 		{
-			Minecraft.getMinecraft().player.playSound("enviromine:chill",  UI_Settings.breathVolume, 1.0F);
+			Minecraft.getMinecraft().player.playSound(new SoundEvent(new ResourceLocation("enviromine:chill")),  UI_Settings.breathVolume, 1.0F);
 			chillPrevTime = Minecraft.getSystemTime();
 		}
 	}

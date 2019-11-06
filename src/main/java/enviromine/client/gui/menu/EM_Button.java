@@ -38,13 +38,13 @@ public class EM_Button extends GuiButtonExt
 	}
 	
 	@Override
-	public void drawButton(Minecraft mc, int mouseX, int mouseY)
+	public void drawButton(Minecraft mc, int mouseX, int mouseY, float partialTicks)
 	{
 	        if (this.visible)
 	        {
-	            this.field_146123_n = mouseX >= this.xPosition && mouseY >= this.yPosition && mouseX < this.xPosition + this.width && mouseY < this.yPosition + this.height;
-	            int k = this.getHoverState(this.field_146123_n);
-	            GuiUtils.drawContinuousTexturedBox(buttonTextures, this.xPosition, this.yPosition, 0, 46 + k * 20, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
+	            this.hovered = mouseX >= this.x && mouseY >= this.y && mouseX < this.x + this.width && mouseY < this.y + this.height;
+	            int k = this.getHoverState(this.hovered);
+	            GuiUtils.drawContinuousTexturedBox(BUTTON_TEXTURES, this.x, this.y, 0, 46 + k * 20, this.width, this.height, 200, 20, 2, 3, 2, 2, this.zLevel);
 	            this.mouseDragged(mc, mouseX, mouseY);
 	            int color = 14737632;
 	            
@@ -56,7 +56,7 @@ public class EM_Button extends GuiButtonExt
 	            {
 	                color = 10526880;
 	            }
-	            else if (this.field_146123_n)
+	            else if (this.hovered)
 	            {
 	                color = 16777120;
 	            }
@@ -73,7 +73,7 @@ public class EM_Button extends GuiButtonExt
 	            	UpdateText = mc.fontRenderer.trimStringToWidth(UpdateText, width - 6 - ellipsisWidth).trim() + "...";
 	               // buttonText = mc.fontRenderer.trimStringToWidth(buttonText, width - 6 - ellipsisWidth).trim() + "...";
 	            
-	            this.drawCenteredString(mc.fontRenderer, buttonText, this.xPosition + this.width / 2, this.yPosition + (this.height - 8) / 2, color);
+	            this.drawCenteredString(mc.fontRenderer, buttonText, this.x + this.width / 2, this.y + (this.height - 8) / 2, color);
 	            
 	            if(this.TickCnt > 50)
 	            {
@@ -81,7 +81,7 @@ public class EM_Button extends GuiButtonExt
 	            	this.TickCnt=0;
 	            }
 	            
-	            if(this.draw)this.drawString(mc.fontRenderer, UpdateText, this.xPosition + this.width - upWidth - 3, this.yPosition + (this.height - 8) / 2, RenderAssist.getColorFromRGBA(214, 242, 36, 0));
+	            if(this.draw)this.drawString(mc.fontRenderer, UpdateText, this.x + this.width - upWidth - 3, this.y + (this.height - 8) / 2, RenderAssist.getColorFromRGBA(214, 242, 36, 0));
 	            
 	            this.TickCnt++;
 	        }

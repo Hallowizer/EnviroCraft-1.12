@@ -8,6 +8,7 @@ import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockFlower;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityFallingBlock;
 import net.minecraft.entity.item.EntityItem;
@@ -90,9 +91,9 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 		}
 	}
 	
-	public EntityPhysicsBlock(World world, double x, double y, double z, Block block, int meta, boolean update)
+	public EntityPhysicsBlock(World world, double x, double y, double z, IBlockState state, boolean update)
 	{
-		super(world, x, y, z, flowerID(block), meta);
+		super(world, x, y, z, state);
 		this.isAnvil2 = true;
 		this.fallHurtMax2 = 40;
 		this.fallHurtAmount2 = 2.0F;
@@ -352,13 +353,14 @@ public class EntityPhysicsBlock extends EntityFallingBlock implements IEntityAdd
 		}
 	}
 	
+	//TODO incorporate damageMultiplier into formula
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	@Override
-	protected void fall(float par1)
+	public void fall(float distance, float damageMultiplier)
 	{
 		if(this.isAnvil2)
 		{
-			int i = MathHelper.ceil(par1 - 1.0F);
+			int i = MathHelper.ceil(distance - 1.0F);
 			
 			if(isLandSlide)
 			{

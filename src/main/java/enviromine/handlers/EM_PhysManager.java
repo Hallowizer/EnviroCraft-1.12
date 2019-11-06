@@ -206,7 +206,7 @@ public class EM_PhysManager
 		
 		boolean locLoaded = false;
 		
-		if(world.getChunkProvider().chunkExists(x >> 4, z >> 4))
+		if(world.getChunkProvider().isChunkGeneratedAt(x >> 4, z >> 4))
 		{
 			locLoaded = world.getChunkFromChunkCoords(x >> 4, z >> 4).isLoaded();
 		} else
@@ -233,10 +233,10 @@ public class EM_PhysManager
 		
 		BlockProperties blockProps = null;
 		
-		Chunk chunk = world.getChunkFromBlockCoords(x, z);
+		Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, y, z));
 		if(chunk != null)
 		{
-			waterLogged = (chunk.getBiomeGenForWorldCoords(x & 15, z & 15, world.getWorldChunkManager()).rainfall > 0 && world.isRaining() && world.canBlockSeeTheSky(x, y + 1, z)) || touchingWater;
+			waterLogged = (chunk.getBiomeGenForWorldCoords(x & 15, z & 15, world.getWorldChunkManager()).rainfall > 0 && world.isRaining() && world.canSeeSky(new BlockPos(x, y + 1, z))) || touchingWater;
 		}
 		
 		boolean validSlideType = false;

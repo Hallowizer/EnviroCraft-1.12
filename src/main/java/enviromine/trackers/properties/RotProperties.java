@@ -7,6 +7,7 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemFood;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.config.Configuration;
 
 import org.apache.logging.log4j.Level;
@@ -143,7 +144,7 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 				continue;
 			}
 			
-			String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
+			String[] regName = ResourceLocation.splitObjectName(Item.REGISTRY.getNameForObject(item).toString());
 			
 			if(regName.length <= 0)
 			{
@@ -229,7 +230,7 @@ public class RotProperties implements SerialisableProperty, PropertyBase
 		
 		Item item = (Item)obj;
 		
-		String[] regName = Item.REGISTRY.getNameForObject(item).split(":");
+		String[] regName = ResourceLocation.splitObjectName(Item.REGISTRY.getNameForObject(item).toString());
 		
 		if(regName.length <= 0)
 		{

@@ -7,6 +7,7 @@ import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.monster.EntityBlaze;
 import net.minecraft.entity.monster.EntityGhast;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.EnumSkyBlock;
 import net.minecraft.world.World;
@@ -53,7 +54,7 @@ public class Hallucination
 		y = (int)(this.type == Type.NORMAL ? (entityLiving.posY + rand.nextInt(2) - 1) : this.overriding.posY);
 		z = (int)(this.type == Type.NORMAL ? (entityLiving.posZ + rand.nextInt(20) - 10) : this.overriding.posZ);
 
-		Biome biome = entityLiving.world.getBiomeGenForCoords(MathHelper.floor(x), MathHelper.floor(z));
+		Biome biome = entityLiving.world.getBiome(new BlockPos(MathHelper.floor(x), MathHelper.floor(y),  MathHelper.floor(z)));
 		
 		ArrayList<SpawnListEntry> spawnList = (ArrayList<SpawnListEntry>)biome.getSpawnableList(EnumCreatureType.MONSTER);
 		
@@ -89,7 +90,7 @@ public class Hallucination
 		}
 		list.add(this);
 		if (this.type == Type.OVERRIDE) {
-			players.put(entityLiving.getCommandSenderName(), this);
+			players.put(entityLiving.getName(), this);
 		}
 		
 		if(falseEntity.world.isRemote && falseEntity instanceof EntityLiving)
@@ -119,7 +120,7 @@ public class Hallucination
 		while (ite.hasNext())
 		{
 			Entity e = (Entity)ite.next();
-			if (e instanceof EntityPlayer && !e.getCommandSenderName().equals(entity.getCommandSenderName()) && !isPlayerSeenWrong(e.getCommandSenderName())) {
+			if (e instanceof EntityPlayer && !(e.getName().equals(entity.getName()) && !isPlayerSeenWrong(e.getName()))) {
 				players.add((EntityPlayer)e);
 			}
 		}
@@ -137,7 +138,7 @@ public class Hallucination
 	public void finish() {
 		switch (this.type) {
 			case OVERRIDE:
-				players.remove(this.overriding.getCommandSenderName());
+				players.remove(this.overriding.getName());
 			case NORMAL:
 				this.falseEntity.setDead();
 				list.remove(this);
@@ -165,7 +166,7 @@ public class Hallucination
 	
 	public static boolean isAtValidSpawn(EntityLivingBase creature)
 	{
-		return creature.world.checkNoEntityCollision(creature.getEntityBoundingBox()) && creature.world.getCollidingBoundingBoxes(creature, creature.boundingBox).isEmpty() && !creature.world.isAnyLiquid(creature.boundingBox) && isValidLightLevel(creature);
+		return creature.world.checkNoEntityCollision(creature.getEntityBoundingBox()) && creature.world.getCollisionBoxes(creature, creature.getEntityBoundingBox()).isEmpty() && !creature.world.containsAnyLiquid(creature.getEntityBoundingBox()) && isValidLightLevel(creature);
 	}
 	
 	/**
@@ -182,12 +183,12 @@ public class Hallucination
 		int j = MathHelper.floor(creature.getEntityBoundingBox().minY);
 		int k = MathHelper.floor(creature.posZ);
 		
-		if(creature.world.getSavedLightValue(EnumSkyBlock.SKY, i, j, k) > creature.getRNG().nextInt(32) && creature.world.isDaytime() && !creature.world.isThundering())
+		if(creature.world.getLightFor(EnumSkyBlock.SKY, new BlockPos(i, j, k)) > creature.getRNG().nextInt(32) && creature.world.isDaytime() && !creature.world.isThundering())
 		{
 			return false;
 		} else
 		{
-			int l = creature.world.getSavedLightValue(EnumSkyBlock.BLOCK, i, j, k);
+			int l = creature.world.getLightFor(EnumSkyBlock.BLOCK, new BlockPos(i, j, k));
 			return l <= creature.getRNG().nextInt(8);
 		}
 	}
@@ -198,7 +199,7 @@ public class Hallucination
 	
 	public static void renderOverride(EntityPlayer player)
 	{
-		Hallucination hal = players.get(player.getCommandSenderName());
+		Hallucination hal = players.get(player.getName());
 		hal.doOverride();
 	}
 	

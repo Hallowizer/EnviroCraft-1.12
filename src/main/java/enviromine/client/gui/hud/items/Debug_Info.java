@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderGameOverlayEvent.ElementType;
@@ -55,8 +56,8 @@ public class Debug_Info
 		try
 		{
 			DB_abientTemp = Gui_EventManager.tracker.airTemp;
-			DB_biomeName = Gui_EventManager.tracker.trackedEntity.world.getBiomeGenForCoords(MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posZ)).biomeName;
-			DB_biomeID = Gui_EventManager.tracker.trackedEntity.world.getBiomeGenForCoords(MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posZ)).biomeID;
+			DB_biomeName = Gui_EventManager.tracker.trackedEntity.world.getBiome(new BlockPos(MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posY), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posZ))).getBiomeName();
+			DB_biomeID = Gui_EventManager.tracker.trackedEntity.world.getBiome(new BlockPos(MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posX), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posY), MathHelper.floor(Gui_EventManager.tracker.trackedEntity.posZ))).biomeID;
 			DB_tempchange = new BigDecimal(String.valueOf(Gui_EventManager.tracker.bodyTemp - Gui_EventManager.tracker.prevBodyTemp)).setScale(3, RoundingMode.HALF_UP).floatValue();
 			DB_sanityrate = new BigDecimal(String.valueOf(Gui_EventManager.tracker.sanity - Gui_EventManager.tracker.prevSanity)).setScale(3, RoundingMode.HALF_UP).floatValue();
 			DB_airquality = new BigDecimal(String.valueOf(Gui_EventManager.tracker.airQuality - Gui_EventManager.tracker.prevAirQuality)).setScale(3, RoundingMode.HALF_UP).floatValue();
