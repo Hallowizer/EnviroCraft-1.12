@@ -9,6 +9,7 @@ import net.minecraft.init.MobEffects;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GasCarbonMonoxide extends EnviroGas
@@ -23,7 +24,7 @@ public class GasCarbonMonoxide extends EnviroGas
 	}
 	
 	@Override
-	public int getGasOnDeath(World world, int i, int j, int k)
+	public int getGasOnDeath(World world, BlockPos pos)
 	{
 		return EnviroGasDictionary.carbonDioxide.gasID;
 	}

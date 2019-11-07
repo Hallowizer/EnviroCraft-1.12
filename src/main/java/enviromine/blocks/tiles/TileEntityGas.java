@@ -124,10 +124,10 @@ public class TileEntityGas extends TileEntity
 		{
 			TileEntity tile1 = this.getWorld().getTileEntity(this.getPos().up());
 			TileEntity tile2 = this.getWorld().getTileEntity(this.getPos().down());
-			TileEntity tile3 = this.getWorld().getTileEntity(this.xCoord + 1, this.yCoord, this.zCoord);
-			TileEntity tile4 = this.getWorld().getTileEntity(this.xCoord - 1, this.yCoord, this.zCoord);
-			TileEntity tile5 = this.getWorld().getTileEntity(this.xCoord, this.yCoord, this.zCoord + 1);
-			TileEntity tile6 = this.getWorld().getTileEntity(this.xCoord, this.yCoord, this.zCoord - 1);
+			TileEntity tile3 = this.getWorld().getTileEntity(this.getPos().east());
+			TileEntity tile4 = this.getWorld().getTileEntity(this.getPos().west());
+			TileEntity tile5 = this.getWorld().getTileEntity(this.getPos().south());
+			TileEntity tile6 = this.getWorld().getTileEntity(this.getPos().north());
 			
 			if(tile1 != null && tile1 instanceof TileEntityGas)
 			{
@@ -558,7 +558,7 @@ public class TileEntityGas extends TileEntity
 		{
 			EnviroMine.logger.log(Level.ERROR, "TileEntityGas has null block type!");
 			return false;
-		} else if(!(this.getWorld().getBlock(this.getPos()) instanceof BlockGas))
+		} else if(!(this.getWorld().getBlockState(this.getPos()) instanceof BlockGas))
 		{
 			EnviroMine.logger.log(Level.ERROR, "TileEntityGas has no block at position!");
 			return false;
@@ -587,23 +587,23 @@ public class TileEntityGas extends TileEntity
 			
 			int[] rDir = gDir.get(index);
 			
-			if(rDir[1] == 0 && this.amount <= 1 || !this.getWorld().getChunkProvider().chunkExists((this.xCoord + rDir[0])/16, (this.zCoord + rDir[2])/16))
+			if(rDir[1] == 0 && this.amount <= 1 || !this.getWorld().getChunkProvider().isChunkGeneratedAt((this.getPos().getX() + rDir[0])/16, (this.getPos().getZ() + rDir[2])/16))
 			{
 				gDir.remove(index);
 				continue;
 			}
 			
-			TileEntity tile = this.getWorld().getTileEntity(this.xCoord + rDir[0], this.yCoord + rDir[1], this.zCoord + rDir[2]);
+			TileEntity tile = this.getWorld().getTileEntity(this.getPos().add(rDir[0], rDir[1], rDir[2]));
 			
-			if((tile != null && tile instanceof TileEntityGas) || this.getWorld().getBlock(this.xCoord + rDir[0], this.yCoord + rDir[1], this.zCoord + rDir[2]) == Blocks.AIR)
+			if((tile != null && tile instanceof TileEntityGas) || this.getWorld().getBlockState(this.getPos().add(rDir[0], rDir[1], rDir[2])).getBlock() == Blocks.AIR)
 			{
-				if(this.offLoadGas(this.xCoord + rDir[0], this.yCoord + rDir[1], this.zCoord + rDir[2], rDir[3]))
+				if(this.offLoadGas(this.getPos().add(rDir[0], rDir[1], rDir[2]), rDir[3]))
 				{
 					changed = true;
 				}
 			}
 			
-			tile = this.getWorld().getTileEntity(this.xCoord + rDir[0], this.yCoord + rDir[1], this.zCoord + rDir[2]);
+			tile = this.getWorld().getTileEntity(this.getPos().add(rDir[0], rDir[1], rDir[2]));
 			
 			if(tile != null && tile instanceof TileEntityGas)
 			{
@@ -611,7 +611,7 @@ public class TileEntityGas extends TileEntity
 				
 				if(gasTile.gases.size() <= 0 || gasTile.amount <= 0)
 				{
-					this.getWorld().setBlockToAir(BlockPos(this.xCoord + rDir[0], this.yCoord + rDir[1], this.zCoord + rDir[2]));
+					this.getWorld().setBlockToAir(this.getPos().add(rDir[0], rDir[1], rDir[2]));
 				}
 			}
 			
@@ -643,8 +643,9 @@ public class TileEntityGas extends TileEntity
 		TileEntity tile = this.world.getTileEntity(pos);
 		if(tile == null)
 		{
-			if(this.world.getBlock(pos) == Blocks.AIR && this.getBlockType() != Blocks.AIR)
+			if(this.world.getBlockState(pos) == Blocks.AIR && this.getBlockType() != Blocks.AIR)
 			{
+				//get Block Type is client side only?
 				this.world.setBlock(pos, this.getBlockType());
 				
 				if(this.world.getTileEntity(pos) == null)
@@ -737,7 +738,7 @@ public class TileEntityGas extends TileEntity
 				skyLight = 15;
 			} else
 			{
-				skyLight = chunk.getSavedLightValue(EnumSkyBlock.SKY, this.xCoord & 0xf, this.yCoord, this.zCoord & 0xf);
+				skyLight = chunk.getLightFor(EnumSkyBlock.SKY, new BlockPos(this.getPos().getX() & 0xf, this.getPos().getY(), this.getPos().getZ() & 0xf));
 			}
 		}
 		
@@ -804,7 +805,7 @@ public class TileEntityGas extends TileEntity
 		for(int i = 0; i < gDir.size(); i++)
 		{
 			int[] rDir = gDir.get(i);
-			dArray[i] = this.getGasCapactiy(this.xCoord + rDir[0], this.yCoord + rDir[1], this.zCoord + rDir[2]);
+			dArray[i] = this.getGasCapactiy(this.getPos().add(rDir[0], rDir[1], rDir[2]));
 		}
 		
 		int totalSpace = 0;
@@ -843,15 +844,15 @@ public class TileEntityGas extends TileEntity
 		return dArray;
 	}
 	
-	public int getGasCapactiy(int i, int j, int k)
+	public int getGasCapactiy(BlockPos pos)
 	{
-		if(!world.getChunkProvider().chunkExists(i/16, k/16))
+		if(!world.getChunkProvider().isChunkGeneratedAt(pos.getX()/16, pos.getZ()/16))
 		{
 			return 0;
 		}
 		
 		int fireAmount = this.getGasQuantity(0);
-		TileEntity tile = this.world.getTileEntity(new BlockPos(i, j, k));
+		TileEntity tile = this.world.getTileEntity(pos);
 		
 		if(tile != null && tile instanceof TileEntityGas)
 		{
@@ -862,7 +863,7 @@ public class TileEntityGas extends TileEntity
 			
 			if(this.getBlockType() == ObjectHandler.fireGasBlock)
 			{
-				if(j < this.getPos().getY())
+				if(pos.getY() < this.getPos().getY())
 				{
 					return 1;
 				} else if(gasTile.getGasQuantity(0) > fireAmount)
@@ -879,7 +880,7 @@ public class TileEntityGas extends TileEntity
 			{
 				return gasSpace;
 			}
-		} else if(this.world.getBlock(i, j, k) == Blocks.AIR)
+		} else if(this.world.getBlockState(pos).getBlock() == Blocks.AIR)
 		{
 			return 10;
 		}

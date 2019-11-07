@@ -168,9 +168,9 @@ public class EM_ConfigMenu extends GuiConfig
 			  Entity en = (Entity) obj;
 
 			  int id = 0;
-				if(EntityList.getEntityID(en) > 0)
+				if(EntityList.getID(en) > 0)
 				{
-					id = EntityList.getEntityID(en);
+					id = EntityList.getID(en);
 				} else if(EntityRegistry.instance().lookupModSpawn(en.getClass(), false) != null)
 				{
 					id = EntityRegistry.instance().lookupModSpawn(en.getClass(), false).getModEntityId() + 128;

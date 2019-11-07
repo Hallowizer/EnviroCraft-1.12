@@ -7,6 +7,7 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockFalling;
 import net.minecraft.block.BlockLeaves;
 import net.minecraft.block.material.Material;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.init.Blocks;
@@ -168,10 +169,9 @@ public class EM_PhysManager
 		callPhysUpdate(world, x, y, z, world.getBlockState(new BlockPos(x, y, z)).getBlock(), world.getBlockMetadata(x, y, z), type);
 	}
 	
-	public static void callPhysUpdate(World world, int x, int y, int z, Block block, int meta, String type)
+	public static void callPhysUpdate(World world, BlockPos pos, Block block, int meta, String type)
 	{
-		String position = (new StringBuilder()).append(x).append(",").append(y).append(",").append(z).toString();
-		
+		String position = (new StringBuilder()).append(pos.getX()).append(",").append(pos.getY()).append(",").append(pos.getZ()).toString();
 		if(excluded.containsKey(position))
 		{
 			if(!excluded.get(position).equals("Collapse") && type.equals("Collapse"))
@@ -189,9 +189,9 @@ public class EM_PhysManager
 		if(world.isRemote || world.getTotalWorldTime() < worldStartTime + EM_Settings.worldDelay)
 		{
 			return;
-		} else if(chunkDelay.containsKey(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)))
+		} else if(chunkDelay.containsKey(world.provider.getDimension() + "" + (pos.getX() >> 4) + "," + (pos.getZ() >> 4)))
 		{
-			if(chunkDelay.get(world.provider.getDimension() + "" + (x >> 4) + "," + (z >> 4)) > world.getTotalWorldTime())
+			if(chunkDelay.get(world.provider.getDimension() + "" + (pos.getX() >> 4) + "," + (pos.getZ() >> 4)) > world.getTotalWorldTime())
 			{
 				return;
 			}
@@ -206,9 +206,9 @@ public class EM_PhysManager
 		
 		boolean locLoaded = false;
 		
-		if(world.getChunkProvider().isChunkGeneratedAt(x >> 4, z >> 4))
+		if(world.getChunkProvider().isChunkGeneratedAt(pos.getX() >> 4, pos.getZ() >> 4))
 		{
-			locLoaded = world.getChunkFromChunkCoords(x >> 4, z >> 4).isLoaded();
+			locLoaded = world.getChunkFromChunkCoords(pos.getX() >> 4, pos.getZ() >> 4).isLoaded();
 		} else
 		{
 			locLoaded = false;
@@ -224,7 +224,7 @@ public class EM_PhysManager
 			debugUpdatesCaptured += 1;
 		}
 		
-		int[] blockData = getSurroundingBlockData(world, x, y, z);
+		int[] blockData = getSurroundingBlockData(world, pos);
 		
 		boolean waterLogged = false;
 		//boolean isMuddy = false;
@@ -233,14 +233,14 @@ public class EM_PhysManager
 		
 		BlockProperties blockProps = null;
 		
-		Chunk chunk = world.getChunkFromBlockCoords(new BlockPos(x, y, z));
+		Chunk chunk = world.getChunkFromBlockCoords(pos);
 		if(chunk != null)
 		{
 			waterLogged = (chunk.getBiomeGenForWorldCoords(x & 15, z & 15, world.getWorldChunkManager()).rainfall > 0 && world.isRaining() && world.canSeeSky(new BlockPos(x, y + 1, z))) || touchingWater;
 		}
 		
 		boolean validSlideType = false;
-		boolean emptyBelow = BlockFalling.func_149831_e(world, x, y - 1, z);
+		boolean emptyBelow = BlockFalling.func_149831_e(world, pos.down());
 		
 		if(EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block) + "," + meta) || EM_Settings.blockProperties.containsKey("" + Block.REGISTRY.getNameForObject(block)))
 		{
@@ -275,11 +275,11 @@ public class EM_PhysManager
 			Block slideBlock = block;
 			int slideMeta = meta;
 			
-			int[] pos = new int[]{x, y, z};
-			int[] npos = slideDirection(world, pos, true);
-			int[] ppos = slideDirection(world, pos, false);
+			int[] opos = new int[]{pos.getX(), pos.getY(), pos.getZ()};
+			int[] npos = slideDirection(world, opos, true);
+			int[] ppos = slideDirection(world, opos, false);
 			
-			TileEntity tile = world.getTileEntity(new BlockPos(x, y, z));
+			TileEntity tile = world.getTileEntity(pos);
 			NBTTagCompound nbtTC = new NBTTagCompound();
 			
 			if(tile != null)
@@ -289,21 +289,21 @@ public class EM_PhysManager
 			
 			if(emptyBelow)
 			{
-				if(!(block instanceof BlockFalling) && !usedSlidePositions.contains("" + pos[0] + "," + pos[2]))
+				if(!(block instanceof BlockFalling) && !usedSlidePositions.contains("" + opos[0] + "," + opos[2]))
 				{
 					//usedSlidePositions.add("" + pos[0] + "," + pos[2]);
-					EntityPhysicsBlock physBlock = new EntityPhysicsBlock(world, pos[0] + 0.5, pos[1] + 0.5, pos[2] + 0.5, slideBlock, slideMeta, false);
+					EntityPhysicsBlock physBlock = new EntityPhysicsBlock(world, opos[0] + 0.5, opos[1] + 0.5, opos[2] + 0.5, slideBlock, slideMeta, false);
 					if(tile != null)
 					{
 						physBlock.field_145810_d = nbtTC;
 					}
-					world.setBlockToAir(new BlockPos(x, y, z));
+					world.setBlockToAir(pos);
 					physBlock.isLandSlide = true;
 					world.spawnEntity(physBlock);
-					EM_PhysManager.schedulePhysUpdate(world, x, y, z, true, "Collapse");
+					EM_PhysManager.schedulePhysUpdate(world, pos, true, "Collapse");
 					return;
 				}
-			} else if(!(pos[0] == npos[0] && pos[1] == npos[1] && pos[2] == npos[2]) && !usedSlidePositions.contains("" + npos[0] + "," + npos[2]))
+			} else if(!(opos[0] == npos[0] && opos[1] == npos[1] && opos[2] == npos[2]) && !usedSlidePositions.contains("" + npos[0] + "," + npos[2]))
 			{
 				//world.setBlock(npos[0], npos[1], npos[2], slideID, slideMeta, 2);
 				//usedSlidePositions.add("" + npos[0] + "," + npos[2]);
@@ -313,18 +313,18 @@ public class EM_PhysManager
 				{
 					physBlock.field_145810_d = nbtTC;
 				}
-				world.setBlockToAir(new BlockPos(x, y, z));
+				world.setBlockToAir(pos);
 				physBlock.isLandSlide = true;
 				world.spawnEntity(physBlock);
-				EM_PhysManager.schedulePhysUpdate(world, x, y, z, true, "Collapse");
+				EM_PhysManager.schedulePhysUpdate(world, pos, true, "Collapse");
 				return;
-			} else if(!(pos[0] == ppos[0] && pos[1] == ppos[1] && pos[2] == ppos[2]))
+			} else if(!(opos[0] == ppos[0] && opos[1] == ppos[1] && opos[2] == ppos[2]))
 			{
-				EM_PhysManager.scheduleSlideUpdate(world, x, y, z);
+				EM_PhysManager.scheduleSlideUpdate(world, pos);
 			}
 		}
 		
-		if(isLegalType(world, x, y, z) && blockNotSolid(world, x, y - 1, z, false) && blockData[4] <= 0)
+		if(isLegalType(world, pos) && blockNotSolid(world, pos.down(), false) && blockData[4] <= 0)
 		{
 			Object dropBlock = block;
 			int dropMeta = -1;
@@ -863,7 +863,7 @@ public class EM_PhysManager
 	
 	protected static void dropItemstack(World par1World, int par2, int par3, int par4, ItemStack par5ItemStack)
 	{
-		if(!par1World.isRemote && par1World.getGameRules().getGameRuleBooleanValue("doTileDrops"))
+		if(!par1World.isRemote && par1World.getGameRules().getBoolean("doTileDrops"))
 		{
 			float f = 0.7F;
 			double d0 = (double)(par1World.rand.nextFloat() * f) + (double)(1.0F - f) * 0.5D;
@@ -918,23 +918,23 @@ public class EM_PhysManager
 		}
 	}
 	
-	public static boolean blockNotSolid(World world, int x, int y, int z, boolean isSliding)
+	public static boolean blockNotSolid(World world, BlockPos pos, boolean isSliding)
 	{
-		if(world.isAirBlock(new BlockPos(x, y, z)))
+		if(world.isAirBlock(pos))
 		{
 			return true;
 		}
 		
-		Block block = world.getBlock(x, y, z);
-		Material material = block.getMaterial();
+		IBlockState state = world.getBlockState(pos);
+		Material material = state.getMaterial();
 		
-		if(block == Blocks.FIRE)
+		if(state.getBlock() == Blocks.FIRE)
 		{
 			return true;
 		} else if(material.isLiquid())
 		{
 			return !isSliding;
-		} else if(block.getCollisionBoundingBoxFromPool(world, x, y, z) == null || !material.blocksMovement())
+		} else if(state.getCollisionBoundingBoxFromPool(world, x, y, z) == null || !material.blocksMovement())
 		{
 			return true;
 		} else

@@ -476,17 +476,17 @@ public class EM_EventManager
 			{
 				if(event.getEntityPlayer().world.getBlock(event.x, event.y, event.z) == Blocks.CAULDRON && event.getEntityPlayer().world.getBlockMetadata(event.x, event.y, event.z) > 0)
 				{
-					fillBottle(event.entityPlayer.worldObj, event.entityPlayer, event.x, event.y, event.z, item, event);
+					fillBottle(event.getEntityPlayer().world, event.getEntityPlayer(), event.x, event.y, event.z, item, event);
 				}
-			} else if(item.getItem() == Items.record_11)
+			} else if(item.getItem() == Items.RECORD_11)
 			{
-				RecordEasterEgg(event.entityPlayer, event.x, event.y, event.z);
+				RecordEasterEgg(event.getEntityPlayer(), event.getPos().getX(), event.getPos().getY(), event.getPos().getZ());
 			}
 		} else if(event.getResult() != Result.DENY && event.action == Action.RIGHT_CLICK_BLOCK && item == null)
 		{
-			if(!event.entityPlayer.worldObj.isRemote)
+			if(!event.getEntityPlayer().world.isRemote)
 			{
-				drinkWater(event.entityPlayer, event);
+				drinkWater(event.getEntityPlayer(), event);
 			}
 		} else if(event.getResult() != Result.DENY && event.action == Action.LEFT_CLICK_BLOCK)
 		{

@@ -5,6 +5,7 @@ import enviromine.gases.EnviroGas;
 import enviromine.gases.EnviroGasDictionary;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 public class GasFire extends EnviroGas
@@ -26,7 +27,7 @@ public class GasFire extends EnviroGas
 	}
 	
 	@Override
-	public int getGasOnDeath(World world, int i, int j, int k)
+	public int getGasOnDeath(World world, BlockPos pos)
 	{
 		return EnviroGasDictionary.carbonMonoxide.gasID;
 	}

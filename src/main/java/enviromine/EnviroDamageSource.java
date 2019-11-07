@@ -29,7 +29,7 @@ public class EnviroDamageSource extends DamageSource
 	{
 		if (!this.damageType.equals("thething"))
 		{
-			return new TextComponentTranslation("deathmessage.enviromine."+this.damageType, par1EntityLivingBase.getCommandSenderName());
+			return new TextComponentTranslation("deathmessage.enviromine."+this.damageType, par1EntityLivingBase.getName());
 		}
 		return new TextComponentString("");
 	}

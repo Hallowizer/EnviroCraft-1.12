@@ -4,6 +4,7 @@ import java.awt.Color;
 import enviromine.handlers.EM_StatusManager;
 import enviromine.trackers.EnviroDataTracker;
 import net.minecraft.entity.EntityLivingBase;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.world.World;
 
@@ -128,7 +129,7 @@ public class EnviroGas
 		return this.color.getAlpha()/255F;
 	}
 	
-	public int getGasOnDeath(World world, int i, int j, int k)
+	public int getGasOnDeath(World world, BlockPos pos)
 	{
 		return -1;
 	}
