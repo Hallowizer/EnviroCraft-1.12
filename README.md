@@ -1,8 +1,31 @@
 EnviroMine
 ==========
 For information, please check [the wiki](https://github.com/EnviroMine/EnviroMine-1.7/wiki)
-An attempt at a 1.12 port is in progress, feel free to contribute to help with the porting/bugfixing!
-The code is not in a useable state yet, a testing build will be available shortly after it is in a bootable state.
+This is an unfinished port of environmine for 1.12 that will not be completed, at least not as one mod.
+
+For similar mechanics to Environmine's modules check out:
+
+Food Funk
+[Curseforge](https://www.curseforge.com/minecraft/mc-mods/food-funk)
+[Github](https://github.com/Stormwind99/FoodFunk)
+This mod is a port of Environmine's food rotting mechanic
+
+Tough as Nails
+[Curseforge](https://www.curseforge.com/minecraft/mc-mods/tough-as-nails)
+[Github](https://github.com/Glitchfiend/ToughAsNails)
+This mod adds thirst and temperature to minecraft. While it is officially not being developed anymore, it is 1.12.
+
+Sadly, I could not find faithful reproductions of the following mechanics:
+
+Sanity
+
+Gases as an underground danger
+
+Air Quality
+
+Block Physics
+
+In my own time I will see if I can replicate these mechanics, but it will be slow. Right now I'll be focusing on replicating Block Physics. I will update this read me as things change.
 
 Licence
 =======
