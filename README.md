@@ -1,7 +1,7 @@
-EnviroMine
+EnviroCraft
 ==========
 For information, please check [the wiki](https://github.com/EnviroMine/EnviroMine-1.7/wiki)
-This is an unfinished port of environmine for 1.12 that will not be completed, at least not as one mod.
+This is an unfinished port of environmine for 1.12 that will hopefully be completed.
 
 For similar mechanics to Environmine's modules check out:
 
